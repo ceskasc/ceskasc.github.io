@@ -1053,28 +1053,141 @@
       margin-bottom: 0.75rem;
     }
 
-    .about p { color: var(--muted); max-width: 74ch; }
+    .about {
+      position: relative;
+      overflow: hidden;
+      border-color: rgba(136, 184, 170, 0.2);
+      background:
+        radial-gradient(circle 540px at 90% -36%, rgba(213, 179, 120, 0.18), transparent 56%),
+        radial-gradient(circle 400px at -16% 110%, rgba(136, 184, 170, 0.13), transparent 56%),
+        linear-gradient(155deg, rgba(14, 18, 24, 0.95), rgba(10, 14, 20, 0.9));
+    }
 
-    .chips {
-      margin-top: 0.85rem;
+    .about::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(102deg, rgba(255, 255, 255, 0.03), transparent 30%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.016), transparent 24%);
+    }
+
+    .about-head {
       display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
       flex-wrap: wrap;
-      gap: 0.54rem;
     }
 
-    .chip {
-      border: 1px solid #1e252c;
+    .about-head .section-title {
+      margin-bottom: 0;
+    }
+
+    .about-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.38rem;
+      border: 1px solid rgba(136, 184, 170, 0.38);
       border-radius: 999px;
-      padding: 0.42rem 0.66rem;
-      font-size: 0.8rem;
-      color: #d4dbe2;
-      background: rgba(255, 255, 255, 0.017);
-      transition: 0.18s ease;
+      padding: 0.27rem 0.56rem;
+      background: rgba(136, 184, 170, 0.11);
+      color: #c4ddd5;
+      text-transform: uppercase;
+      letter-spacing: 0.11em;
+      font-size: 0.66rem;
+      font-weight: 650;
+      line-height: 1;
     }
 
-    .chip:hover {
-      color: #f4e1ba;
-      border-color: rgba(213, 179, 120, 0.48);
+    .about-tag::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #88b8aa;
+      box-shadow: 0 0 0 4px rgba(136, 184, 170, 0.14);
+      flex-shrink: 0;
+    }
+
+    .about-intro {
+      margin-top: 0.24rem;
+      color: #b7c1cc;
+      max-width: 76ch;
+      line-height: 1.66;
+      font-size: 1.04rem;
+      border: 1px solid #25303a;
+      border-radius: 14px;
+      background: linear-gradient(150deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+      padding: 0.8rem 0.88rem;
+    }
+
+    .chips.tech-grid {
+      margin-top: 0.9rem;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.58rem;
+    }
+
+    .tech-chip {
+      --tech: 213, 179, 120;
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.52rem;
+      min-height: 46px;
+      border: 1px solid rgba(var(--tech), 0.32);
+      border-radius: 14px;
+      padding: 0.5rem 0.62rem;
+      color: #e6ecf2;
+      background:
+        linear-gradient(150deg, rgba(255, 255, 255, 0.026), rgba(255, 255, 255, 0.01)),
+        rgba(255, 255, 255, 0.01);
+      font-size: 0.83rem;
+      font-weight: 520;
+      letter-spacing: 0.01em;
+      line-height: 1.2;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .tech-chip::after {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.03), rgba(var(--tech), 0.56), rgba(255, 255, 255, 0.03));
+    }
+
+    .chip-icon-wrap {
+      width: 22px;
+      height: 22px;
+      border-radius: 8px;
+      border: 1px solid rgba(var(--tech), 0.45);
+      background: rgba(var(--tech), 0.14);
+      display: inline-grid;
+      place-items: center;
+      flex-shrink: 0;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    .chip-icon {
+      width: 14px;
+      height: 14px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .tech-chip:hover {
+      transform: translateY(-1px);
+      border-color: rgba(var(--tech), 0.62);
+      background:
+        linear-gradient(150deg, rgba(var(--tech), 0.16), rgba(255, 255, 255, 0.03)),
+        rgba(255, 255, 255, 0.02);
+      box-shadow:
+        0 10px 22px rgba(var(--tech), 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
     }
 
     .repo-top {
@@ -1688,6 +1801,7 @@
       .hero { grid-template-columns: 1fr; }
       .hero-main h1 .hero-name { font-size: clamp(2.8rem, 8vw, 4.6rem); }
       .hero-main h1 .hero-headline { max-width: min(26ch, 100%); }
+      .chips.tech-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .repo-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .insights { grid-template-columns: 1fr; }
       .resume-grid { grid-template-columns: 1fr; }
@@ -1784,6 +1898,11 @@
       .identity-tag { font-size: 0.64rem; letter-spacing: 0.1em; }
       .side-mini-item strong { font-size: 0.98rem; }
       .side-link { padding: 0.58rem 0.52rem; }
+      .about-intro { font-size: 0.96rem; padding: 0.74rem 0.78rem; }
+      .chips.tech-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.5rem; }
+      .tech-chip { min-height: 42px; font-size: 0.78rem; padding: 0.46rem 0.56rem; }
+      .chip-icon-wrap { width: 20px; height: 20px; border-radius: 7px; }
+      .chip-icon { width: 13px; height: 13px; }
       .brand { padding: 0.3rem 0.55rem 0.3rem 0.32rem; border-radius: 15px; gap: 0.54rem; }
       .brand-avatar { width: 38px; height: 38px; border-radius: 11px; }
       .brand-status { width: 11px; height: 11px; right: -1px; bottom: -1px; }
@@ -1896,24 +2015,27 @@
       </aside>
     </section>
     <section id="about" class="section panel about" data-reveal>
-      <p class="section-title">About</p>
-      <p>
+      <div class="about-head">
+        <p class="section-title">About</p>
+        <span class="about-tag">Stack Icons</span>
+      </div>
+      <p class="about-intro">
         My approach blends product thinking and technical rigor. I focus on delightful user experience,
         dependable architecture, and maintainable codebases that scale with business needs.
       </p>
-      <div class="chips">
-        <span class="chip">JavaScript</span>
-        <span class="chip">TypeScript</span>
-        <span class="chip">React</span>
-        <span class="chip">Next.js</span>
-        <span class="chip">Node.js</span>
-        <span class="chip">Tailwind CSS</span>
-        <span class="chip">GraphQL</span>
-        <span class="chip">PostgreSQL</span>
-        <span class="chip">MongoDB</span>
-        <span class="chip">Docker</span>
-        <span class="chip">AWS</span>
-        <span class="chip">CI/CD</span>
+      <div class="chips tech-grid" role="list" aria-label="Primary tech stack with logos">
+        <span class="chip tech-chip" role="listitem" style="--tech:247,223,30;"><span class="chip-icon-wrap"><img class="chip-icon" src="https://cdn.simpleicons.org/javascript/F7DF1E" alt="" aria-hidden="true" loading="lazy" decoding="async" /></span><span>JavaScript</span></span>
+        <span class="chip tech-chip" role="listitem" style="--tech:49,120,198;"><span class="chip-icon-wrap"><img class="chip-icon" src="https://cdn.simpleicons.org/typescript/3178C6" alt="" aria-hidden="true" loading="lazy" decoding="async" /></span><span>TypeScript</span></span>
+        <span class="chip tech-chip" role="listitem" style="--tech:97,218,251;"><span class="chip-icon-wrap"><img class="chip-icon" src="https://cdn.simpleicons.org/react/61DAFB" alt="" aria-hidden="true" loading="lazy" decoding="async" /></span><span>React</span></span>
+        <span class="chip tech-chip" role="listitem" style="--tech:255,255,255;"><span class="chip-icon-wrap"><img class="chip-icon" src="https://cdn.simpleicons.org/nextdotjs/FFFFFF" alt="" aria-hidden="true" loading="lazy" decoding="async" /></span><span>Next.js</span></span>
+        <span class="chip tech-chip" role="listitem" style="--tech:95,175,93;"><span class="chip-icon-wrap"><img class="chip-icon" src="https://cdn.simpleicons.org/nodedotjs/5FAF5D" alt="" aria-hidden="true" loading="lazy" decoding="async" /></span><span>Node.js</span></span>
+        <span class="chip tech-chip" role="listitem" style="--tech:56,189,248;"><span class="chip-icon-wrap"><img class="chip-icon" src="https://cdn.simpleicons.org/tailwindcss/38BDF8" alt="" aria-hidden="true" loading="lazy" decoding="async" /></span><span>Tailwind CSS</span></span>
+        <span class="chip tech-chip" role="listitem" style="--tech:225,0,152;"><span class="chip-icon-wrap"><img class="chip-icon" src="https://cdn.simpleicons.org/graphql/E10098" alt="" aria-hidden="true" loading="lazy" decoding="async" /></span><span>GraphQL</span></span>
+        <span class="chip tech-chip" role="listitem" style="--tech:51,103,145;"><span class="chip-icon-wrap"><img class="chip-icon" src="https://cdn.simpleicons.org/postgresql/336791" alt="" aria-hidden="true" loading="lazy" decoding="async" /></span><span>PostgreSQL</span></span>
+        <span class="chip tech-chip" role="listitem" style="--tech:71,162,72;"><span class="chip-icon-wrap"><img class="chip-icon" src="https://cdn.simpleicons.org/mongodb/47A248" alt="" aria-hidden="true" loading="lazy" decoding="async" /></span><span>MongoDB</span></span>
+        <span class="chip tech-chip" role="listitem" style="--tech:36,150,237;"><span class="chip-icon-wrap"><img class="chip-icon" src="https://cdn.simpleicons.org/docker/2496ED" alt="" aria-hidden="true" loading="lazy" decoding="async" /></span><span>Docker</span></span>
+        <span class="chip tech-chip" role="listitem" style="--tech:255,153,0;"><span class="chip-icon-wrap"><img class="chip-icon" src="https://api.iconify.design/logos:aws.svg" alt="" aria-hidden="true" loading="lazy" decoding="async" /></span><span>AWS</span></span>
+        <span class="chip tech-chip" role="listitem" style="--tech:32,136,255;"><span class="chip-icon-wrap"><img class="chip-icon" src="https://cdn.simpleicons.org/githubactions/2088FF" alt="" aria-hidden="true" loading="lazy" decoding="async" /></span><span>CI/CD</span></span>
       </div>
     </section>
 
