@@ -1686,14 +1686,15 @@
     const resumeFileName = "Sadikcan-Ceska-CV.pdf";
     const resumeFileUrl = encodeURI(resumeFileName);
     const githubApiBase = "https://api.github.com";
+    const dataSnapshotUrl = "data/github.json";
     const githubDefaultHeaders = {
       Accept: "application/vnd.github+json",
       "X-GitHub-Api-Version": "2022-11-28"
     };
     const requestTimeoutMs = 12000;
     const retryDelaysMs = [0, 900, 2200];
-    const autoRefreshMs = 3 * 60 * 1000;
-    const refocusRefreshAfterMs = 45 * 1000;
+    const autoRefreshMs = 10 * 60 * 1000;
+    const refocusRefreshAfterMs = 6 * 60 * 1000;
     const cacheKey = `portfolio-live-cache-v3-${username}`;
     const cacheMaxAgeMs = 14 * 24 * 60 * 60 * 1000;
 
@@ -1738,6 +1739,7 @@
       dataTimestamp: null,
       lastSuccessfulLiveSyncAt: 0,
       lastLoadAttemptAt: 0,
+      rateLimitResetAt: 0,
       cacheEtags: { profile: null, repos: null },
       refreshTimer: null,
       loadPromise: null
@@ -1802,10 +1804,18 @@
 
       const error = new Error(message);
       error.status = response.status;
+      const remainingRaw = response.headers.get("x-ratelimit-remaining");
+      if (remainingRaw !== null) {
+        const remaining = Number(remainingRaw);
+        if (Number.isFinite(remaining)) error.rateRemaining = remaining;
+      }
       const resetRaw = response.headers.get("x-ratelimit-reset");
       if (resetRaw) {
         const resetEpochMs = Number(resetRaw) * 1000;
         if (Number.isFinite(resetEpochMs)) error.rateReset = resetEpochMs;
+      }
+      if ((response.status === 403 || response.status === 429) && error.rateRemaining === 0) {
+        error.isRateLimited = true;
       }
       return error;
     }
@@ -1962,7 +1972,50 @@
       return true;
     }
 
-    function scheduleAutoRefresh() {
+    async function hydrateFromBundledSnapshot() {
+      try {
+        const response = await fetch(`${dataSnapshotUrl}?t=${Date.now()}`, { cache: "no-store" });
+        if (!response.ok) {
+          throw new Error(`Bundled snapshot request failed with ${response.status}`);
+        }
+        const snapshot = await response.json();
+        if (!snapshot || typeof snapshot !== "object") {
+          throw new Error("Bundled snapshot payload is invalid.");
+        }
+        if (!snapshot.profile || !Array.isArray(snapshot.repos)) {
+          throw new Error("Bundled snapshot is missing profile/repos.");
+        }
+
+        const snapshotTimeRaw = snapshot.generated_at || snapshot.generatedAt;
+        const snapshotTime = Number.isFinite(Date.parse(snapshotTimeRaw))
+          ? Date.parse(snapshotTimeRaw)
+          : Date.now();
+        const repos = snapshot.repos.filter((repo) => repo && !repo.fork && !repo.archived);
+        const existingSnapshotTime = Number(state.dataTimestamp) || 0;
+
+        if (hasDataSnapshot() && existingSnapshotTime && snapshotTime <= existingSnapshotTime) {
+          return false;
+        }
+
+        applyData(snapshot.profile, repos, { source: "cached", timestamp: snapshotTime });
+        setSyncBadge("cached", "Bundled snapshot");
+        repoStatus.textContent = `Showing ${getFilteredRepos().length} repositories from bundled snapshot (${formatDateTime(snapshotTime)}). Live refresh running.`;
+
+        writeLiveCache({
+          fetchedAt: snapshotTime,
+          profile: snapshot.profile,
+          repos,
+          etags: state.cacheEtags
+        });
+
+        return true;
+      } catch (error) {
+        console.warn("Bundled snapshot load failed.", error);
+        return false;
+      }
+    }
+
+    function scheduleAutoRefresh(delayMs = autoRefreshMs) {
       if (state.refreshTimer) clearTimeout(state.refreshTimer);
 
       state.refreshTimer = window.setTimeout(() => {
@@ -1971,7 +2024,7 @@
           return;
         }
         loadData({ background: true, reason: "interval" });
-      }, autoRefreshMs);
+      }, Math.max(6000, delayMs));
     }
 
     function repoScore(repo) {
@@ -2055,6 +2108,12 @@
         <a class="repo-link" href="${repo.html_url}" target="_blank" rel="noreferrer">Open Repository</a>
         <a class="repo-link" href="${repo.html_url}#readme" target="_blank" rel="noreferrer">Open README on GitHub</a>
       `;
+
+      if (state.rateLimitResetAt && Date.now() < state.rateLimitResetAt) {
+        repoModalReadmeContent.textContent = "GitHub API rate limit is active. Repository links are still available.";
+        repoModalReadmeStatus.textContent = `Retry after ${formatDateTime(state.rateLimitResetAt)}.`;
+        return;
+      }
 
       try {
         const [detailsResult, readmeResult] = await Promise.all([
@@ -2261,6 +2320,28 @@
       const { background = false, reason = "manual" } = options;
       if (state.loadPromise) return state.loadPromise;
 
+      const now = Date.now();
+      if (state.rateLimitResetAt && now < state.rateLimitResetAt) {
+        const retryInMs = state.rateLimitResetAt - now + 5000;
+        if (hasDataSnapshot()) {
+          state.dataSource = "cached";
+          renderRepos();
+          setSyncBadge("cached", "Rate limited");
+          repoStatus.textContent = `GitHub API limit reached. Showing cached snapshot. Next automatic retry at ${formatDateTime(state.rateLimitResetAt)}.`;
+        } else {
+          const bundledReady = await hydrateFromBundledSnapshot();
+          if (bundledReady) {
+            setSyncBadge("cached", "Bundled snapshot");
+            repoStatus.textContent = `GitHub API limit reached. Showing bundled snapshot. Next retry at ${formatDateTime(state.rateLimitResetAt)}.`;
+          } else {
+            setSyncBadge("error", "Rate limited");
+            repoStatus.textContent = `GitHub API limit reached and no snapshot is available yet. Retry at ${formatDateTime(state.rateLimitResetAt)}.`;
+          }
+        }
+        scheduleAutoRefresh(retryInMs);
+        return Promise.resolve();
+      }
+
       state.lastLoadAttemptAt = Date.now();
       state.loadPromise = (async () => {
         const hadExistingData = hasDataSnapshot();
@@ -2289,6 +2370,7 @@
             repos: fresh.etags.repos || state.cacheEtags.repos
           };
           state.lastSuccessfulLiveSyncAt = now;
+          state.rateLimitResetAt = 0;
 
           applyData(resolvedProfile, resolvedRepos, { source: "live", timestamp: now });
           writeLiveCache({
@@ -2306,6 +2388,10 @@
           }
           setSyncBadge("live", `Live ${new Date(now).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}`);
         } catch (error) {
+          if (error?.rateReset && Number.isFinite(error.rateReset)) {
+            state.rateLimitResetAt = error.rateReset;
+          }
+
           const cached = readLiveCache();
           if (!hasDataSnapshot() && cached) {
             state.cacheEtags = {
@@ -2318,6 +2404,10 @@
             });
           }
 
+          if (!hasDataSnapshot()) {
+            await hydrateFromBundledSnapshot();
+          }
+
           if (hasDataSnapshot()) {
             state.dataSource = "cached";
             if (!state.dataTimestamp) state.dataTimestamp = Date.now();
@@ -2325,19 +2415,22 @@
 
             const sourceTime = formatDateTime(state.dataTimestamp);
             const rateResetText = error?.rateReset
-              ? ` Next GitHub API reset: ${formatDateTime(error.rateReset)}.`
+              ? ` Next retry: ${formatDateTime(error.rateReset)}.`
               : "";
-            repoStatus.textContent = `Live sync failed (${error?.message || "unknown error"}). Showing cached snapshot (${sourceTime}).${rateResetText}`;
+            repoStatus.textContent = `Live sync had an issue (${error?.message || "unknown error"}). Showing cached snapshot (${sourceTime}).${rateResetText}`;
             setSyncBadge("cached", "Cached fallback");
           } else {
             repoGrid.innerHTML = "";
-            repoStatus.textContent = "Could not fetch GitHub data and no cache snapshot is available yet.";
-            setSyncBadge("error", "Live failed");
+            repoStatus.textContent = "Could not fetch GitHub data and no local snapshot could be loaded.";
+            setSyncBadge("error", "Sync error");
           }
 
           console.warn("Live sync error", reason, error);
         } finally {
-          scheduleAutoRefresh();
+          const retryDelay = state.rateLimitResetAt && state.rateLimitResetAt > Date.now()
+            ? (state.rateLimitResetAt - Date.now() + 5000)
+            : autoRefreshMs;
+          scheduleAutoRefresh(retryDelay);
         }
       })().finally(() => {
         state.loadPromise = null;
@@ -2531,7 +2624,19 @@
     initAnimations();
     initEvents();
     initResume();
-    loadData({ background: hasCachedSnapshot, reason: "initial" });
+
+    (async () => {
+      let hasInitialSnapshot = hasCachedSnapshot;
+      if (!hasInitialSnapshot) {
+        hasInitialSnapshot = await hydrateFromBundledSnapshot();
+      } else {
+        const refreshedFromBundled = await hydrateFromBundledSnapshot();
+        if (refreshedFromBundled) {
+          hasInitialSnapshot = true;
+        }
+      }
+      loadData({ background: hasInitialSnapshot, reason: "initial" });
+    })();
   </script>
 </body>
 </html>

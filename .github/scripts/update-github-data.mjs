@@ -1,10 +1,14 @@
 import { mkdir, writeFile } from "node:fs/promises";
 
 const username = process.env.GITHUB_USERNAME || "ceskasc";
+const token = process.env.GITHUB_TOKEN || "";
 const headers = {
   Accept: "application/vnd.github+json",
   "User-Agent": `${username}-portfolio-updater`,
 };
+if (token) {
+  headers.Authorization = `Bearer ${token}`;
+}
 
 async function fetchJson(url) {
   const response = await fetch(url, { headers });

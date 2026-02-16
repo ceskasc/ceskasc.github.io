@@ -2,8 +2,13 @@ name: Update GitHub Data
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "data/github.json"
   schedule:
-    - cron: "0 */6 * * *"
+    - cron: "*/30 * * * *"
 
 permissions:
   contents: write
@@ -23,6 +28,7 @@ jobs:
       - name: Update snapshot file
         env:
           GITHUB_USERNAME: ceskasc
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: node .github/scripts/update-github-data.mjs
 
       - name: Commit and push if changed
