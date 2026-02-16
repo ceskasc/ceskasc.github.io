@@ -1525,9 +1525,9 @@
       <div class="repo-top">
         <div>
           <p class="section-title">Live GitHub Repositories</p>
-          <p>Data is fetched directly from public GitHub APIs and rendered in real time.</p>
+          <p>Repositories stay updated automatically for a smooth browsing experience.</p>
         </div>
-        <span id="sync" class="sync">Syncing...</span>
+        <span id="sync" class="sync">Updating...</span>
       </div>
 
       <div class="repo-controls">
@@ -1764,17 +1764,6 @@
       return new Date(value).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
     }
 
-    function formatDateTime(value) {
-      if (!value) return "--";
-      return new Date(value).toLocaleString("en-US", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit"
-      });
-    }
-
     function delay(ms) {
       return new Promise((resolve) => setTimeout(resolve, ms));
     }
@@ -1922,10 +1911,9 @@
 
     function currentSourceLabel() {
       if (state.dataSource === "cached") {
-        if (!state.dataTimestamp) return "cached snapshot";
-        return `cached snapshot (${formatDateTime(state.dataTimestamp)})`;
+        return "latest snapshot";
       }
-      return "live GitHub API data";
+      return "live data";
     }
 
     function hasDataSnapshot() {
@@ -1963,12 +1951,8 @@
 
       const snapshotTime = cached.fetchedAt || Date.now();
       applyData(cached.profile, cached.repos, { source: "cached", timestamp: snapshotTime });
-      setSyncBadge("cached", "Cached snapshot");
-
-      const freshness = cached.stale
-        ? "Snapshot is older than 14 days. Live refresh running."
-        : "Snapshot restored. Live refresh running.";
-      repoStatus.textContent = `Showing ${getFilteredRepos().length} repositories from cached snapshot (${formatDateTime(snapshotTime)}). ${freshness}`;
+      setSyncBadge("cached", "Snapshot");
+      repoStatus.textContent = `Showing ${getFilteredRepos().length} repositories from the latest snapshot.`;
       return true;
     }
 
@@ -1998,8 +1982,8 @@
         }
 
         applyData(snapshot.profile, repos, { source: "cached", timestamp: snapshotTime });
-        setSyncBadge("cached", "Bundled snapshot");
-        repoStatus.textContent = `Showing ${getFilteredRepos().length} repositories from bundled snapshot (${formatDateTime(snapshotTime)}). Live refresh running.`;
+        setSyncBadge("cached", "Snapshot");
+        repoStatus.textContent = `Showing ${getFilteredRepos().length} repositories from the latest snapshot.`;
 
         writeLiveCache({
           fetchedAt: snapshotTime,
@@ -2094,7 +2078,7 @@
 
       repoModalName.textContent = repo.name;
       repoModalDescription.textContent = repo.description || "No description provided.";
-      repoModalReadmeStatus.textContent = "Loading from GitHub API...";
+      repoModalReadmeStatus.textContent = "Loading...";
       repoModalReadmeContent.textContent = "Fetching README...";
 
       repoModalMeta.innerHTML = `
@@ -2110,8 +2094,8 @@
       `;
 
       if (state.rateLimitResetAt && Date.now() < state.rateLimitResetAt) {
-        repoModalReadmeContent.textContent = "GitHub API rate limit is active. Repository links are still available.";
-        repoModalReadmeStatus.textContent = `Retry after ${formatDateTime(state.rateLimitResetAt)}.`;
+        repoModalReadmeContent.textContent = "README preview is temporarily unavailable. Use repository links below.";
+        repoModalReadmeStatus.textContent = "Temporarily unavailable";
         return;
       }
 
@@ -2149,19 +2133,19 @@
 
         if (readmeResult.status === 404) {
           repoModalReadmeContent.textContent = "This repository does not have a README file yet.";
-          repoModalReadmeStatus.textContent = "README not found.";
+          repoModalReadmeStatus.textContent = "Not available";
         } else if (typeof readmeResult.data === "string") {
           const readmeText = readmeResult.data;
           repoModalReadmeContent.textContent = readmeText || "README exists but returned empty content.";
-          repoModalReadmeStatus.textContent = "Loaded live from GitHub.";
+          repoModalReadmeStatus.textContent = "Ready";
         } else {
           repoModalReadmeContent.textContent = "README could not be loaded right now.";
-          repoModalReadmeStatus.textContent = "GitHub returned an unexpected README response.";
+          repoModalReadmeStatus.textContent = "Temporarily unavailable";
         }
       } catch (error) {
         if (requestId !== activeModalRequest) return;
         repoModalReadmeContent.textContent = "README could not be loaded right now.";
-        repoModalReadmeStatus.textContent = "Live request failed.";
+        repoModalReadmeStatus.textContent = "Temporarily unavailable";
         console.warn(error);
       }
     }
@@ -2326,16 +2310,16 @@
         if (hasDataSnapshot()) {
           state.dataSource = "cached";
           renderRepos();
-          setSyncBadge("cached", "Rate limited");
-          repoStatus.textContent = `GitHub API limit reached. Showing cached snapshot. Next automatic retry at ${formatDateTime(state.rateLimitResetAt)}.`;
+          setSyncBadge("cached", "Snapshot");
+          repoStatus.textContent = `Showing ${getFilteredRepos().length} repositories from the latest snapshot.`;
         } else {
           const bundledReady = await hydrateFromBundledSnapshot();
           if (bundledReady) {
-            setSyncBadge("cached", "Bundled snapshot");
-            repoStatus.textContent = `GitHub API limit reached. Showing bundled snapshot. Next retry at ${formatDateTime(state.rateLimitResetAt)}.`;
+            setSyncBadge("cached", "Snapshot");
+            repoStatus.textContent = `Showing ${getFilteredRepos().length} repositories from the latest snapshot.`;
           } else {
-            setSyncBadge("error", "Rate limited");
-            repoStatus.textContent = `GitHub API limit reached and no snapshot is available yet. Retry at ${formatDateTime(state.rateLimitResetAt)}.`;
+            setSyncBadge("error", "Unavailable");
+            repoStatus.textContent = "Repositories are temporarily unavailable.";
           }
         }
         scheduleAutoRefresh(retryInMs);
@@ -2350,9 +2334,9 @@
           showSkeletons(Number(limitSelect.value) || 9);
         }
 
-        setSyncBadge("syncing", background ? "Refreshing..." : "Live syncing...");
+        setSyncBadge("syncing", "Updating...");
         if (!hadExistingData && !background) {
-          repoStatus.textContent = "Fetching live GitHub profile and repositories...";
+          repoStatus.textContent = "Loading repositories...";
         }
 
         try {
@@ -2382,11 +2366,11 @@
 
           const unchanged = fresh.profileNotModified && fresh.reposNotModified;
           if (unchanged) {
-            repoStatus.textContent = `Live sync complete. No repo changes detected. (${getFilteredRepos().length} visible)`;
+            repoStatus.textContent = `Showing ${getFilteredRepos().length} repositories from live data.`;
           } else {
-            repoStatus.textContent = `Showing ${getFilteredRepos().length} repositories from live GitHub API data.`;
+            repoStatus.textContent = `Showing ${getFilteredRepos().length} repositories from live data.`;
           }
-          setSyncBadge("live", `Live ${new Date(now).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}`);
+          setSyncBadge("live", "Live");
         } catch (error) {
           if (error?.rateReset && Number.isFinite(error.rateReset)) {
             state.rateLimitResetAt = error.rateReset;
@@ -2412,17 +2396,12 @@
             state.dataSource = "cached";
             if (!state.dataTimestamp) state.dataTimestamp = Date.now();
             renderRepos();
-
-            const sourceTime = formatDateTime(state.dataTimestamp);
-            const rateResetText = error?.rateReset
-              ? ` Next retry: ${formatDateTime(error.rateReset)}.`
-              : "";
-            repoStatus.textContent = `Live sync had an issue (${error?.message || "unknown error"}). Showing cached snapshot (${sourceTime}).${rateResetText}`;
-            setSyncBadge("cached", "Cached fallback");
+            repoStatus.textContent = `Showing ${getFilteredRepos().length} repositories from the latest snapshot.`;
+            setSyncBadge("cached", "Snapshot");
           } else {
             repoGrid.innerHTML = "";
-            repoStatus.textContent = "Could not fetch GitHub data and no local snapshot could be loaded.";
-            setSyncBadge("error", "Sync error");
+            repoStatus.textContent = "Repositories are temporarily unavailable.";
+            setSyncBadge("error", "Unavailable");
           }
 
           console.warn("Live sync error", reason, error);
@@ -2532,16 +2511,16 @@
 
     function initLiveSyncLifecycle() {
       window.addEventListener("online", () => {
-        repoStatus.textContent = "Connection restored. Refreshing live GitHub data...";
+        repoStatus.textContent = "Connection restored. Updating repositories...";
         loadData({ background: true, reason: "online" });
       });
 
       window.addEventListener("offline", () => {
-        setSyncBadge("cached", "Offline");
+        setSyncBadge("cached", "Snapshot");
         if (hasDataSnapshot()) {
-          repoStatus.textContent = `You are offline. Showing ${getFilteredRepos().length} repositories from ${currentSourceLabel()}.`;
+          repoStatus.textContent = `Offline mode. Showing ${getFilteredRepos().length} repositories from the latest snapshot.`;
         } else {
-          repoStatus.textContent = "You are offline and no cached GitHub snapshot is available yet.";
+          repoStatus.textContent = "Offline mode. Repository list is temporarily unavailable.";
         }
       });
 
