@@ -1,66 +1,66 @@
 {
-    "generated_at":  "2026-02-16T22:31:55.6376174Z",
-    "username":  "ceskasc",
-    "profile":  {
-                    "login":  "ceskasc",
-                    "avatar_url":  "https://avatars.githubusercontent.com/u/152553355?v=4",
-                    "html_url":  "https://github.com/ceskasc",
-                    "bio":  "Senior Fullstack Developer | Crafting pixel-perfect, scalable web experiences with Next.js \u0026 Node.js.",
-                    "location":  "Ankara",
-                    "followers":  0,
-                    "following":  0,
-                    "public_repos":  4,
-                    "created_at":  "2023-11-30T20:36:21Z",
-                    "updated_at":  "2026-02-16T20:48:36Z"
-                },
-    "repos":  [
-                  {
-                      "name":  "ceskasc.github.io",
-                      "description":  null,
-                      "language":  "HTML",
-                      "html_url":  "https://github.com/ceskasc/ceskasc.github.io",
-                      "homepage":  null,
-                      "stargazers_count":  0,
-                      "forks_count":  0,
-                      "pushed_at":  "2026-02-16T22:30:34Z",
-                      "fork":  false,
-                      "archived":  false
-                  },
-                  {
-                      "name":  "ceskasc",
-                      "description":  null,
-                      "language":  null,
-                      "html_url":  "https://github.com/ceskasc/ceskasc",
-                      "homepage":  null,
-                      "stargazers_count":  0,
-                      "forks_count":  0,
-                      "pushed_at":  "2026-02-16T20:45:15Z",
-                      "fork":  false,
-                      "archived":  false
-                  },
-                  {
-                      "name":  "portfolio-2026",
-                      "description":  null,
-                      "language":  "HTML",
-                      "html_url":  "https://github.com/ceskasc/portfolio-2026",
-                      "homepage":  null,
-                      "stargazers_count":  0,
-                      "forks_count":  0,
-                      "pushed_at":  "2026-02-16T20:45:11Z",
-                      "fork":  false,
-                      "archived":  false
-                  },
-                  {
-                      "name":  "gozde-cv",
-                      "description":  null,
-                      "language":  "TypeScript",
-                      "html_url":  "https://github.com/ceskasc/gozde-cv",
-                      "homepage":  null,
-                      "stargazers_count":  0,
-                      "forks_count":  0,
-                      "pushed_at":  "2026-02-16T20:19:05Z",
-                      "fork":  false,
-                      "archived":  false
-                  }
-              ]
+  "generated_at": "2026-02-16T23:09:18.318Z",
+  "username": "ceskasc",
+  "profile": {
+    "login": "ceskasc",
+    "avatar_url": "https://avatars.githubusercontent.com/u/152553355?v=4",
+    "html_url": "https://github.com/ceskasc",
+    "bio": "Senior Fullstack Developer | Crafting pixel-perfect, scalable web experiences with Next.js & Node.js.",
+    "location": "Ankara",
+    "followers": 0,
+    "following": 0,
+    "public_repos": 4,
+    "created_at": "2023-11-30T20:36:21Z",
+    "updated_at": "2026-02-16T20:48:36Z"
+  },
+  "repos": [
+    {
+      "name": "ceskasc.github.io",
+      "description": null,
+      "language": "HTML",
+      "html_url": "https://github.com/ceskasc/ceskasc.github.io",
+      "homepage": null,
+      "stargazers_count": 0,
+      "forks_count": 0,
+      "pushed_at": "2026-02-16T23:09:11Z",
+      "fork": false,
+      "archived": false
+    },
+    {
+      "name": "ceskasc",
+      "description": null,
+      "language": null,
+      "html_url": "https://github.com/ceskasc/ceskasc",
+      "homepage": null,
+      "stargazers_count": 0,
+      "forks_count": 0,
+      "pushed_at": "2026-02-16T20:45:15Z",
+      "fork": false,
+      "archived": false
+    },
+    {
+      "name": "portfolio-2026",
+      "description": null,
+      "language": "HTML",
+      "html_url": "https://github.com/ceskasc/portfolio-2026",
+      "homepage": null,
+      "stargazers_count": 0,
+      "forks_count": 0,
+      "pushed_at": "2026-02-16T20:45:11Z",
+      "fork": false,
+      "archived": false
+    },
+    {
+      "name": "gozde-cv",
+      "description": null,
+      "language": "TypeScript",
+      "html_url": "https://github.com/ceskasc/gozde-cv",
+      "homepage": null,
+      "stargazers_count": 0,
+      "forks_count": 0,
+      "pushed_at": "2026-02-16T20:19:05Z",
+      "fork": false,
+      "archived": false
+    }
+  ]
 }
