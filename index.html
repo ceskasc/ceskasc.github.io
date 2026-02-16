@@ -725,6 +725,31 @@
       font-size: 0.75rem;
       color: #9aa3ad;
       background: rgba(255, 255, 255, 0.018);
+      transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+    }
+
+    .sync[data-mode="syncing"] {
+      color: #c7d1db;
+      border-color: #2a3742;
+      background: rgba(136, 184, 170, 0.12);
+    }
+
+    .sync[data-mode="live"] {
+      color: #bee6d8;
+      border-color: rgba(136, 184, 170, 0.5);
+      background: rgba(136, 184, 170, 0.15);
+    }
+
+    .sync[data-mode="cached"] {
+      color: #efd8ac;
+      border-color: rgba(213, 179, 120, 0.5);
+      background: rgba(213, 179, 120, 0.16);
+    }
+
+    .sync[data-mode="error"] {
+      color: #f0b5b5;
+      border-color: rgba(201, 97, 97, 0.54);
+      background: rgba(201, 97, 97, 0.14);
     }
 
     .repo-controls {
@@ -1660,6 +1685,17 @@
     const username = "ceskasc";
     const resumeFileName = "Sadikcan-Ceska-CV.pdf";
     const resumeFileUrl = encodeURI(resumeFileName);
+    const githubApiBase = "https://api.github.com";
+    const githubDefaultHeaders = {
+      Accept: "application/vnd.github+json",
+      "X-GitHub-Api-Version": "2022-11-28"
+    };
+    const requestTimeoutMs = 12000;
+    const retryDelaysMs = [0, 900, 2200];
+    const autoRefreshMs = 3 * 60 * 1000;
+    const refocusRefreshAfterMs = 45 * 1000;
+    const cacheKey = `portfolio-live-cache-v3-${username}`;
+    const cacheMaxAgeMs = 14 * 24 * 60 * 60 * 1000;
 
     const repoGrid = document.getElementById("repo-grid");
     const repoStatus = document.getElementById("repo-status");
@@ -1693,7 +1729,19 @@
       C: "#555555", "C++": "#f34b7d", default: "#9aa3ad"
     };
 
-    const state = { profile: null, repos: [], activeLanguage: "All", maxLanguages: 10 };
+    const state = {
+      profile: null,
+      repos: [],
+      activeLanguage: "All",
+      maxLanguages: 10,
+      dataSource: "live",
+      dataTimestamp: null,
+      lastSuccessfulLiveSyncAt: 0,
+      lastLoadAttemptAt: 0,
+      cacheEtags: { profile: null, repos: null },
+      refreshTimer: null,
+      loadPromise: null
+    };
     let activeModalRequest = 0;
 
     function esc(text) {
@@ -1712,6 +1760,218 @@
     function formatDate(value) {
       if (!value) return "--";
       return new Date(value).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+    }
+
+    function formatDateTime(value) {
+      if (!value) return "--";
+      return new Date(value).toLocaleString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
+
+    function delay(ms) {
+      return new Promise((resolve) => setTimeout(resolve, ms));
+    }
+
+    function isRetriableStatus(status) {
+      return status === 403 || status === 408 || status === 425 || status === 429 || status >= 500;
+    }
+
+    async function fetchWithTimeout(url, options = {}, timeoutMs = requestTimeoutMs) {
+      const controller = new AbortController();
+      const timeoutId = window.setTimeout(() => controller.abort(), timeoutMs);
+      try {
+        return await fetch(url, { ...options, signal: controller.signal, cache: "no-store" });
+      } finally {
+        clearTimeout(timeoutId);
+      }
+    }
+
+    async function parseGitHubError(response, label) {
+      let message = `${label} failed with ${response.status}`;
+      try {
+        const payload = await response.json();
+        if (payload && typeof payload.message === "string" && payload.message.trim()) {
+          message = `${message}: ${payload.message.trim()}`;
+        }
+      } catch (_) {}
+
+      const error = new Error(message);
+      error.status = response.status;
+      const resetRaw = response.headers.get("x-ratelimit-reset");
+      if (resetRaw) {
+        const resetEpochMs = Number(resetRaw) * 1000;
+        if (Number.isFinite(resetEpochMs)) error.rateReset = resetEpochMs;
+      }
+      return error;
+    }
+
+    async function requestGitHub(url, options = {}) {
+      const {
+        etag = null,
+        accept = "application/vnd.github+json",
+        parse = "json",
+        allowStatuses = []
+      } = options;
+
+      let lastError = null;
+
+      for (let attempt = 0; attempt < retryDelaysMs.length; attempt += 1) {
+        if (retryDelaysMs[attempt] > 0) {
+          await delay(retryDelaysMs[attempt]);
+        }
+
+        try {
+          const headers = { ...githubDefaultHeaders, Accept: accept };
+          if (etag) headers["If-None-Match"] = etag;
+
+          const response = await fetchWithTimeout(url, { headers });
+          const nextEtag = response.headers.get("etag") || etag || null;
+
+          if (response.status === 304) {
+            return { status: 304, data: null, etag: nextEtag };
+          }
+
+          if (!response.ok && allowStatuses.includes(response.status)) {
+            return { status: response.status, data: null, etag: nextEtag };
+          }
+
+          if (!response.ok) {
+            const responseError = await parseGitHubError(response, "GitHub API request");
+            lastError = responseError;
+            if (attempt < retryDelaysMs.length - 1 && isRetriableStatus(response.status)) {
+              continue;
+            }
+            throw responseError;
+          }
+
+          const payload = parse === "text" ? await response.text() : await response.json();
+          return { status: response.status, data: payload, etag: nextEtag };
+        } catch (error) {
+          const retryable =
+            error?.name === "AbortError" ||
+            error instanceof TypeError ||
+            (typeof error?.status === "number" && isRetriableStatus(error.status));
+
+          lastError = error;
+          if (!retryable || attempt === retryDelaysMs.length - 1) {
+            throw error;
+          }
+        }
+      }
+
+      throw lastError || new Error("GitHub request failed.");
+    }
+
+    function readLiveCache() {
+      try {
+        const raw = localStorage.getItem(cacheKey);
+        if (!raw) return null;
+
+        const parsed = JSON.parse(raw);
+        if (!parsed || typeof parsed !== "object") return null;
+        if (!parsed.profile || !Array.isArray(parsed.repos)) return null;
+
+        const fetchedAt = Number(parsed.fetchedAt) || 0;
+        const etags = parsed.etags && typeof parsed.etags === "object"
+          ? parsed.etags
+          : { profile: null, repos: null };
+
+        return {
+          profile: parsed.profile,
+          repos: parsed.repos.filter((repo) => repo && !repo.fork && !repo.archived),
+          fetchedAt,
+          etags: {
+            profile: etags.profile || null,
+            repos: etags.repos || null
+          },
+          stale: !fetchedAt || (Date.now() - fetchedAt > cacheMaxAgeMs)
+        };
+      } catch (error) {
+        console.warn("Local cache parse failed.", error);
+        return null;
+      }
+    }
+
+    function writeLiveCache(snapshot) {
+      try {
+        localStorage.setItem(cacheKey, JSON.stringify(snapshot));
+      } catch (error) {
+        console.warn("Local cache write failed.", error);
+      }
+    }
+
+    function setSyncBadge(mode, label) {
+      syncBadge.dataset.mode = mode;
+      syncBadge.textContent = label;
+    }
+
+    function currentSourceLabel() {
+      if (state.dataSource === "cached") {
+        if (!state.dataTimestamp) return "cached snapshot";
+        return `cached snapshot (${formatDateTime(state.dataTimestamp)})`;
+      }
+      return "live GitHub API data";
+    }
+
+    function hasDataSnapshot() {
+      return Boolean(state.profile) && Array.isArray(state.repos);
+    }
+
+    function applyData(profile, repos, options = {}) {
+      const { source = "live", timestamp = Date.now() } = options;
+      const safeRepos = Array.isArray(repos) ? repos : [];
+
+      state.profile = profile;
+      state.repos = safeRepos;
+      state.dataSource = source;
+      state.dataTimestamp = timestamp;
+
+      const languages = aggregateLanguages(state.repos);
+      if (state.activeLanguage !== "All" && !languages.some((lang) => lang.name === state.activeLanguage)) {
+        state.activeLanguage = "All";
+      }
+
+      updateProfile(state.profile, state.repos);
+      renderLanguageFilters(languages);
+      renderLanguageBars(languages);
+      renderRepos();
+    }
+
+    function hydrateFromCache() {
+      const cached = readLiveCache();
+      if (!cached) return false;
+
+      state.cacheEtags = {
+        profile: cached.etags.profile || null,
+        repos: cached.etags.repos || null
+      };
+
+      const snapshotTime = cached.fetchedAt || Date.now();
+      applyData(cached.profile, cached.repos, { source: "cached", timestamp: snapshotTime });
+      setSyncBadge("cached", "Cached snapshot");
+
+      const freshness = cached.stale
+        ? "Snapshot is older than 14 days. Live refresh running."
+        : "Snapshot restored. Live refresh running.";
+      repoStatus.textContent = `Showing ${getFilteredRepos().length} repositories from cached snapshot (${formatDateTime(snapshotTime)}). ${freshness}`;
+      return true;
+    }
+
+    function scheduleAutoRefresh() {
+      if (state.refreshTimer) clearTimeout(state.refreshTimer);
+
+      state.refreshTimer = window.setTimeout(() => {
+        if (document.hidden) {
+          scheduleAutoRefresh();
+          return;
+        }
+        loadData({ background: true, reason: "interval" });
+      }, autoRefreshMs);
     }
 
     function repoScore(repo) {
@@ -1772,8 +2032,8 @@
       if (!repo) return;
 
       const requestId = ++activeModalRequest;
-      const repoApiUrl = `https://api.github.com/repos/${username}/${repo.name}?ts=${Date.now()}`;
-      const readmeApiUrl = `https://api.github.com/repos/${username}/${repo.name}/readme?ts=${Date.now()}`;
+      const repoApiUrl = `${githubApiBase}/repos/${username}/${repo.name}`;
+      const readmeApiUrl = `${githubApiBase}/repos/${username}/${repo.name}/readme`;
 
       repoModal.classList.add("show");
       repoModal.setAttribute("aria-hidden", "false");
@@ -1797,15 +2057,19 @@
       `;
 
       try {
-        const [detailsResponse, readmeResponse] = await Promise.all([
-          fetch(repoApiUrl, { headers: { Accept: "application/vnd.github+json" }, cache: "no-store" }),
-          fetch(readmeApiUrl, { headers: { Accept: "application/vnd.github.raw+json" }, cache: "no-store" })
+        const [detailsResult, readmeResult] = await Promise.all([
+          requestGitHub(repoApiUrl),
+          requestGitHub(readmeApiUrl, {
+            accept: "application/vnd.github.raw+json",
+            parse: "text",
+            allowStatuses: [404]
+          })
         ]);
 
         if (requestId !== activeModalRequest) return;
 
-        if (detailsResponse.ok) {
-          const details = await detailsResponse.json();
+        if (detailsResult.data) {
+          const details = detailsResult.data;
           repoModalMeta.innerHTML = `
             <li><span class="lang-dot" style="background:${languageColors[details.language] || languageColors.default}"></span>${esc(details.language || "Code")}</li>
             <li>Stars ${details.stargazers_count}</li>
@@ -1824,16 +2088,16 @@
           `;
         }
 
-        if (readmeResponse.ok) {
-          const readmeText = await readmeResponse.text();
-          repoModalReadmeContent.textContent = readmeText || "README exists but returned empty content.";
-          repoModalReadmeStatus.textContent = "Loaded live from GitHub.";
-        } else if (readmeResponse.status === 404) {
+        if (readmeResult.status === 404) {
           repoModalReadmeContent.textContent = "This repository does not have a README file yet.";
           repoModalReadmeStatus.textContent = "README not found.";
+        } else if (typeof readmeResult.data === "string") {
+          const readmeText = readmeResult.data;
+          repoModalReadmeContent.textContent = readmeText || "README exists but returned empty content.";
+          repoModalReadmeStatus.textContent = "Loaded live from GitHub.";
         } else {
           repoModalReadmeContent.textContent = "README could not be loaded right now.";
-          repoModalReadmeStatus.textContent = `GitHub responded with ${readmeResponse.status}.`;
+          repoModalReadmeStatus.textContent = "GitHub returned an unexpected README response.";
         }
       } catch (error) {
         if (requestId !== activeModalRequest) return;
@@ -1908,7 +2172,7 @@
         return;
       }
       repoGrid.innerHTML = repos.map((repo, i) => createRepoMarkup(repo, i)).join("");
-      repoStatus.textContent = `Showing ${repos.length} repositories from live GitHub data.`;
+      repoStatus.textContent = `Showing ${repos.length} repositories from ${currentSourceLabel()}.`;
     }
 
     function updateProfile(profile, repos) {
@@ -1961,50 +2225,125 @@
       }
     }
 
-    async function fetchGitHubData() {
-      const ts = Date.now();
-      const [profileRes, reposRes] = await Promise.all([
-        fetch(`https://api.github.com/users/${username}?ts=${ts}`, {
-          headers: { Accept: "application/vnd.github+json" },
-          cache: "no-store"
-        }),
-        fetch(`https://api.github.com/users/${username}/repos?per_page=100&sort=updated&direction=desc&type=owner&ts=${ts}`, {
-          headers: { Accept: "application/vnd.github+json" },
-          cache: "no-store"
-        })
+    async function fetchGitHubData(etags = {}) {
+      const profileUrl = `${githubApiBase}/users/${username}`;
+      const reposUrl = `${githubApiBase}/users/${username}/repos?per_page=100&sort=updated&direction=desc&type=owner`;
+
+      const [profileResult, reposResult] = await Promise.all([
+        requestGitHub(profileUrl, { etag: etags.profile || null }),
+        requestGitHub(reposUrl, { etag: etags.repos || null })
       ]);
 
-      if (!profileRes.ok) throw new Error(`Profile request failed with ${profileRes.status}`);
-      if (!reposRes.ok) throw new Error(`Repos request failed with ${reposRes.status}`);
+      const profile = profileResult.status === 304 ? null : profileResult.data;
+      const repoList = reposResult.status === 304 ? null : reposResult.data;
 
-      const [profile, repoList] = await Promise.all([profileRes.json(), reposRes.json()]);
-      const repos = repoList.filter((repo) => !repo.fork && !repo.archived);
-      return { profile, repos };
+      if (repoList !== null && !Array.isArray(repoList)) {
+        throw new Error("GitHub repository payload is not an array.");
+      }
+
+      const repos = Array.isArray(repoList)
+        ? repoList.filter((repo) => !repo.fork && !repo.archived)
+        : null;
+
+      return {
+        profile,
+        repos,
+        etags: {
+          profile: profileResult.etag || etags.profile || null,
+          repos: reposResult.etag || etags.repos || null
+        },
+        profileNotModified: profileResult.status === 304,
+        reposNotModified: reposResult.status === 304
+      };
     }
 
-    async function loadData() {
-      showSkeletons(9);
-      repoStatus.textContent = "Fetching live GitHub profile and repositories...";
-      syncBadge.textContent = "Live syncing...";
+    async function loadData(options = {}) {
+      const { background = false, reason = "manual" } = options;
+      if (state.loadPromise) return state.loadPromise;
 
-      try {
-        const fresh = await fetchGitHubData();
-        state.profile = fresh.profile;
-        state.repos = fresh.repos;
+      state.lastLoadAttemptAt = Date.now();
+      state.loadPromise = (async () => {
+        const hadExistingData = hasDataSnapshot();
+        const shouldShowSkeleton = !background && !hadExistingData;
+        if (shouldShowSkeleton) {
+          showSkeletons(Number(limitSelect.value) || 9);
+        }
 
-        const langs = aggregateLanguages(state.repos);
-        updateProfile(state.profile, state.repos);
-        renderLanguageFilters(langs);
-        renderLanguageBars(langs);
-        renderRepos();
-        repoStatus.textContent = `Showing ${getFilteredRepos().length} repositories from live GitHub API data.`;
-        syncBadge.textContent = `Live ${new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}`;
-      } catch (error) {
-        syncBadge.textContent = "Live failed";
-        repoGrid.innerHTML = "";
-        repoStatus.textContent = "Could not fetch live GitHub data. Please try again shortly.";
-        console.warn(error);
-      }
+        setSyncBadge("syncing", background ? "Refreshing..." : "Live syncing...");
+        if (!hadExistingData && !background) {
+          repoStatus.textContent = "Fetching live GitHub profile and repositories...";
+        }
+
+        try {
+          const fresh = await fetchGitHubData(state.cacheEtags);
+
+          const resolvedProfile = fresh.profile || state.profile;
+          const resolvedRepos = fresh.repos || state.repos;
+          if (!resolvedProfile || !Array.isArray(resolvedRepos)) {
+            throw new Error("GitHub returned incomplete data and no snapshot is available.");
+          }
+
+          const now = Date.now();
+          state.cacheEtags = {
+            profile: fresh.etags.profile || state.cacheEtags.profile,
+            repos: fresh.etags.repos || state.cacheEtags.repos
+          };
+          state.lastSuccessfulLiveSyncAt = now;
+
+          applyData(resolvedProfile, resolvedRepos, { source: "live", timestamp: now });
+          writeLiveCache({
+            fetchedAt: now,
+            profile: resolvedProfile,
+            repos: resolvedRepos,
+            etags: state.cacheEtags
+          });
+
+          const unchanged = fresh.profileNotModified && fresh.reposNotModified;
+          if (unchanged) {
+            repoStatus.textContent = `Live sync complete. No repo changes detected. (${getFilteredRepos().length} visible)`;
+          } else {
+            repoStatus.textContent = `Showing ${getFilteredRepos().length} repositories from live GitHub API data.`;
+          }
+          setSyncBadge("live", `Live ${new Date(now).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}`);
+        } catch (error) {
+          const cached = readLiveCache();
+          if (!hasDataSnapshot() && cached) {
+            state.cacheEtags = {
+              profile: cached.etags.profile || state.cacheEtags.profile,
+              repos: cached.etags.repos || state.cacheEtags.repos
+            };
+            applyData(cached.profile, cached.repos, {
+              source: "cached",
+              timestamp: cached.fetchedAt || Date.now()
+            });
+          }
+
+          if (hasDataSnapshot()) {
+            state.dataSource = "cached";
+            if (!state.dataTimestamp) state.dataTimestamp = Date.now();
+            renderRepos();
+
+            const sourceTime = formatDateTime(state.dataTimestamp);
+            const rateResetText = error?.rateReset
+              ? ` Next GitHub API reset: ${formatDateTime(error.rateReset)}.`
+              : "";
+            repoStatus.textContent = `Live sync failed (${error?.message || "unknown error"}). Showing cached snapshot (${sourceTime}).${rateResetText}`;
+            setSyncBadge("cached", "Cached fallback");
+          } else {
+            repoGrid.innerHTML = "";
+            repoStatus.textContent = "Could not fetch GitHub data and no cache snapshot is available yet.";
+            setSyncBadge("error", "Live failed");
+          }
+
+          console.warn("Live sync error", reason, error);
+        } finally {
+          scheduleAutoRefresh();
+        }
+      })().finally(() => {
+        state.loadPromise = null;
+      });
+
+      return state.loadPromise;
     }
 
     function initHeader() {
@@ -2098,6 +2437,29 @@
       });
     }
 
+    function initLiveSyncLifecycle() {
+      window.addEventListener("online", () => {
+        repoStatus.textContent = "Connection restored. Refreshing live GitHub data...";
+        loadData({ background: true, reason: "online" });
+      });
+
+      window.addEventListener("offline", () => {
+        setSyncBadge("cached", "Offline");
+        if (hasDataSnapshot()) {
+          repoStatus.textContent = `You are offline. Showing ${getFilteredRepos().length} repositories from ${currentSourceLabel()}.`;
+        } else {
+          repoStatus.textContent = "You are offline and no cached GitHub snapshot is available yet.";
+        }
+      });
+
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) return;
+        if (!state.lastSuccessfulLiveSyncAt || Date.now() - state.lastSuccessfulLiveSyncAt > refocusRefreshAfterMs) {
+          loadData({ background: true, reason: "visibility" });
+        }
+      });
+    }
+
     function initAnimations() {
       const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
@@ -2163,11 +2525,13 @@
 
     document.getElementById("year").textContent = String(new Date().getFullYear());
     window.requestAnimationFrame(() => document.body.classList.add("loaded"));
+    const hasCachedSnapshot = hydrateFromCache();
     initHeader();
+    initLiveSyncLifecycle();
     initAnimations();
     initEvents();
     initResume();
-    loadData();
+    loadData({ background: hasCachedSnapshot, reason: "initial" });
   </script>
 </body>
 </html>
