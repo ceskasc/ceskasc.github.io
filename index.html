@@ -1173,7 +1173,7 @@
 
   <script>
     const username = "ceskasc";
-    const cacheKey = `portfolio-cache-${username}-v5`;
+    const cacheKey = `portfolio-cache-${username}-v6`;
     const cacheTtlMs = 1000 * 60 * 30;
     const staticDataUrl = "data/github.json";
     const resumeFileName = "Sadikcan-Ceska-CV.pdf";
@@ -1426,20 +1426,6 @@
       syncBadge.textContent = "Syncing...";
       let hasAnyData = false;
 
-      const cached = readCache();
-      if (cached && cached.profile && Array.isArray(cached.repos)) {
-        state.profile = cached.profile;
-        state.repos = cached.repos;
-        const langs = aggregateLanguages(state.repos);
-        updateProfile(state.profile, state.repos);
-        renderLanguageFilters(langs);
-        renderLanguageBars(langs);
-        renderRepos();
-        repoStatus.textContent = `Showing ${getFilteredRepos().length} repositories from cached data.`;
-        syncBadge.textContent = `Cached ${new Date(cached.timestamp).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}`;
-        hasAnyData = true;
-      }
-
       try {
         const snapshot = await fetchStaticData();
         state.profile = snapshot.profile;
@@ -1449,6 +1435,7 @@
         renderLanguageFilters(langs);
         renderLanguageBars(langs);
         renderRepos();
+        saveCache(state.profile, state.repos);
 
         if (snapshot.generatedAt) {
           syncBadge.textContent = `Snapshot ${new Date(snapshot.generatedAt).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}`;
@@ -1457,8 +1444,20 @@
         }
         repoStatus.textContent = `Showing ${getFilteredRepos().length} repositories from snapshot data.`;
         hasAnyData = true;
-      } catch (_) {
-        // Static snapshot is optional; live API fetch continues below.
+      } catch {
+        const cached = readCache();
+        if (cached && cached.profile && Array.isArray(cached.repos)) {
+          state.profile = cached.profile;
+          state.repos = cached.repos;
+          const langs = aggregateLanguages(state.repos);
+          updateProfile(state.profile, state.repos);
+          renderLanguageFilters(langs);
+          renderLanguageBars(langs);
+          renderRepos();
+          repoStatus.textContent = `Showing ${getFilteredRepos().length} repositories from cached data.`;
+          syncBadge.textContent = `Cached ${new Date(cached.timestamp).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}`;
+          hasAnyData = true;
+        }
       }
 
       try {
