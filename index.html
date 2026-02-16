@@ -1114,13 +1114,17 @@
     .about-intro {
       margin-top: 0.24rem;
       color: #b7c1cc;
-      max-width: 76ch;
-      line-height: 1.66;
-      font-size: 1.04rem;
+      width: 100%;
+      max-width: 100%;
+      line-height: 1.74;
+      font-size: 1.06rem;
       border: 1px solid #25303a;
       border-radius: 14px;
       background: linear-gradient(150deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
-      padding: 0.8rem 0.88rem;
+      padding: 1rem 1.08rem;
+      min-height: 126px;
+      display: flex;
+      align-items: center;
     }
 
     .chips.tech-grid {
@@ -1136,16 +1140,16 @@
       display: inline-flex;
       align-items: center;
       gap: 0.52rem;
-      min-height: 46px;
+      min-height: 58px;
       border: 1px solid rgba(var(--tech), 0.32);
       border-radius: 14px;
-      padding: 0.5rem 0.62rem;
+      padding: 0.64rem 0.76rem;
       color: #e6ecf2;
       background:
         linear-gradient(150deg, rgba(255, 255, 255, 0.026), rgba(255, 255, 255, 0.01)),
         rgba(255, 255, 255, 0.01);
-      font-size: 0.83rem;
-      font-weight: 520;
+      font-size: 0.91rem;
+      font-weight: 560;
       letter-spacing: 0.01em;
       line-height: 1.2;
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
@@ -1161,9 +1165,9 @@
     }
 
     .chip-icon-wrap {
-      width: 22px;
-      height: 22px;
-      border-radius: 8px;
+      width: 30px;
+      height: 30px;
+      border-radius: 10px;
       border: 1px solid rgba(var(--tech), 0.45);
       background: rgba(var(--tech), 0.14);
       display: inline-grid;
@@ -1173,8 +1177,8 @@
     }
 
     .chip-icon {
-      width: 14px;
-      height: 14px;
+      width: 20px;
+      height: 20px;
       object-fit: contain;
       display: block;
     }
@@ -1898,11 +1902,11 @@
       .identity-tag { font-size: 0.64rem; letter-spacing: 0.1em; }
       .side-mini-item strong { font-size: 0.98rem; }
       .side-link { padding: 0.58rem 0.52rem; }
-      .about-intro { font-size: 0.96rem; padding: 0.74rem 0.78rem; }
+      .about-intro { font-size: 0.98rem; padding: 0.86rem 0.9rem; min-height: 112px; }
       .chips.tech-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.5rem; }
-      .tech-chip { min-height: 42px; font-size: 0.78rem; padding: 0.46rem 0.56rem; }
-      .chip-icon-wrap { width: 20px; height: 20px; border-radius: 7px; }
-      .chip-icon { width: 13px; height: 13px; }
+      .tech-chip { min-height: 50px; font-size: 0.85rem; padding: 0.54rem 0.62rem; }
+      .chip-icon-wrap { width: 26px; height: 26px; border-radius: 9px; }
+      .chip-icon { width: 17px; height: 17px; }
       .brand { padding: 0.3rem 0.55rem 0.3rem 0.32rem; border-radius: 15px; gap: 0.54rem; }
       .brand-avatar { width: 38px; height: 38px; border-radius: 11px; }
       .brand-status { width: 11px; height: 11px; right: -1px; bottom: -1px; }
@@ -2020,8 +2024,9 @@
         <span class="about-tag">Stack Icons</span>
       </div>
       <p class="about-intro">
-        My approach blends product thinking and technical rigor. I focus on delightful user experience,
-        dependable architecture, and maintainable codebases that scale with business needs.
+        My product engineering approach combines strategic thinking, premium interface craftsmanship, and resilient backend architecture.
+        I design systems that are fast, maintainable, and easy to scale, while keeping user clarity and business impact at the center of every decision.
+        From polished front-end interactions to stable API and deployment workflows, I build end-to-end experiences that feel refined in both design and performance.
       </p>
       <div class="chips tech-grid" role="list" aria-label="Primary tech stack with logos">
         <span class="chip tech-chip" role="listitem" style="--tech:247,223,30;"><span class="chip-icon-wrap"><img class="chip-icon" src="https://cdn.simpleicons.org/javascript/F7DF1E" alt="" aria-hidden="true" loading="lazy" decoding="async" /></span><span>JavaScript</span></span>
