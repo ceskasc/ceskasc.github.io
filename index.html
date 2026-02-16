@@ -1425,6 +1425,8 @@
       repoStatus.textContent = "Fetching repositories and profile data...";
       syncBadge.textContent = "Syncing...";
       let hasAnyData = false;
+      let hasSnapshotData = false;
+      const isGitHubPagesHost = window.location.hostname.endsWith("github.io");
 
       const cached = readCache();
       if (cached && cached.profile && Array.isArray(cached.repos)) {
@@ -1457,8 +1459,14 @@
         }
         repoStatus.textContent = `Showing ${getFilteredRepos().length} repositories from snapshot data.`;
         hasAnyData = true;
+        hasSnapshotData = true;
       } catch (_) {
         // Static snapshot is optional; live API fetch continues below.
+      }
+
+      // On GitHub Pages, prefer snapshot mode to avoid public API rate-limit failures in client-side requests.
+      if (isGitHubPagesHost && hasSnapshotData) {
+        return;
       }
 
       try {
@@ -1476,14 +1484,18 @@
         syncBadge.textContent = `Synced ${new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}`;
         hasAnyData = true;
       } catch (error) {
-        syncBadge.textContent = "Sync failed";
         if (!hasAnyData) {
+          syncBadge.textContent = "Sync failed";
           repoGrid.innerHTML = "";
           repoStatus.textContent = "Could not load GitHub data. Please try again shortly.";
         } else {
-          repoStatus.textContent = "Live sync failed. Showing latest available snapshot.";
+          const isRateLimited = String(error?.message || "").includes("403");
+          syncBadge.textContent = isRateLimited ? "Rate-limited" : "Snapshot mode";
+          repoStatus.textContent = isRateLimited
+            ? "GitHub API rate limit reached. Showing latest available snapshot."
+            : "Live update unavailable. Showing latest available snapshot.";
         }
-        console.error(error);
+        console.warn(error);
       }
     }
 
