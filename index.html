@@ -1,0 +1,1540 @@
+﻿
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sadıkcan Çeşka | Fullstack Portfolio</title>
+  <meta name="description" content="Portfolio of Sadıkcan Çeşka. Fullstack engineer building premium, high-performance digital products." />
+  <meta name="theme-color" content="#0b0e11" />
+  <link rel="canonical" href="https://ceskasc.github.io/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Sadıkcan Çeşka Portfolio" />
+  <meta property="og:title" content="Sadıkcan Çeşka | Fullstack Portfolio" />
+  <meta property="og:description" content="Premium portfolio of Sadıkcan Çeşka. Fullstack engineer building scalable, high-performance web products." />
+  <meta property="og:url" content="https://ceskasc.github.io/" />
+  <meta property="og:image" content="https://github.com/ceskasc.png" />
+  <meta property="og:image:alt" content="Sadıkcan Çeşka profile photo" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Sadıkcan Çeşka | Fullstack Portfolio" />
+  <meta name="twitter:description" content="Premium portfolio of Sadıkcan Çeşka. Fullstack engineer building scalable web products." />
+  <meta name="twitter:image" content="https://github.com/ceskasc.png" />
+  <link rel="icon" type="image/svg+xml" href="/logo-sc.svg" />
+  <link rel="shortcut icon" href="/logo-sc.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Sadıkcan Çeşka",
+      "url": "https://ceskasc.github.io/",
+      "image": "https://github.com/ceskasc.png",
+      "sameAs": [
+        "https://github.com/ceskasc",
+        "https://discord.gg/xz5fNAS3"
+      ],
+      "jobTitle": "Senior Fullstack Web Developer"
+    }
+  </script>
+  <style>
+    :root {
+      --bg: #0b0e11;
+      --panel: rgba(16, 20, 24, 0.86);
+      --panel-soft: rgba(20, 25, 30, 0.68);
+      --line: #232a31;
+      --text: #f3f4ef;
+      --muted: #9ca6b0;
+      --accent: #d5b378;
+      --accent-soft: #f4dfb6;
+      --accent-2: #88b8aa;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-sm: 11px;
+      --shadow: 0 24px 54px rgba(0, 0, 0, 0.42);
+      --content: min(1140px, calc(100% - 2rem));
+      --mx: 50%;
+      --my: 50%;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: "Outfit", sans-serif;
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.58;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(213, 179, 120, 0.13), transparent 28%),
+        radial-gradient(circle at 90% 20%, rgba(136, 184, 170, 0.1), transparent 30%),
+        linear-gradient(155deg, #090b0d 0%, #0b0e11 45%, #121820 100%);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -3;
+      pointer-events: none;
+      opacity: 0.12;
+      background-image:
+        linear-gradient(to right, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+      background-size: 36px 36px;
+      mask-image: radial-gradient(circle at 50% 8%, black, transparent 78%);
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -4;
+      background: radial-gradient(circle 480px at var(--mx) var(--my), rgba(213, 179, 120, 0.08), transparent 44%);
+      transition: background 0.08s linear;
+    }
+
+    .orb {
+      position: fixed;
+      border-radius: 999px;
+      filter: blur(68px);
+      opacity: 0.24;
+      pointer-events: none;
+      z-index: -5;
+      animation: drift 14s ease-in-out infinite;
+    }
+    .orb.a { width: 250px; height: 250px; left: -90px; top: -80px; background: #d5b378; }
+    .orb.b { width: 300px; height: 300px; right: -120px; top: 25vh; background: #88b8aa; animation-delay: -5s; }
+    .orb.c { width: 240px; height: 240px; left: 42%; bottom: -120px; background: #7f90c2; opacity: 0.14; animation-delay: -8s; }
+
+    @keyframes drift {
+      0%, 100% { transform: translate3d(0, 0, 0); }
+      50% { transform: translate3d(0, -20px, 0); }
+    }
+
+    .container { width: var(--content); margin-inline: auto; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(7, 9, 11, 0.72);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(213, 179, 120, 0.2);
+    }
+
+    .nav {
+      min-height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.8rem;
+    }
+
+    .brand {
+      color: var(--text);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.66rem;
+    }
+
+    .brand-name {
+      font-family: "Playfair Display", serif;
+      font-size: 1.32rem;
+      font-weight: 700;
+      letter-spacing: 0.012em;
+      color: #f6ecd4;
+      text-shadow: 0 0 14px rgba(213, 179, 120, 0.22);
+      white-space: nowrap;
+      line-height: 1;
+    }
+
+    .brand-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 11px;
+      object-fit: cover;
+      flex-shrink: 0;
+      padding: 2px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(213, 179, 120, 0.42);
+      box-shadow: 0 0 0 4px rgba(213, 179, 120, 0.12);
+    }
+
+    .menu { list-style: none; display: flex; gap: 0.55rem; flex-wrap: wrap; }
+    .menu a {
+      color: #d5dce3;
+      text-decoration: none;
+      font-size: 0.84rem;
+      border: 1px solid #1f262d;
+      border-radius: 999px;
+      padding: 0.42rem 0.7rem;
+      transition: 0.2s ease;
+    }
+    .menu a:hover {
+      color: var(--accent-soft);
+      border-color: rgba(213, 179, 120, 0.5);
+      background: rgba(213, 179, 120, 0.08);
+      transform: translateY(-1px);
+    }
+
+    main { padding: 76px 0 42px; }
+
+    .panel {
+      position: relative;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--line);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      pointer-events: none;
+      background: radial-gradient(300px circle at var(--mx) var(--my), rgba(213, 179, 120, 0.08), transparent 45%);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 1rem;
+    }
+
+    .hero-main,
+    .hero-side {
+      position: relative;
+      z-index: 1;
+      padding: 2rem;
+    }
+
+    .hero-side {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-size: 0.73rem;
+      font-weight: 600;
+    }
+
+    h1 {
+      margin-top: 0.56rem;
+      font-family: "Playfair Display", serif;
+      font-weight: 700;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      line-height: 0.94;
+      max-width: 11ch;
+      letter-spacing: 0.01em;
+    }
+
+    h1 span {
+      display: block;
+      margin-top: 0.72rem;
+      font-family: "Outfit", sans-serif;
+      font-weight: 500;
+      font-size: clamp(1.3rem, 2.9vw, 2rem);
+      color: #ead7b1;
+      line-height: 1.1;
+      max-width: 17ch;
+    }
+    .lead {
+      margin-top: 1rem;
+      max-width: 65ch;
+      color: var(--muted);
+      font-size: clamp(0.95rem, 1.6vw, 1.05rem);
+    }
+
+    .actions {
+      margin-top: 1.35rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+    }
+
+    .btn {
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      padding: 0.66rem 0.96rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: 0.2s ease;
+    }
+
+    .btn.primary {
+      color: #111317;
+      background: linear-gradient(130deg, var(--accent), #f1ddb3);
+      box-shadow: 0 10px 24px rgba(213, 179, 120, 0.25);
+    }
+
+    .btn.secondary {
+      color: #d8dfe6;
+      border-color: var(--line);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .btn:hover { transform: translateY(-2px); }
+
+    .metrics {
+      margin-top: 1.25rem;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.62rem;
+    }
+
+    .metric {
+      border-radius: var(--radius-sm);
+      border: 1px solid #1e252c;
+      background: rgba(255, 255, 255, 0.015);
+      padding: 0.66rem 0.7rem;
+      display: grid;
+      gap: 0.13rem;
+    }
+
+    .metric strong {
+      font-size: 1rem;
+      color: #f0ddb4;
+      font-weight: 600;
+    }
+
+    .metric span { font-size: 0.75rem; color: var(--muted); }
+
+    .identity {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 0.78rem;
+    }
+
+    .avatar {
+      width: 74px;
+      height: 74px;
+      border-radius: 18px;
+      object-fit: cover;
+      border: 1px solid rgba(213, 179, 120, 0.5);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+    }
+
+    .identity strong { display: block; font-size: 1.03rem; line-height: 1.2; }
+    .identity span { font-size: 0.84rem; color: var(--muted); }
+
+    .side-list {
+      list-style: none;
+      display: grid;
+      gap: 0.48rem;
+      margin: 0.68rem 0 1rem;
+      color: #ccd2d9;
+      font-size: 0.9rem;
+    }
+
+    .side-list li { display: inline-flex; align-items: center; gap: 0.48rem; }
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--accent-2);
+      flex-shrink: 0;
+    }
+
+    .side-bottom {
+      margin-top: auto;
+      display: grid;
+      gap: 0.62rem;
+    }
+
+    .side-focus {
+      border: 1px solid #1e252c;
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.015);
+      padding: 0.76rem 0.82rem;
+      display: grid;
+      gap: 0.28rem;
+    }
+
+    .side-focus h3 {
+      font-size: 0.83rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #f0ddb5;
+      font-weight: 600;
+    }
+
+    .side-focus p {
+      color: #b9c2cb;
+      font-size: 0.82rem;
+      line-height: 1.45;
+    }
+
+    .side-mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.52rem;
+    }
+
+    .side-mini-item {
+      border: 1px solid #1e252c;
+      border-radius: 11px;
+      background: rgba(255, 255, 255, 0.016);
+      padding: 0.56rem 0.6rem;
+      display: grid;
+      gap: 0.08rem;
+    }
+
+    .side-mini-item strong {
+      font-size: 0.9rem;
+      color: #f0ddb4;
+      line-height: 1.2;
+      font-weight: 600;
+    }
+
+    .side-mini-item span {
+      color: #a5aeb8;
+      font-size: 0.72rem;
+      line-height: 1.28;
+    }
+
+    .side-links {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.52rem;
+    }
+
+    .side-link {
+      text-decoration: none;
+      border: 1px solid #1e252c;
+      border-radius: 11px;
+      padding: 0.56rem 0.6rem;
+      color: #d4dbe2;
+      background: rgba(255, 255, 255, 0.016);
+      font-size: 0.77rem;
+      text-align: center;
+      transition: 0.18s ease;
+    }
+
+    .side-link:hover {
+      color: #121416;
+      border-color: transparent;
+      background: linear-gradient(130deg, var(--accent), #efdaad);
+      transform: translateY(-1px);
+    }
+
+    .section {
+      margin-top: 1rem;
+      padding: 1.4rem;
+    }
+
+    .section-title {
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 0.79rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    .about p { color: var(--muted); max-width: 74ch; }
+
+    .chips {
+      margin-top: 0.85rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.54rem;
+    }
+
+    .chip {
+      border: 1px solid #1e252c;
+      border-radius: 999px;
+      padding: 0.42rem 0.66rem;
+      font-size: 0.8rem;
+      color: #d4dbe2;
+      background: rgba(255, 255, 255, 0.017);
+      transition: 0.18s ease;
+    }
+
+    .chip:hover {
+      color: #f4e1ba;
+      border-color: rgba(213, 179, 120, 0.48);
+    }
+
+    .repo-top {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    .repo-top p { color: var(--muted); font-size: 0.9rem; }
+
+    .sync {
+      border: 1px solid #1e252c;
+      border-radius: 999px;
+      padding: 0.3rem 0.52rem;
+      font-size: 0.75rem;
+      color: #9aa3ad;
+      background: rgba(255, 255, 255, 0.018);
+    }
+
+    .repo-controls {
+      margin-top: 0.88rem;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      gap: 0.54rem;
+    }
+
+    .input,
+    .select {
+      width: 100%;
+      border: 1px solid #1e252c;
+      border-radius: 10px;
+      padding: 0.56rem 0.65rem;
+      font: inherit;
+      color: #e3e8ee;
+      background: rgba(255, 255, 255, 0.018);
+      outline: none;
+    }
+
+    .input:focus,
+    .select:focus {
+      border-color: rgba(213, 179, 120, 0.55);
+      box-shadow: 0 0 0 3px rgba(213, 179, 120, 0.14);
+    }
+
+    .filters {
+      margin-top: 0.65rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+    }
+
+    .filter-chip {
+      border: 1px solid #1e252c;
+      border-radius: 999px;
+      padding: 0.36rem 0.6rem;
+      font-size: 0.76rem;
+      background: rgba(255, 255, 255, 0.018);
+      color: #ccd3da;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .filter-chip:hover { border-color: rgba(213, 179, 120, 0.5); color: #f4e0b7; }
+    .filter-chip.active {
+      color: #121416;
+      background: linear-gradient(130deg, var(--accent), #f1ddb3);
+      border-color: transparent;
+      font-weight: 600;
+    }
+
+    .repo-grid {
+      margin-top: 0.8rem;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.7rem;
+    }
+
+    .repo-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 0.9rem;
+      background: linear-gradient(165deg, rgba(255, 255, 255, 0.028), rgba(255, 255, 255, 0)), rgba(12, 15, 18, 0.62);
+      display: grid;
+      gap: 0.6rem;
+      opacity: 0;
+      transform: translateY(14px) scale(0.985);
+      animation: cardIn 0.5s cubic-bezier(0.2, 0.65, 0.2, 1) forwards;
+      animation-delay: var(--delay, 0ms);
+    }
+
+    @keyframes cardIn { to { opacity: 1; transform: translateY(0) scale(1); } }
+
+    .repo-card h3 { font-size: 0.97rem; line-height: 1.3; min-height: 2.3em; }
+    .repo-card h3 a { color: #edf0f4; text-decoration: none; }
+    .repo-card h3 a:hover { color: #f3deb4; }
+    .repo-card p { color: var(--muted); font-size: 0.87rem; min-height: 2.8em; }
+
+    .repo-meta {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      font-size: 0.74rem;
+      color: #c5ccd3;
+    }
+
+    .repo-meta li {
+      border: 1px solid #1e252c;
+      border-radius: 999px;
+      padding: 0.22rem 0.45rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.34rem;
+      background: rgba(255, 255, 255, 0.017);
+    }
+
+    .lang-dot { width: 8px; height: 8px; border-radius: 999px; display: inline-block; flex-shrink: 0; }
+    .repo-links { display: flex; gap: 0.44rem; flex-wrap: wrap; }
+
+    .repo-link {
+      text-decoration: none;
+      border: 1px solid #1e252c;
+      border-radius: 999px;
+      padding: 0.28rem 0.5rem;
+      color: #d5dce3;
+      font-size: 0.73rem;
+      transition: 0.18s ease;
+    }
+
+    .repo-link:hover {
+      color: #111317;
+      background: linear-gradient(130deg, var(--accent), #efdaad);
+      border-color: transparent;
+    }
+
+    .skeleton {
+      position: relative;
+      overflow: hidden;
+      opacity: 1;
+      animation: none;
+      min-height: 160px;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .skeleton::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      transform: translateX(-100%);
+      background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+      animation: shimmer 1.3s infinite;
+    }
+
+    @keyframes shimmer { to { transform: translateX(100%); } }
+
+    .repo-status { margin-top: 0.8rem; color: #98a1ab; font-size: 0.84rem; }
+
+    .insights {
+      margin-top: 0.12rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.68rem;
+    }
+
+    .insight-card {
+      border: 1px solid #1e252c;
+      border-radius: var(--radius-md);
+      padding: 0.86rem;
+      background: var(--panel-soft);
+      display: grid;
+      gap: 0.6rem;
+    }
+
+    .kv {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.48rem;
+    }
+
+    .kv-item {
+      border: 1px solid #1e252c;
+      border-radius: 10px;
+      padding: 0.53rem 0.56rem;
+      background: rgba(255, 255, 255, 0.015);
+      display: grid;
+      gap: 0.1rem;
+    }
+
+    .kv-item strong { font-size: 0.94rem; color: #f0ddb4; line-height: 1.2; }
+    .kv-item span { font-size: 0.73rem; color: var(--muted); }
+
+    .lang-list { display: grid; gap: 0.42rem; }
+    .lang-row { display: grid; gap: 0.25rem; }
+
+    .lang-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.5rem;
+      font-size: 0.78rem;
+      color: #ced5dc;
+    }
+
+    .bar {
+      width: 100%;
+      height: 7px;
+      border-radius: 999px;
+      background: #1d242b;
+      overflow: hidden;
+    }
+
+    .bar > span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      transform-origin: left center;
+      transform: scaleX(0);
+      background: linear-gradient(130deg, var(--accent), #edd8ad);
+      animation: grow 0.8s ease forwards;
+    }
+
+    @keyframes grow { to { transform: scaleX(1); } }
+
+    .resume-grid {
+      margin-top: 0.35rem;
+      display: grid;
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 0.7rem;
+      align-items: stretch;
+    }
+
+    .resume-card {
+      border: 1px solid #1e252c;
+      border-radius: var(--radius-md);
+      background: var(--panel-soft);
+      padding: 0.95rem;
+      display: grid;
+      gap: 0.6rem;
+      align-content: start;
+    }
+
+    .resume-card p {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .resume-actions {
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    .resume-meta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.78rem;
+      color: #bcc5cf;
+    }
+
+    .resume-meta.ok .status-dot { background: #88b8aa; }
+    .resume-meta.warn .status-dot { background: #d29393; }
+    .resume-meta.warn { color: #d9a8a8; }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--accent-2);
+      flex-shrink: 0;
+    }
+
+    .resume-note {
+      font-size: 0.78rem;
+      color: #a5aeb8;
+    }
+
+    .cv-frame-wrap {
+      border: 1px solid #1e252c;
+      border-radius: var(--radius-md);
+      background: rgba(9, 12, 16, 0.7);
+      min-height: 420px;
+      overflow: hidden;
+    }
+
+    .cv-frame {
+      width: 100%;
+      height: 100%;
+      min-height: 420px;
+      border: 0;
+      display: block;
+    }
+
+    .contact-layout {
+      margin-top: 0.88rem;
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: 0.75rem;
+      align-items: start;
+    }
+
+    .contact-form {
+      border: 1px solid #1e252c;
+      border-radius: var(--radius-md);
+      background: var(--panel-soft);
+      padding: 0.9rem;
+      display: grid;
+      gap: 0.58rem;
+    }
+
+    .contact-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.58rem;
+    }
+
+    .contact-form label {
+      display: grid;
+      gap: 0.34rem;
+      font-size: 0.8rem;
+      color: #d5dce3;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      border: 1px solid #1e252c;
+      border-radius: 10px;
+      padding: 0.62rem 0.7rem;
+      font: inherit;
+      color: #e8edf3;
+      background: rgba(255, 255, 255, 0.02);
+      outline: none;
+    }
+
+    .contact-form textarea {
+      min-height: 130px;
+      resize: vertical;
+    }
+
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      border-color: rgba(213, 179, 120, 0.52);
+      box-shadow: 0 0 0 3px rgba(213, 179, 120, 0.13);
+    }
+
+    .contact-submit {
+      margin-top: 0.1rem;
+    }
+
+    .contact-form-note {
+      color: #a5aeb8;
+      font-size: 0.77rem;
+      line-height: 1.4;
+    }
+
+    .contact-status {
+      border: 1px solid rgba(136, 184, 170, 0.44);
+      background: rgba(136, 184, 170, 0.13);
+      color: #b9dece;
+      border-radius: 10px;
+      padding: 0.58rem 0.64rem;
+      font-size: 0.79rem;
+      display: none;
+    }
+
+    .contact-status.show {
+      display: block;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.7rem;
+    }
+
+    .contact-link {
+      text-decoration: none;
+      border: 1px solid #1e252c;
+      border-radius: var(--radius-md);
+      padding: 0.8rem;
+      color: #dce1e7;
+      background: rgba(255, 255, 255, 0.017);
+      display: grid;
+      gap: 0.22rem;
+      transition: 0.2s ease;
+    }
+
+    .contact-link strong {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: #f1ddb3;
+    }
+
+    .contact-link span { font-size: 0.88rem; color: #d5dbe2; word-break: break-word; }
+
+    .contact-link:hover {
+      transform: translateY(-2px);
+      border-color: rgba(213, 179, 120, 0.52);
+      background: rgba(213, 179, 120, 0.09);
+    }
+
+    footer {
+      width: var(--content);
+      margin: 1.9rem auto 1.4rem;
+      color: #89939e;
+      font-size: 0.79rem;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.52rem;
+    }
+
+    [data-reveal] {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    [data-reveal].visible { opacity: 1; transform: translateY(0); }
+
+    .hero-item {
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      transition-delay: calc(var(--i, 0) * 80ms);
+    }
+
+    body.loaded .hero-item { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 980px) {
+      .hero { grid-template-columns: 1fr; }
+      .repo-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .insights { grid-template-columns: 1fr; }
+      .resume-grid { grid-template-columns: 1fr; }
+      .contact-layout { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 780px) {
+      .menu { display: none; }
+      .hero-main, .hero-side { padding: 1.2rem; }
+      .metrics { grid-template-columns: 1fr; }
+      .repo-controls { grid-template-columns: 1fr; }
+      .contact-row { grid-template-columns: 1fr; }
+      .contact-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      main { padding-top: 56px; }
+      .repo-grid { grid-template-columns: 1fr; }
+      .section { padding: 1.06rem; }
+      .btn { width: 100%; }
+      .side-links { grid-template-columns: 1fr; }
+      .brand-avatar { width: 34px; height: 34px; border-radius: 10px; }
+      .brand-name { font-size: 1.12rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="orb a"></div>
+  <div class="orb b"></div>
+  <div class="orb c"></div>
+
+  <header class="topbar">
+    <div class="container nav">
+      <a class="brand" href="#top">
+        <img id="brand-avatar" class="brand-avatar" src="https://github.com/ceskasc.png" alt="Sadıkcan Çeşka profile photo" />
+        <span class="brand-name">Sadıkcan Çeşka</span>
+      </a>
+      <ul class="menu">
+        <li><a href="#about">About</a></li>
+        <li><a href="#repositories">Repositories</a></li>
+        <li><a href="#insights">Insights</a></li>
+        <li><a href="#resume">Resume</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main id="top" class="container">
+    <section class="hero">
+      <article class="panel hero-main">
+        <p class="eyebrow hero-item" style="--i: 0;">Fullstack Product Engineer</p>
+        <h1 class="hero-item" style="--i: 1;">
+          Sadıkcan Çeşka
+          <span>Crafting premium web systems with elegant engineering.</span>
+        </h1>
+        <p class="lead hero-item" style="--i: 2;">
+          I build digital products that combine intentional interface design with scalable backend architecture.
+          Performance, maintainability, and product impact are at the center of my workflow.
+        </p>
+        <div class="actions hero-item" style="--i: 3;">
+          <a class="btn primary" href="#repositories">Explore Live Projects</a>
+          <a class="btn secondary" href="#resume">View Resume</a>
+          <a class="btn secondary" href="https://github.com/ceskasc" target="_blank" rel="noreferrer">GitHub Profile</a>
+        </div>
+        <div class="metrics hero-item" style="--i: 4;">
+          <div class="metric"><strong id="metric-repos">--</strong><span>Public repositories</span></div>
+          <div class="metric"><strong id="metric-followers">--</strong><span>GitHub followers</span></div>
+          <div class="metric"><strong id="metric-stars">--</strong><span>Total stars across repos</span></div>
+        </div>
+      </article>
+
+      <aside class="panel hero-side">
+        <div class="identity">
+          <img class="avatar" id="avatar" src="https://github.com/ceskasc.png" alt="Sadıkcan Çeşka avatar" />
+          <div>
+            <strong>Sadıkcan Çeşka</strong>
+            <span id="handle">@ceskasc</span>
+          </div>
+        </div>
+        <ul class="side-list">
+          <li><span class="dot"></span><span id="bio">Senior Fullstack Web Developer</span></li>
+          <li><span class="dot"></span><span id="location">Ankara, Turkiye</span></li>
+          <li><span class="dot"></span><span id="joined">Joined GitHub --</span></li>
+        </ul>
+        <a class="btn secondary" href="https://github.com/ceskasc?tab=repositories" target="_blank" rel="noreferrer">View All Repositories</a>
+
+        <div class="side-bottom">
+          <article class="side-focus">
+            <h3>Current Focus</h3>
+            <p>
+              Building production-ready Next.js systems, API performance pipelines, and polished interface architecture.
+            </p>
+          </article>
+          <div class="side-mini-grid">
+            <div class="side-mini-item"><strong id="side-public-repos">--</strong><span>Public Repos</span></div>
+            <div class="side-mini-item"><strong id="side-total-stars">--</strong><span>Total Stars</span></div>
+            <div class="side-mini-item"><strong id="side-followers">--</strong><span>Followers</span></div>
+            <div class="side-mini-item"><strong id="side-top-lang">--</strong><span>Top Language</span></div>
+          </div>
+          <div class="side-links">
+            <a class="side-link" href="#repositories">Latest Projects</a>
+            <a class="side-link" href="#resume">Open Resume</a>
+          </div>
+        </div>
+      </aside>
+    </section>
+    <section id="about" class="section panel about" data-reveal>
+      <p class="section-title">About</p>
+      <p>
+        My approach blends product thinking and technical rigor. I focus on delightful user experience,
+        dependable architecture, and maintainable codebases that scale with business needs.
+      </p>
+      <div class="chips">
+        <span class="chip">JavaScript</span>
+        <span class="chip">TypeScript</span>
+        <span class="chip">React</span>
+        <span class="chip">Next.js</span>
+        <span class="chip">Node.js</span>
+        <span class="chip">Tailwind CSS</span>
+        <span class="chip">GraphQL</span>
+        <span class="chip">PostgreSQL</span>
+        <span class="chip">MongoDB</span>
+        <span class="chip">Docker</span>
+        <span class="chip">AWS</span>
+        <span class="chip">CI/CD</span>
+      </div>
+    </section>
+
+    <section id="repositories" class="section panel" data-reveal>
+      <div class="repo-top">
+        <div>
+          <p class="section-title">Live GitHub Repositories</p>
+          <p>Data is fetched directly from public GitHub APIs and rendered in real time.</p>
+        </div>
+        <span id="sync" class="sync">Syncing...</span>
+      </div>
+
+      <div class="repo-controls">
+        <input id="repo-search" class="input" type="search" placeholder="Search repositories by name or description..." aria-label="Search repositories" />
+        <select id="repo-sort" class="select" aria-label="Sort repositories">
+          <option value="featured">Sort: Featured</option>
+          <option value="updated">Sort: Recently Updated</option>
+          <option value="stars">Sort: Most Starred</option>
+          <option value="name">Sort: Name A-Z</option>
+        </select>
+        <select id="repo-limit" class="select" aria-label="Repository card count">
+          <option value="6">Show: 6</option>
+          <option value="9" selected>Show: 9</option>
+          <option value="12">Show: 12</option>
+          <option value="100">Show: All</option>
+        </select>
+      </div>
+
+      <div id="language-filters" class="filters" aria-label="Language filters"></div>
+      <div id="repo-grid" class="repo-grid" aria-live="polite"></div>
+      <p id="repo-status" class="repo-status"></p>
+    </section>
+
+    <section id="insights" class="section panel" data-reveal>
+      <p class="section-title">Insights</p>
+      <div class="insights">
+        <article class="insight-card">
+          <strong>GitHub Snapshot</strong>
+          <div class="kv">
+            <div class="kv-item"><strong id="snap-followers">--</strong><span>Followers</span></div>
+            <div class="kv-item"><strong id="snap-following">--</strong><span>Following</span></div>
+            <div class="kv-item"><strong id="snap-public">--</strong><span>Public Repos</span></div>
+            <div class="kv-item"><strong id="snap-updated">--</strong><span>Latest Activity</span></div>
+          </div>
+        </article>
+        <article class="insight-card">
+          <strong>Top Languages</strong>
+          <div id="lang-list" class="lang-list"></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="resume" class="section panel" data-reveal>
+      <p class="section-title">Resume</p>
+      <div class="resume-grid">
+        <article class="resume-card">
+          <h3>Sadıkcan Çeşka - CV</h3>
+          <p>
+            Download the latest PDF version or preview it directly in the embedded viewer.
+          </p>
+          <div class="resume-actions">
+            <a id="cv-view-link" class="btn primary" href="#" target="_blank" rel="noreferrer">Open Resume in New Tab</a>
+            <a id="cv-download-link" class="btn secondary" href="#" download>Download Resume PDF</a>
+          </div>
+          <p class="resume-meta"><span class="status-dot" aria-hidden="true"></span><span id="cv-status">Checking resume file...</span></p>
+          <p class="resume-note">
+            If the preview does not appear on your browser, use the download button above.
+          </p>
+        </article>
+        <div class="cv-frame-wrap">
+          <iframe id="cv-frame" class="cv-frame" title="Sadıkcan Çeşka resume preview" loading="lazy"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section panel" data-reveal>
+      <p class="section-title">Contact</p>
+      <div class="contact-layout">
+        <form class="contact-form" action="https://formsubmit.co/kanalinizo@gmail.com" method="POST">
+          <input type="hidden" name="_subject" value="New Portfolio Contact Message" />
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_next" value="https://ceskasc.github.io/?message=sent#contact" />
+          <input type="text" name="_honey" tabindex="-1" autocomplete="off" style="display:none" />
+
+          <div id="contact-status" class="contact-status">Your message has been sent successfully.</div>
+
+          <div class="contact-row">
+            <label>
+              Full Name
+              <input type="text" name="name" required placeholder="Your full name" />
+            </label>
+            <label>
+              Email Address
+              <input type="email" name="email" required placeholder="you@example.com" />
+            </label>
+          </div>
+
+          <label>
+            Subject
+            <input type="text" name="subject" required placeholder="Project inquiry" />
+          </label>
+
+          <label>
+            Message
+            <textarea name="message" required placeholder="Tell me about your project..."></textarea>
+          </label>
+
+          <button class="btn primary contact-submit" type="submit">Send Message</button>
+          <p class="contact-form-note">
+            This form forwards messages to <strong>kanalinizo@gmail.com</strong>.
+          </p>
+        </form>
+
+        <div class="contact-grid">
+          <a class="contact-link" href="mailto:kanalinizo@gmail.com">
+            <strong>Email</strong>
+            <span>kanalinizo@gmail.com</span>
+          </a>
+          <a class="contact-link" href="https://discord.gg/xz5fNAS3" target="_blank" rel="noreferrer">
+            <strong>Discord</strong>
+            <span>discord.gg/xz5fNAS3</span>
+          </a>
+          <a class="contact-link" href="https://github.com/ceskasc" target="_blank" rel="noreferrer">
+            <strong>GitHub</strong>
+            <span>github.com/ceskasc</span>
+          </a>
+          <a id="cv-contact-link" class="contact-link" href="#" target="_blank" rel="noreferrer">
+            <strong>Resume</strong>
+            <span>Open CV PDF</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>(c) <span id="year"></span> Sadıkcan Çeşka</span>
+    <span>Designed for premium GitHub Pages presentation.</span>
+  </footer>
+
+  <script>
+    const username = "ceskasc";
+    const cacheKey = `portfolio-cache-${username}-v5`;
+    const cacheTtlMs = 1000 * 60 * 30;
+    const staticDataUrl = "data/github.json";
+    const resumeFileName = "Sadikcan-Ceska-CV.pdf";
+    const resumeFileUrl = encodeURI(resumeFileName);
+
+    const repoGrid = document.getElementById("repo-grid");
+    const repoStatus = document.getElementById("repo-status");
+    const syncBadge = document.getElementById("sync");
+    const filtersHost = document.getElementById("language-filters");
+    const langList = document.getElementById("lang-list");
+    const searchInput = document.getElementById("repo-search");
+    const sortSelect = document.getElementById("repo-sort");
+    const limitSelect = document.getElementById("repo-limit");
+    const cvViewLink = document.getElementById("cv-view-link");
+    const cvDownloadLink = document.getElementById("cv-download-link");
+    const cvContactLink = document.getElementById("cv-contact-link");
+    const cvFrame = document.getElementById("cv-frame");
+    const cvStatus = document.getElementById("cv-status");
+    const brandAvatar = document.getElementById("brand-avatar");
+
+    const languageColors = {
+      JavaScript: "#f1e05a", TypeScript: "#3178c6", HTML: "#e34c26", CSS: "#563d7c",
+      Python: "#3572A5", Shell: "#89e051", Go: "#00ADD8", Rust: "#dea584", PHP: "#4F5D95",
+      C: "#555555", "C++": "#f34b7d", default: "#9aa3ad"
+    };
+
+    const state = { profile: null, repos: [], activeLanguage: "All", maxLanguages: 10 };
+
+    function esc(text) {
+      return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/\"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function shortNumber(value) {
+      return new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 }).format(value || 0);
+    }
+
+    function formatDate(value) {
+      if (!value) return "--";
+      return new Date(value).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+    }
+
+    function repoScore(repo) {
+      const stars = repo.stargazers_count || 0;
+      const forks = repo.forks_count || 0;
+      const updatedMs = new Date(repo.pushed_at).getTime() || 0;
+      return stars * 5 + forks * 2 + updatedMs / 1e12;
+    }
+
+    function showSkeletons(count) {
+      repoGrid.innerHTML = Array.from({ length: count })
+        .map(() => '<article class="repo-card skeleton" aria-hidden="true"></article>')
+        .join("");
+    }
+
+    function createRepoMarkup(repo, index) {
+      const description = repo.description ? esc(repo.description) : "No description provided.";
+      const language = repo.language || "Code";
+      const langColor = languageColors[language] || languageColors.default;
+      const homepage = repo.homepage && repo.homepage.trim() ? repo.homepage.trim() : "";
+      const links = [`<a class="repo-link" href="${repo.html_url}" target="_blank" rel="noreferrer">Repository</a>`];
+      if (homepage) {
+        links.push(`<a class="repo-link" href="${esc(homepage)}" target="_blank" rel="noreferrer">Live Demo</a>`);
+      }
+
+      return `
+        <article class="repo-card" style="--delay:${index * 50}ms">
+          <h3><a href="${repo.html_url}" target="_blank" rel="noreferrer">${esc(repo.name)}</a></h3>
+          <p>${description}</p>
+          <ul class="repo-meta">
+            <li><span class="lang-dot" style="background:${langColor}"></span>${esc(language)}</li>
+            <li>Stars ${repo.stargazers_count}</li>
+            <li>Forks ${repo.forks_count}</li>
+            <li>Updated ${formatDate(repo.pushed_at)}</li>
+          </ul>
+          <div class="repo-links">${links.join("")}</div>
+        </article>
+      `;
+    }
+    function aggregateLanguages(repos) {
+      const map = new Map();
+      repos.forEach((repo) => {
+        const key = repo.language || "Other";
+        map.set(key, (map.get(key) || 0) + 1);
+      });
+      return Array.from(map.entries())
+        .map(([name, count]) => ({ name, count }))
+        .sort((a, b) => b.count - a.count);
+    }
+
+    function renderLanguageFilters(languages) {
+      const all = [{ name: "All", count: state.repos.length }, ...languages.slice(0, state.maxLanguages)];
+      filtersHost.innerHTML = all
+        .map((lang) => {
+          const active = lang.name === state.activeLanguage ? "active" : "";
+          return `<button class="filter-chip ${active}" data-lang="${esc(lang.name)}">${esc(lang.name)} (${lang.count})</button>`;
+        })
+        .join("");
+    }
+
+    function renderLanguageBars(languages) {
+      if (!languages.length) {
+        langList.innerHTML = "<p class='repo-status'>No language data available.</p>";
+        return;
+      }
+      const total = languages.reduce((acc, item) => acc + item.count, 0);
+      langList.innerHTML = languages.slice(0, 6).map((item, idx) => {
+        const pct = Math.max(3, Math.round((item.count / total) * 100));
+        return `
+          <div class="lang-row">
+            <div class="lang-head"><span>${esc(item.name)}</span><span>${pct}%</span></div>
+            <div class="bar"><span style="width:${pct}%;animation-delay:${idx * 70}ms"></span></div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function getFilteredRepos() {
+      const searchTerm = searchInput.value.trim().toLowerCase();
+      const sortMode = sortSelect.value;
+      const limit = Number(limitSelect.value) || 9;
+
+      let result = state.repos.filter((repo) => {
+        if (state.activeLanguage !== "All" && (repo.language || "Other") !== state.activeLanguage) return false;
+        if (!searchTerm) return true;
+        return `${repo.name} ${repo.description || ""}`.toLowerCase().includes(searchTerm);
+      });
+
+      if (sortMode === "updated") result.sort((a, b) => new Date(b.pushed_at) - new Date(a.pushed_at));
+      else if (sortMode === "stars") result.sort((a, b) => b.stargazers_count - a.stargazers_count);
+      else if (sortMode === "name") result.sort((a, b) => a.name.localeCompare(b.name));
+      else result.sort((a, b) => repoScore(b) - repoScore(a));
+
+      return result.slice(0, limit);
+    }
+
+    function renderRepos() {
+      const repos = getFilteredRepos();
+      if (!repos.length) {
+        repoGrid.innerHTML = "";
+        repoStatus.textContent = "No repositories match the current filters.";
+        return;
+      }
+      repoGrid.innerHTML = repos.map((repo, i) => createRepoMarkup(repo, i)).join("");
+      repoStatus.textContent = `Showing ${repos.length} repositories from live GitHub data.`;
+    }
+
+    function updateProfile(profile, repos) {
+      const totalStars = repos.reduce((sum, repo) => sum + (repo.stargazers_count || 0), 0);
+      const latestPush = repos.length ? repos.map((repo) => new Date(repo.pushed_at).getTime()).sort((a, b) => b - a)[0] : null;
+      const topLanguage = aggregateLanguages(repos)[0]?.name || "N/A";
+
+      document.getElementById("metric-repos").textContent = shortNumber(profile.public_repos || repos.length);
+      document.getElementById("metric-followers").textContent = shortNumber(profile.followers);
+      document.getElementById("metric-stars").textContent = shortNumber(totalStars);
+
+      document.getElementById("snap-followers").textContent = shortNumber(profile.followers);
+      document.getElementById("snap-following").textContent = shortNumber(profile.following);
+      document.getElementById("snap-public").textContent = shortNumber(profile.public_repos || repos.length);
+      document.getElementById("snap-updated").textContent = latestPush ? formatDate(latestPush) : "--";
+
+      document.getElementById("bio").textContent = profile.bio || "Senior Fullstack Web Developer";
+      document.getElementById("location").textContent = profile.location || "Location not specified";
+      document.getElementById("joined").textContent = `Joined GitHub ${formatDate(profile.created_at)}`;
+      document.getElementById("handle").textContent = `@${profile.login || username}`;
+      document.getElementById("side-public-repos").textContent = shortNumber(profile.public_repos || repos.length);
+      document.getElementById("side-total-stars").textContent = shortNumber(totalStars);
+      document.getElementById("side-followers").textContent = shortNumber(profile.followers);
+      document.getElementById("side-top-lang").textContent = topLanguage;
+      if (profile.avatar_url) {
+        document.getElementById("avatar").src = profile.avatar_url;
+        if (brandAvatar) brandAvatar.src = profile.avatar_url;
+      }
+    }
+
+    function readCache() {
+      try {
+        const raw = localStorage.getItem(cacheKey);
+        if (!raw) return null;
+        const cached = JSON.parse(raw);
+        if (!cached.timestamp || Date.now() - cached.timestamp > cacheTtlMs) return null;
+        return cached;
+      } catch (_) {
+        return null;
+      }
+    }
+
+    function saveCache(profile, repos) {
+      localStorage.setItem(cacheKey, JSON.stringify({ timestamp: Date.now(), profile, repos }));
+    }
+
+    async function fetchStaticData() {
+      const response = await fetch(staticDataUrl, { cache: "no-store" });
+      if (!response.ok) {
+        throw new Error(`Static data request failed with ${response.status}`);
+      }
+
+      const payload = await response.json();
+      if (!payload || typeof payload !== "object" || !payload.profile || !Array.isArray(payload.repos)) {
+        throw new Error("Static data payload is invalid");
+      }
+
+      const repos = payload.repos.filter((repo) => !repo.fork && !repo.archived);
+      return { profile: payload.profile, repos, generatedAt: payload.generated_at || null };
+    }
+
+    async function initResume() {
+      const resumePreviewUrl = `${resumeFileUrl}#view=FitH`;
+      cvViewLink.href = resumePreviewUrl;
+      cvDownloadLink.href = resumeFileUrl;
+      cvContactLink.href = resumePreviewUrl;
+      cvFrame.src = resumePreviewUrl;
+      cvStatus.textContent = "Resume is linked and ready.";
+      cvStatus.parentElement.classList.remove("warn");
+      cvStatus.parentElement.classList.add("ok");
+
+      try {
+        const response = await fetch(resumeFileUrl, { method: "HEAD" });
+        if (!response.ok) {
+          throw new Error(`Resume check failed with ${response.status}`);
+        }
+      } catch (_) {
+        cvStatus.textContent = "Resume link is set. If preview fails locally, test on GitHub Pages.";
+        cvStatus.parentElement.classList.remove("ok");
+        cvStatus.parentElement.classList.add("warn");
+      }
+    }
+
+    async function fetchGitHubData() {
+      const [profileRes, reposRes] = await Promise.all([
+        fetch(`https://api.github.com/users/${username}`, { headers: { Accept: "application/vnd.github+json" } }),
+        fetch(`https://api.github.com/users/${username}/repos?per_page=100&sort=updated&direction=desc&type=owner`, { headers: { Accept: "application/vnd.github+json" } })
+      ]);
+
+      if (!profileRes.ok) throw new Error(`Profile request failed with ${profileRes.status}`);
+      if (!reposRes.ok) throw new Error(`Repos request failed with ${reposRes.status}`);
+
+      const [profile, repoList] = await Promise.all([profileRes.json(), reposRes.json()]);
+      const repos = repoList.filter((repo) => !repo.fork && !repo.archived);
+      return { profile, repos };
+    }
+
+    async function loadData() {
+      showSkeletons(9);
+      repoStatus.textContent = "Fetching repositories and profile data...";
+      syncBadge.textContent = "Syncing...";
+      let hasAnyData = false;
+
+      const cached = readCache();
+      if (cached && cached.profile && Array.isArray(cached.repos)) {
+        state.profile = cached.profile;
+        state.repos = cached.repos;
+        const langs = aggregateLanguages(state.repos);
+        updateProfile(state.profile, state.repos);
+        renderLanguageFilters(langs);
+        renderLanguageBars(langs);
+        renderRepos();
+        repoStatus.textContent = `Showing ${getFilteredRepos().length} repositories from cached data.`;
+        syncBadge.textContent = `Cached ${new Date(cached.timestamp).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}`;
+        hasAnyData = true;
+      }
+
+      try {
+        const snapshot = await fetchStaticData();
+        state.profile = snapshot.profile;
+        state.repos = snapshot.repos;
+        const langs = aggregateLanguages(state.repos);
+        updateProfile(state.profile, state.repos);
+        renderLanguageFilters(langs);
+        renderLanguageBars(langs);
+        renderRepos();
+
+        if (snapshot.generatedAt) {
+          syncBadge.textContent = `Snapshot ${new Date(snapshot.generatedAt).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}`;
+        } else {
+          syncBadge.textContent = "Snapshot loaded";
+        }
+        repoStatus.textContent = `Showing ${getFilteredRepos().length} repositories from snapshot data.`;
+        hasAnyData = true;
+      } catch (_) {
+        // Static snapshot is optional; live API fetch continues below.
+      }
+
+      try {
+        const fresh = await fetchGitHubData();
+        state.profile = fresh.profile;
+        state.repos = fresh.repos;
+        saveCache(state.profile, state.repos);
+
+        const langs = aggregateLanguages(state.repos);
+        updateProfile(state.profile, state.repos);
+        renderLanguageFilters(langs);
+        renderLanguageBars(langs);
+        renderRepos();
+        repoStatus.textContent = `Showing ${getFilteredRepos().length} repositories from live GitHub data.`;
+        syncBadge.textContent = `Synced ${new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}`;
+        hasAnyData = true;
+      } catch (error) {
+        syncBadge.textContent = "Sync failed";
+        if (!hasAnyData) {
+          repoGrid.innerHTML = "";
+          repoStatus.textContent = "Could not load GitHub data. Please try again shortly.";
+        } else {
+          repoStatus.textContent = "Live sync failed. Showing latest available snapshot.";
+        }
+        console.error(error);
+      }
+    }
+
+    function initAnimations() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.14 });
+
+      document.querySelectorAll("[data-reveal]").forEach((el) => observer.observe(el));
+
+      window.addEventListener("pointermove", (event) => {
+        const x = (event.clientX / window.innerWidth) * 100;
+        const y = (event.clientY / window.innerHeight) * 100;
+        document.documentElement.style.setProperty("--mx", `${x}%`);
+        document.documentElement.style.setProperty("--my", `${y}%`);
+      });
+    }
+
+    function initEvents() {
+      filtersHost.addEventListener("click", (event) => {
+        const target = event.target.closest("[data-lang]");
+        if (!target) return;
+        state.activeLanguage = target.getAttribute("data-lang") || "All";
+        renderLanguageFilters(aggregateLanguages(state.repos));
+        renderRepos();
+      });
+
+      searchInput.addEventListener("input", renderRepos);
+      sortSelect.addEventListener("change", renderRepos);
+      limitSelect.addEventListener("change", renderRepos);
+
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("message") === "sent") {
+        const status = document.getElementById("contact-status");
+        if (status) status.classList.add("show");
+        const cleanUrl = `${window.location.pathname}${window.location.hash || "#contact"}`;
+        window.history.replaceState({}, document.title, cleanUrl);
+      }
+    }
+
+    document.getElementById("year").textContent = String(new Date().getFullYear());
+    window.requestAnimationFrame(() => document.body.classList.add("loaded"));
+    initAnimations();
+    initEvents();
+    initResume();
+    loadData();
+  </script>
+</body>
+</html>
