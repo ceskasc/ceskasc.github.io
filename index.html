@@ -1425,8 +1425,6 @@
       repoStatus.textContent = "Fetching repositories and profile data...";
       syncBadge.textContent = "Syncing...";
       let hasAnyData = false;
-      let hasSnapshotData = false;
-      const isGitHubPagesHost = window.location.hostname.endsWith("github.io");
 
       const cached = readCache();
       if (cached && cached.profile && Array.isArray(cached.repos)) {
@@ -1459,14 +1457,8 @@
         }
         repoStatus.textContent = `Showing ${getFilteredRepos().length} repositories from snapshot data.`;
         hasAnyData = true;
-        hasSnapshotData = true;
       } catch (_) {
         // Static snapshot is optional; live API fetch continues below.
-      }
-
-      // On GitHub Pages, prefer snapshot mode to avoid public API rate-limit failures in client-side requests.
-      if (isGitHubPagesHost && hasSnapshotData) {
-        return;
       }
 
       try {
