@@ -1068,7 +1068,7 @@
       <p class="section-title">Insights</p>
       <div class="insights">
         <article class="insight-card">
-          <strong>GitHub Snapshot</strong>
+          <strong>GitHub Live Stats</strong>
           <div class="kv">
             <div class="kv-item"><strong id="snap-followers">--</strong><span>Followers</span></div>
             <div class="kv-item"><strong id="snap-following">--</strong><span>Following</span></div>
@@ -1173,9 +1173,6 @@
 
   <script>
     const username = "ceskasc";
-    const cacheKey = `portfolio-cache-${username}-v6`;
-    const cacheTtlMs = 1000 * 60 * 30;
-    const staticDataUrl = "data/github.json";
     const resumeFileName = "Sadikcan-Ceska-CV.pdf";
     const resumeFileUrl = encodeURI(resumeFileName);
 
@@ -1353,37 +1350,6 @@
       }
     }
 
-    function readCache() {
-      try {
-        const raw = localStorage.getItem(cacheKey);
-        if (!raw) return null;
-        const cached = JSON.parse(raw);
-        if (!cached.timestamp || Date.now() - cached.timestamp > cacheTtlMs) return null;
-        return cached;
-      } catch (_) {
-        return null;
-      }
-    }
-
-    function saveCache(profile, repos) {
-      localStorage.setItem(cacheKey, JSON.stringify({ timestamp: Date.now(), profile, repos }));
-    }
-
-    async function fetchStaticData() {
-      const response = await fetch(staticDataUrl, { cache: "no-store" });
-      if (!response.ok) {
-        throw new Error(`Static data request failed with ${response.status}`);
-      }
-
-      const payload = await response.json();
-      if (!payload || typeof payload !== "object" || !payload.profile || !Array.isArray(payload.repos)) {
-        throw new Error("Static data payload is invalid");
-      }
-
-      const repos = payload.repos.filter((repo) => !repo.fork && !repo.archived);
-      return { profile: payload.profile, repos, generatedAt: payload.generated_at || null };
-    }
-
     async function initResume() {
       const resumePreviewUrl = `${resumeFileUrl}#view=FitH`;
       cvViewLink.href = resumePreviewUrl;
@@ -1407,9 +1373,16 @@
     }
 
     async function fetchGitHubData() {
+      const ts = Date.now();
       const [profileRes, reposRes] = await Promise.all([
-        fetch(`https://api.github.com/users/${username}`, { headers: { Accept: "application/vnd.github+json" } }),
-        fetch(`https://api.github.com/users/${username}/repos?per_page=100&sort=updated&direction=desc&type=owner`, { headers: { Accept: "application/vnd.github+json" } })
+        fetch(`https://api.github.com/users/${username}?ts=${ts}`, {
+          headers: { Accept: "application/vnd.github+json" },
+          cache: "no-store"
+        }),
+        fetch(`https://api.github.com/users/${username}/repos?per_page=100&sort=updated&direction=desc&type=owner&ts=${ts}`, {
+          headers: { Accept: "application/vnd.github+json" },
+          cache: "no-store"
+        })
       ]);
 
       if (!profileRes.ok) throw new Error(`Profile request failed with ${profileRes.status}`);
@@ -1422,69 +1395,25 @@
 
     async function loadData() {
       showSkeletons(9);
-      repoStatus.textContent = "Fetching repositories and profile data...";
-      syncBadge.textContent = "Syncing...";
-      let hasAnyData = false;
-
-      try {
-        const snapshot = await fetchStaticData();
-        state.profile = snapshot.profile;
-        state.repos = snapshot.repos;
-        const langs = aggregateLanguages(state.repos);
-        updateProfile(state.profile, state.repos);
-        renderLanguageFilters(langs);
-        renderLanguageBars(langs);
-        renderRepos();
-        saveCache(state.profile, state.repos);
-
-        if (snapshot.generatedAt) {
-          syncBadge.textContent = `Snapshot ${new Date(snapshot.generatedAt).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}`;
-        } else {
-          syncBadge.textContent = "Snapshot loaded";
-        }
-        repoStatus.textContent = `Showing ${getFilteredRepos().length} repositories from snapshot data.`;
-        hasAnyData = true;
-      } catch {
-        const cached = readCache();
-        if (cached && cached.profile && Array.isArray(cached.repos)) {
-          state.profile = cached.profile;
-          state.repos = cached.repos;
-          const langs = aggregateLanguages(state.repos);
-          updateProfile(state.profile, state.repos);
-          renderLanguageFilters(langs);
-          renderLanguageBars(langs);
-          renderRepos();
-          repoStatus.textContent = `Showing ${getFilteredRepos().length} repositories from cached data.`;
-          syncBadge.textContent = `Cached ${new Date(cached.timestamp).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}`;
-          hasAnyData = true;
-        }
-      }
+      repoStatus.textContent = "Fetching live GitHub profile and repositories...";
+      syncBadge.textContent = "Live syncing...";
 
       try {
         const fresh = await fetchGitHubData();
         state.profile = fresh.profile;
         state.repos = fresh.repos;
-        saveCache(state.profile, state.repos);
 
         const langs = aggregateLanguages(state.repos);
         updateProfile(state.profile, state.repos);
         renderLanguageFilters(langs);
         renderLanguageBars(langs);
         renderRepos();
-        repoStatus.textContent = `Showing ${getFilteredRepos().length} repositories from live GitHub data.`;
-        syncBadge.textContent = `Synced ${new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}`;
-        hasAnyData = true;
+        repoStatus.textContent = `Showing ${getFilteredRepos().length} repositories from live GitHub API data.`;
+        syncBadge.textContent = `Live ${new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}`;
       } catch (error) {
-        if (!hasAnyData) {
-          syncBadge.textContent = "Sync failed";
-          repoGrid.innerHTML = "";
-          repoStatus.textContent = "Could not load GitHub data. Please try again shortly.";
-        } else {
-          // Keep the current snapshot/cached status visible; do not surface live API failures to users.
-          if (syncBadge.textContent === "Syncing...") {
-            syncBadge.textContent = "Snapshot mode";
-          }
-        }
+        syncBadge.textContent = "Live failed";
+        repoGrid.innerHTML = "";
+        repoStatus.textContent = "Could not fetch live GitHub data. Please try again shortly.";
         console.warn(error);
       }
     }
