@@ -74,6 +74,10 @@
       -webkit-font-smoothing: antialiased;
     }
 
+    body.modal-open {
+      overflow: hidden;
+    }
+
     body::before {
       content: "";
       position: fixed;
@@ -606,6 +610,159 @@
       border-color: transparent;
     }
 
+    .repo-link-button {
+      appearance: none;
+      background: rgba(255, 255, 255, 0.01);
+      cursor: pointer;
+      font: inherit;
+      line-height: 1;
+    }
+
+    .repo-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 90;
+      background: rgba(4, 6, 8, 0.72);
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .repo-modal.show {
+      display: flex;
+    }
+
+    .repo-modal-panel {
+      width: min(980px, 100%);
+      max-height: min(88vh, 860px);
+      overflow: hidden;
+      border: 1px solid #232a31;
+      border-radius: 18px;
+      background: linear-gradient(160deg, rgba(18, 23, 28, 0.96), rgba(13, 18, 24, 0.97));
+      box-shadow: 0 28px 58px rgba(0, 0, 0, 0.44);
+      display: grid;
+      grid-template-rows: auto 1fr;
+      animation: modalIn 0.22s ease-out;
+    }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(8px) scale(0.985); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .repo-modal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.7rem;
+      padding: 1rem 1rem 0.85rem;
+      border-bottom: 1px solid #1f262d;
+    }
+
+    .repo-modal-title {
+      display: grid;
+      gap: 0.26rem;
+    }
+
+    .repo-modal-title h3 {
+      font-size: 1.12rem;
+      line-height: 1.25;
+    }
+
+    .repo-modal-title p {
+      color: #a8b1bb;
+      font-size: 0.9rem;
+    }
+
+    .repo-modal-close {
+      appearance: none;
+      border: 1px solid #2a333c;
+      background: rgba(255, 255, 255, 0.02);
+      color: #d7dee5;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 1.05rem;
+      line-height: 1;
+    }
+
+    .repo-modal-close:hover {
+      border-color: rgba(213, 179, 120, 0.5);
+      color: #f2ddb4;
+    }
+
+    .repo-modal-body {
+      overflow: auto;
+      padding: 0.95rem 1rem 1.05rem;
+      display: grid;
+      gap: 0.85rem;
+    }
+
+    .repo-modal-meta {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.52rem;
+      color: #c8d0d8;
+      font-size: 0.78rem;
+    }
+
+    .repo-modal-meta li {
+      border: 1px solid #26303a;
+      border-radius: 999px;
+      padding: 0.28rem 0.52rem;
+      background: rgba(255, 255, 255, 0.015);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.36rem;
+    }
+
+    .repo-modal-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .repo-modal-readme {
+      border: 1px solid #1f262d;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.014);
+      overflow: hidden;
+    }
+
+    .repo-modal-readme-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.68rem 0.75rem;
+      border-bottom: 1px solid #1f262d;
+      background: rgba(255, 255, 255, 0.012);
+      color: #d9e0e7;
+      font-size: 0.8rem;
+    }
+
+    .repo-modal-readme-status {
+      color: #9ea9b4;
+      font-size: 0.76rem;
+    }
+
+    .repo-modal-readme-content {
+      margin: 0;
+      padding: 0.8rem 0.85rem;
+      max-height: 52vh;
+      overflow: auto;
+      color: #d1d8e0;
+      font-size: 0.8rem;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
     .skeleton {
       position: relative;
       overflow: hidden;
@@ -915,6 +1072,9 @@
       .repo-controls { grid-template-columns: 1fr; }
       .contact-row { grid-template-columns: 1fr; }
       .contact-grid { grid-template-columns: 1fr; }
+      .repo-modal-head { padding: 0.8rem 0.8rem 0.7rem; }
+      .repo-modal-body { padding: 0.75rem 0.8rem 0.85rem; }
+      .repo-modal-readme-content { max-height: 46vh; }
     }
 
     @media (max-width: 640px) {
@@ -1166,6 +1326,29 @@
     </section>
   </main>
 
+  <div id="repo-modal" class="repo-modal" aria-hidden="true">
+    <article class="repo-modal-panel" role="dialog" aria-modal="true" aria-labelledby="repo-modal-name">
+      <header class="repo-modal-head">
+        <div class="repo-modal-title">
+          <h3 id="repo-modal-name">Repository</h3>
+          <p id="repo-modal-description">Loading...</p>
+        </div>
+        <button id="repo-modal-close" class="repo-modal-close" type="button" aria-label="Close repository details">x</button>
+      </header>
+      <div class="repo-modal-body">
+        <ul id="repo-modal-meta" class="repo-modal-meta"></ul>
+        <div id="repo-modal-links" class="repo-modal-links"></div>
+        <section class="repo-modal-readme">
+          <div class="repo-modal-readme-head">
+            <strong>README</strong>
+            <span id="repo-modal-readme-status" class="repo-modal-readme-status">Loading...</span>
+          </div>
+          <pre id="repo-modal-readme-content" class="repo-modal-readme-content"></pre>
+        </section>
+      </div>
+    </article>
+  </div>
+
   <footer>
     <span>(c) <span id="year"></span> Sadıkcan Çeşka</span>
     <span>Designed for premium GitHub Pages presentation.</span>
@@ -1190,6 +1373,14 @@
     const cvFrame = document.getElementById("cv-frame");
     const cvStatus = document.getElementById("cv-status");
     const brandAvatar = document.getElementById("brand-avatar");
+    const repoModal = document.getElementById("repo-modal");
+    const repoModalClose = document.getElementById("repo-modal-close");
+    const repoModalName = document.getElementById("repo-modal-name");
+    const repoModalDescription = document.getElementById("repo-modal-description");
+    const repoModalMeta = document.getElementById("repo-modal-meta");
+    const repoModalLinks = document.getElementById("repo-modal-links");
+    const repoModalReadmeStatus = document.getElementById("repo-modal-readme-status");
+    const repoModalReadmeContent = document.getElementById("repo-modal-readme-content");
 
     const languageColors = {
       JavaScript: "#f1e05a", TypeScript: "#3178c6", HTML: "#e34c26", CSS: "#563d7c",
@@ -1198,6 +1389,7 @@
     };
 
     const state = { profile: null, repos: [], activeLanguage: "All", maxLanguages: 10 };
+    let activeModalRequest = 0;
 
     function esc(text) {
       return String(text)
@@ -1235,7 +1427,10 @@
       const language = repo.language || "Code";
       const langColor = languageColors[language] || languageColors.default;
       const homepage = repo.homepage && repo.homepage.trim() ? repo.homepage.trim() : "";
-      const links = [`<a class="repo-link" href="${repo.html_url}" target="_blank" rel="noreferrer">Repository</a>`];
+      const links = [
+        `<button type="button" class="repo-link repo-link-button repo-detail-btn" data-repo="${esc(repo.name)}">Details</button>`,
+        `<a class="repo-link" href="${repo.html_url}" target="_blank" rel="noreferrer">Repository</a>`
+      ];
       if (homepage) {
         links.push(`<a class="repo-link" href="${esc(homepage)}" target="_blank" rel="noreferrer">Live Demo</a>`);
       }
@@ -1254,6 +1449,95 @@
         </article>
       `;
     }
+
+    function formatRepoSize(sizeKb) {
+      const mb = sizeKb / 1024;
+      if (mb >= 1) return `${mb.toFixed(1)} MB`;
+      return `${Math.max(1, sizeKb)} KB`;
+    }
+
+    function closeRepoModal() {
+      repoModal.classList.remove("show");
+      repoModal.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("modal-open");
+    }
+
+    async function openRepoModal(repoName) {
+      const repo = state.repos.find((item) => item.name === repoName);
+      if (!repo) return;
+
+      const requestId = ++activeModalRequest;
+      const repoApiUrl = `https://api.github.com/repos/${username}/${repo.name}?ts=${Date.now()}`;
+      const readmeApiUrl = `https://api.github.com/repos/${username}/${repo.name}/readme?ts=${Date.now()}`;
+
+      repoModal.classList.add("show");
+      repoModal.setAttribute("aria-hidden", "false");
+      document.body.classList.add("modal-open");
+
+      repoModalName.textContent = repo.name;
+      repoModalDescription.textContent = repo.description || "No description provided.";
+      repoModalReadmeStatus.textContent = "Loading from GitHub API...";
+      repoModalReadmeContent.textContent = "Fetching README...";
+
+      repoModalMeta.innerHTML = `
+        <li><span class="lang-dot" style="background:${languageColors[repo.language] || languageColors.default}"></span>${esc(repo.language || "Code")}</li>
+        <li>Stars ${repo.stargazers_count}</li>
+        <li>Forks ${repo.forks_count}</li>
+        <li>Updated ${formatDate(repo.pushed_at)}</li>
+      `;
+
+      repoModalLinks.innerHTML = `
+        <a class="repo-link" href="${repo.html_url}" target="_blank" rel="noreferrer">Open Repository</a>
+        <a class="repo-link" href="${repo.html_url}#readme" target="_blank" rel="noreferrer">Open README on GitHub</a>
+      `;
+
+      try {
+        const [detailsResponse, readmeResponse] = await Promise.all([
+          fetch(repoApiUrl, { headers: { Accept: "application/vnd.github+json" }, cache: "no-store" }),
+          fetch(readmeApiUrl, { headers: { Accept: "application/vnd.github.raw+json" }, cache: "no-store" })
+        ]);
+
+        if (requestId !== activeModalRequest) return;
+
+        if (detailsResponse.ok) {
+          const details = await detailsResponse.json();
+          repoModalMeta.innerHTML = `
+            <li><span class="lang-dot" style="background:${languageColors[details.language] || languageColors.default}"></span>${esc(details.language || "Code")}</li>
+            <li>Stars ${details.stargazers_count}</li>
+            <li>Forks ${details.forks_count}</li>
+            <li>Open Issues ${details.open_issues_count}</li>
+            <li>Size ${formatRepoSize(details.size || 0)}</li>
+            <li>License ${esc(details.license?.spdx_id || "N/A")}</li>
+            <li>Default Branch ${esc(details.default_branch || "main")}</li>
+            <li>Updated ${formatDate(details.pushed_at)}</li>
+          `;
+
+          repoModalLinks.innerHTML = `
+            <a class="repo-link" href="${details.html_url}" target="_blank" rel="noreferrer">Open Repository</a>
+            <a class="repo-link" href="${details.html_url}#readme" target="_blank" rel="noreferrer">Open README on GitHub</a>
+            <a class="repo-link" href="${details.html_url}/issues" target="_blank" rel="noreferrer">View Issues</a>
+          `;
+        }
+
+        if (readmeResponse.ok) {
+          const readmeText = await readmeResponse.text();
+          repoModalReadmeContent.textContent = readmeText || "README exists but returned empty content.";
+          repoModalReadmeStatus.textContent = "Loaded live from GitHub.";
+        } else if (readmeResponse.status === 404) {
+          repoModalReadmeContent.textContent = "This repository does not have a README file yet.";
+          repoModalReadmeStatus.textContent = "README not found.";
+        } else {
+          repoModalReadmeContent.textContent = "README could not be loaded right now.";
+          repoModalReadmeStatus.textContent = `GitHub responded with ${readmeResponse.status}.`;
+        }
+      } catch (error) {
+        if (requestId !== activeModalRequest) return;
+        repoModalReadmeContent.textContent = "README could not be loaded right now.";
+        repoModalReadmeStatus.textContent = "Live request failed.";
+        console.warn(error);
+      }
+    }
+
     function aggregateLanguages(repos) {
       const map = new Map();
       repos.forEach((repo) => {
@@ -1450,6 +1734,27 @@
       searchInput.addEventListener("input", renderRepos);
       sortSelect.addEventListener("change", renderRepos);
       limitSelect.addEventListener("change", renderRepos);
+
+      repoGrid.addEventListener("click", (event) => {
+        const trigger = event.target.closest(".repo-detail-btn");
+        if (!trigger) return;
+        const repoName = trigger.getAttribute("data-repo");
+        if (!repoName) return;
+        openRepoModal(repoName);
+      });
+
+      repoModalClose.addEventListener("click", closeRepoModal);
+      repoModal.addEventListener("click", (event) => {
+        if (event.target === repoModal) {
+          closeRepoModal();
+        }
+      });
+
+      window.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && repoModal.classList.contains("show")) {
+          closeRepoModal();
+        }
+      });
 
       const params = new URLSearchParams(window.location.search);
       if (params.get("message") === "sent") {
