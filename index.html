@@ -1489,11 +1489,10 @@
           repoGrid.innerHTML = "";
           repoStatus.textContent = "Could not load GitHub data. Please try again shortly.";
         } else {
-          const isRateLimited = String(error?.message || "").includes("403");
-          syncBadge.textContent = isRateLimited ? "Rate-limited" : "Snapshot mode";
-          repoStatus.textContent = isRateLimited
-            ? "GitHub API rate limit reached. Showing latest available snapshot."
-            : "Live update unavailable. Showing latest available snapshot.";
+          // Keep the current snapshot/cached status visible; do not surface live API failures to users.
+          if (syncBadge.textContent === "Syncing...") {
+            syncBadge.textContent = "Snapshot mode";
+          }
         }
         console.warn(error);
       }
