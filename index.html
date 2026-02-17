@@ -1634,6 +1634,308 @@
       gap: 0.5rem;
     }
 
+    .repo-modal-screens {
+      border: 1px solid #1f262d;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.014);
+      overflow: hidden;
+    }
+
+    .repo-modal-screens-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.68rem 0.75rem;
+      border-bottom: 1px solid #1f262d;
+      background: rgba(255, 255, 255, 0.012);
+      color: #d9e0e7;
+      font-size: 0.8rem;
+    }
+
+    .repo-modal-screens-status {
+      color: #9ea9b4;
+      font-size: 0.76rem;
+    }
+
+    .repo-modal-screens-grid {
+      padding: 0.72rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(235px, 1fr));
+      gap: 0.62rem;
+    }
+
+    .repo-modal-shot {
+      border: 1px solid #28323c;
+      border-radius: 12px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.01);
+      display: grid;
+      gap: 0;
+      transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+      min-height: 132px;
+    }
+
+    .repo-modal-shot:hover {
+      transform: translateY(-1px);
+      border-color: rgba(213, 179, 120, 0.52);
+      box-shadow: 0 10px 20px rgba(213, 179, 120, 0.14);
+    }
+
+    .repo-modal-shot.is-loading {
+      min-height: 178px;
+      position: relative;
+      overflow: hidden;
+      border-color: #2d3742;
+    }
+
+    .repo-modal-shot.is-loading::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(110deg, rgba(255, 255, 255, 0.01) 15%, rgba(255, 255, 255, 0.08) 42%, rgba(255, 255, 255, 0.01) 78%);
+      transform: translateX(-120%);
+      animation: repoPanelShimmer 1.2s ease-in-out infinite;
+    }
+
+    @keyframes repoPanelShimmer {
+      to { transform: translateX(120%); }
+    }
+
+    .repo-modal-shot-label {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 0.36rem 0.54rem;
+      border-bottom: 1px solid #25303a;
+      color: #dbe2ea;
+      background: rgba(255, 255, 255, 0.015);
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      line-height: 1.2;
+      font-weight: 620;
+    }
+
+    .repo-modal-screen {
+      padding: 0.62rem 0.64rem 0.68rem;
+      display: grid;
+      gap: 0.56rem;
+    }
+
+    .repo-modal-og-preview {
+      border: 1px solid #22303b;
+      border-radius: 10px;
+      aspect-ratio: 16 / 9;
+      background-color: #101721;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .repo-modal-og-preview::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(9, 13, 18, 0.18), rgba(9, 13, 18, 0.6));
+      pointer-events: none;
+    }
+
+    .repo-modal-screen-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+      color: #d8e0e8;
+      font-size: 0.74rem;
+    }
+
+    .repo-modal-screen-repo {
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .repo-modal-screen-badge {
+      border: 1px solid #2b3641;
+      border-radius: 999px;
+      padding: 0.12rem 0.44rem;
+      color: #c1ccd7;
+      background: rgba(255, 255, 255, 0.025);
+      font-size: 0.68rem;
+      flex: 0 0 auto;
+    }
+
+    .repo-modal-file-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      border: 1px solid #23303b;
+      border-radius: 10px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.012);
+    }
+
+    .repo-modal-file-list li {
+      display: flex;
+      align-items: center;
+      gap: 0.42rem;
+      padding: 0.4rem 0.46rem;
+      border-bottom: 1px solid #1f2a35;
+      font-size: 0.75rem;
+      line-height: 1.3;
+      color: #c9d3dc;
+    }
+
+    .repo-modal-file-list li:last-child {
+      border-bottom: none;
+    }
+
+    .repo-modal-file-list li.empty {
+      justify-content: center;
+      color: #a3b0bc;
+      text-align: center;
+    }
+
+    .repo-modal-file-icon {
+      min-width: 34px;
+      padding: 0.1rem 0.26rem;
+      border-radius: 999px;
+      font-size: 0.58rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-align: center;
+      border: 1px solid #2f3945;
+      color: #b8c4cf;
+      background: rgba(255, 255, 255, 0.02);
+      flex: 0 0 auto;
+    }
+
+    .repo-modal-file-icon.dir {
+      color: #e0c78f;
+      border-color: rgba(213, 179, 120, 0.46);
+      background: rgba(213, 179, 120, 0.12);
+    }
+
+    .repo-modal-file-list a {
+      color: inherit;
+      text-decoration: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .repo-modal-file-list a:hover {
+      color: #f3e0b8;
+    }
+
+    .repo-modal-screen-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 32px;
+      padding: 0.34rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid #2b3642;
+      color: #d3dce5;
+      text-decoration: none;
+      font-size: 0.73rem;
+      font-weight: 560;
+      background: rgba(255, 255, 255, 0.018);
+      transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+      width: fit-content;
+      max-width: 100%;
+    }
+
+    .repo-modal-screen-link:hover {
+      border-color: rgba(213, 179, 120, 0.52);
+      color: #f3ddb1;
+      background: rgba(213, 179, 120, 0.13);
+    }
+
+    .repo-modal-readme-mini {
+      margin: 0;
+      border: 1px solid #22303c;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.012);
+      color: #ced7e0;
+      padding: 0.56rem 0.58rem;
+      min-height: 122px;
+      max-height: 168px;
+      overflow: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      line-height: 1.46;
+      font-size: 0.73rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    .repo-modal-activity-meta {
+      display: grid;
+      gap: 0.34rem;
+    }
+
+    .repo-modal-activity-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.72rem;
+      color: #aeb8c3;
+    }
+
+    .repo-modal-activity-line strong {
+      color: #dde5ee;
+      font-weight: 620;
+      font-size: 0.74rem;
+    }
+
+    .repo-modal-commit {
+      border: 1px solid #22303b;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.012);
+      padding: 0.56rem 0.58rem;
+      display: grid;
+      gap: 0.34rem;
+    }
+
+    .repo-modal-commit-msg {
+      margin: 0;
+      color: #e1e8ef;
+      font-size: 0.76rem;
+      font-weight: 570;
+      line-height: 1.34;
+      word-break: break-word;
+    }
+
+    .repo-modal-commit-meta {
+      margin: 0;
+      color: #9eabb8;
+      font-size: 0.69rem;
+      line-height: 1.32;
+    }
+
+    .repo-modal-activity-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.36rem;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .repo-modal-activity-stats li {
+      border: 1px solid #27313d;
+      border-radius: 999px;
+      padding: 0.24rem 0.48rem;
+      color: #c2ccd7;
+      font-size: 0.69rem;
+      background: rgba(255, 255, 255, 0.015);
+    }
+
     .repo-modal-readme {
       border: 1px solid #1f262d;
       border-radius: 12px;
@@ -2895,6 +3197,7 @@
       .pet-media { height: auto; }
       .repo-modal-head { padding: 0.8rem 0.8rem 0.7rem; }
       .repo-modal-body { padding: 0.75rem 0.8rem 0.85rem; }
+      .repo-modal-screens-grid { grid-template-columns: 1fr; }
       .repo-modal-readme-content { max-height: 46vh; }
     }
 
@@ -3312,6 +3615,13 @@
       <div class="repo-modal-body">
         <ul id="repo-modal-meta" class="repo-modal-meta"></ul>
         <div id="repo-modal-links" class="repo-modal-links"></div>
+        <section class="repo-modal-screens">
+          <div class="repo-modal-screens-head">
+            <strong>Screens</strong>
+            <span id="repo-modal-screens-status" class="repo-modal-screens-status">Loading...</span>
+          </div>
+          <div id="repo-modal-screens" class="repo-modal-screens-grid"></div>
+        </section>
         <section class="repo-modal-readme">
           <div class="repo-modal-readme-head">
             <strong>README</strong>
@@ -3381,6 +3691,8 @@
     const repoModalDescription = document.getElementById("repo-modal-description");
     const repoModalMeta = document.getElementById("repo-modal-meta");
     const repoModalLinks = document.getElementById("repo-modal-links");
+    const repoModalScreensStatus = document.getElementById("repo-modal-screens-status");
+    const repoModalScreens = document.getElementById("repo-modal-screens");
     const repoModalReadmeStatus = document.getElementById("repo-modal-readme-status");
     const repoModalReadmeContent = document.getElementById("repo-modal-readme-content");
 
@@ -3969,6 +4281,150 @@
       return `${Math.max(1, sizeKb)} KB`;
     }
 
+    function formatDateTime(value) {
+      if (!value) return "--";
+      return new Date(value).toLocaleString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
+
+    function toPlainReadmeSnippet(readmeText, maxChars = 540) {
+      if (!readmeText || typeof readmeText !== "string") {
+        return "README content is not available in this snapshot.";
+      }
+
+      const normalized = readmeText
+        .replace(/\r/g, "")
+        .replace(/```[\s\S]*?```/g, "")
+        .replace(/^#{1,6}\s*/gm, "")
+        .replace(/^>\s?/gm, "")
+        .replace(/^-\s\[[ xX]\]\s/gm, "- ")
+        .replace(/!\[[^\]]*]\([^)]+\)/g, "")
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, "$1")
+        .replace(/[`*_~]/g, "")
+        .replace(/\n{3,}/g, "\n\n")
+        .trim();
+
+      if (!normalized) {
+        return "README exists but there is no readable text preview.";
+      }
+
+      if (normalized.length <= maxChars) return normalized;
+      return `${normalized.slice(0, maxChars).trimEnd()}...`;
+    }
+
+    function buildRepoFileRows(files, repoUrl, branch) {
+      if (!Array.isArray(files) || !files.length) {
+        return '<li class="empty">File list is not available right now.</li>';
+      }
+
+      return files.slice(0, 6).map((item) => {
+        const isDir = item.type === "dir";
+        const itemPath = String(item.path || item.name || "");
+        const safePath = itemPath
+          .split("/")
+          .map((segment) => encodeURIComponent(segment))
+          .join("/");
+        const branchSegment = encodeURIComponent(branch || "main");
+        const fallbackHref = `${repoUrl}/${isDir ? "tree" : "blob"}/${branchSegment}/${safePath}`;
+        const href = item.html_url || fallbackHref;
+
+        return `
+          <li>
+            <span class="repo-modal-file-icon ${isDir ? "dir" : "file"}">${isDir ? "DIR" : "FILE"}</span>
+            <a href="${esc(href)}" target="_blank" rel="noreferrer">${esc(item.name || item.path || "Unknown")}</a>
+          </li>
+        `;
+      }).join("");
+    }
+
+    function renderRepoScreens(payload, requestId) {
+      if (!repoModalScreens || !repoModalScreensStatus) return;
+      if (requestId !== activeModalRequest) return;
+
+      const mode = payload?.mode || "ready";
+      const repo = payload?.repo || null;
+      if (!repo) {
+        repoModalScreens.innerHTML = "";
+        repoModalScreensStatus.textContent = "Unavailable";
+        return;
+      }
+
+      if (mode === "loading") {
+        repoModalScreensStatus.textContent = "Syncing screens...";
+        repoModalScreens.innerHTML = Array.from({ length: 3 }).map((_, index) => `
+          <article class="repo-modal-shot is-loading" aria-hidden="true">
+            <span class="repo-modal-shot-label">Screen ${index + 1}</span>
+          </article>
+        `).join("");
+        return;
+      }
+
+      const details = payload?.details || repo;
+      const repoUrl = details.html_url || repo.html_url || `https://github.com/${username}/${repo.name}`;
+      const readmeUrl = `${repoUrl}#readme`;
+      const branch = details.default_branch || "main";
+      const opengraphUrl = `https://opengraph.githubassets.com/1/${username}/${repo.name}`;
+      const readmeSnippet = toPlainReadmeSnippet(payload?.readmeText || "");
+      const fileRows = buildRepoFileRows(payload?.files || [], repoUrl, branch);
+
+      const latestCommit = payload?.latestCommit && typeof payload.latestCommit === "object"
+        ? payload.latestCommit
+        : null;
+      const commitMessage = (latestCommit?.commit?.message || "").split("\n")[0].trim()
+        || "No commit message available right now.";
+      const commitAuthor = latestCommit?.commit?.author?.name || latestCommit?.author?.login || username;
+      const commitDate = latestCommit?.commit?.author?.date || details.pushed_at || repo.pushed_at;
+      const commitUrl = latestCommit?.html_url || `${repoUrl}/commits/${encodeURIComponent(branch)}`;
+
+      repoModalScreensStatus.textContent = mode === "fallback" ? "Snapshot mode" : "Live mode";
+      repoModalScreens.innerHTML = `
+        <article class="repo-modal-shot">
+          <span class="repo-modal-shot-label">Repository Screen</span>
+          <div class="repo-modal-screen">
+            <div class="repo-modal-og-preview" style="background-image: linear-gradient(180deg, rgba(7, 11, 16, 0.18), rgba(7, 11, 16, 0.56)), url('${esc(opengraphUrl)}');"></div>
+            <div class="repo-modal-screen-top">
+              <span class="repo-modal-screen-repo">${esc(details.full_name || `${username}/${repo.name}`)}</span>
+              <span class="repo-modal-screen-badge">${esc(branch)}</span>
+            </div>
+            <ul class="repo-modal-file-list">${fileRows}</ul>
+            <a class="repo-modal-screen-link" href="${esc(repoUrl)}" target="_blank" rel="noreferrer">Open Code on GitHub</a>
+          </div>
+        </article>
+        <article class="repo-modal-shot">
+          <span class="repo-modal-shot-label">README Screen</span>
+          <div class="repo-modal-screen">
+            <pre class="repo-modal-readme-mini">${esc(readmeSnippet)}</pre>
+            <a class="repo-modal-screen-link" href="${esc(readmeUrl)}" target="_blank" rel="noreferrer">Open Full README</a>
+          </div>
+        </article>
+        <article class="repo-modal-shot">
+          <span class="repo-modal-shot-label">Activity Screen</span>
+          <div class="repo-modal-screen">
+            <div class="repo-modal-activity-meta">
+              <div class="repo-modal-activity-line"><span>Latest Activity</span><strong>${esc(formatDate(commitDate))}</strong></div>
+              <div class="repo-modal-activity-line"><span>Commit Author</span><strong>${esc(commitAuthor)}</strong></div>
+            </div>
+            <div class="repo-modal-commit">
+              <p class="repo-modal-commit-msg">${esc(commitMessage)}</p>
+              <p class="repo-modal-commit-meta">${esc(formatDateTime(commitDate))}</p>
+            </div>
+            <ul class="repo-modal-activity-stats">
+              <li>Stars ${details.stargazers_count || 0}</li>
+              <li>Forks ${details.forks_count || 0}</li>
+              <li>Issues ${details.open_issues_count || 0}</li>
+              <li>License ${esc(details.license?.spdx_id || "N/A")}</li>
+            </ul>
+            <a class="repo-modal-screen-link" href="${esc(commitUrl)}" target="_blank" rel="noreferrer">View Commit Activity</a>
+          </div>
+        </article>
+      `;
+    }
+
     function closeRepoModal() {
       repoModal.classList.remove("show");
       repoModal.setAttribute("aria-hidden", "true");
@@ -3982,6 +4438,8 @@
       const requestId = ++activeModalRequest;
       const repoApiUrl = `${githubApiBase}/repos/${username}/${repo.name}`;
       const readmeApiUrl = `${githubApiBase}/repos/${username}/${repo.name}/readme`;
+      const contentsApiUrl = `${githubApiBase}/repos/${username}/${repo.name}/contents`;
+      const commitsApiUrl = `${githubApiBase}/repos/${username}/${repo.name}/commits?per_page=1`;
 
       repoModal.classList.add("show");
       repoModal.setAttribute("aria-hidden", "false");
@@ -3989,6 +4447,7 @@
 
       repoModalName.textContent = repo.name;
       repoModalDescription.textContent = repo.description || "No description provided.";
+      renderRepoScreens({ repo, mode: "loading" }, requestId);
       repoModalReadmeStatus.textContent = "Loading...";
       repoModalReadmeContent.textContent = "Fetching README...";
 
@@ -4005,25 +4464,45 @@
       `;
 
       if (state.rateLimitResetAt && Date.now() < state.rateLimitResetAt) {
+        renderRepoScreens({ repo, mode: "fallback" }, requestId);
         repoModalReadmeContent.textContent = "README preview is temporarily unavailable. Use repository links below.";
         repoModalReadmeStatus.textContent = "Temporarily unavailable";
         return;
       }
 
       try {
-        const [detailsResult, readmeResult] = await Promise.all([
+        const [detailsResult, readmeResult, contentsResult, commitsResult] = await Promise.all([
           requestGitHub(repoApiUrl),
           requestGitHub(readmeApiUrl, {
             accept: "application/vnd.github.raw+json",
             parse: "text",
+            allowStatuses: [404]
+          }),
+          requestGitHub(contentsApiUrl, {
+            allowStatuses: [404]
+          }),
+          requestGitHub(commitsApiUrl, {
             allowStatuses: [404]
           })
         ]);
 
         if (requestId !== activeModalRequest) return;
 
+        const details = detailsResult.data || repo;
+        const readmeText = typeof readmeResult.data === "string" ? readmeResult.data : "";
+        const files = Array.isArray(contentsResult.data) ? contentsResult.data : [];
+        const latestCommit = Array.isArray(commitsResult.data) ? commitsResult.data[0] : null;
+
+        renderRepoScreens({
+          repo,
+          details,
+          readmeText,
+          files,
+          latestCommit,
+          mode: "ready"
+        }, requestId);
+
         if (detailsResult.data) {
-          const details = detailsResult.data;
           repoModalMeta.innerHTML = `
             <li><span class="lang-dot" style="background:${languageColors[details.language] || languageColors.default}"></span>${esc(details.language || "Code")}</li>
             <li>Stars ${details.stargazers_count}</li>
@@ -4055,6 +4534,7 @@
         }
       } catch (error) {
         if (requestId !== activeModalRequest) return;
+        renderRepoScreens({ repo, mode: "fallback" }, requestId);
         repoModalReadmeContent.textContent = "README could not be loaded right now.";
         repoModalReadmeStatus.textContent = "Temporarily unavailable";
         console.warn(error);
