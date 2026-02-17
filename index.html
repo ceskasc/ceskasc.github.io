@@ -1738,57 +1738,238 @@
       flex-shrink: 0;
     }
 
+    .insights-panel {
+      position: relative;
+      overflow: hidden;
+      border-color: rgba(127, 144, 194, 0.26);
+      background:
+        radial-gradient(circle 620px at -8% -34%, rgba(127, 144, 194, 0.19), transparent 56%),
+        radial-gradient(circle 520px at 110% 115%, rgba(136, 184, 170, 0.15), transparent 58%),
+        linear-gradient(155deg, rgba(13, 18, 24, 0.95), rgba(9, 13, 19, 0.9));
+    }
+
+    .insights-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(104deg, rgba(255, 255, 255, 0.03), transparent 36%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.015), transparent 26%);
+    }
+
+    .insights-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.66rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.84rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .insights-head .section-title {
+      margin-bottom: 0;
+    }
+
+    .insights-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      border: 1px solid rgba(136, 184, 170, 0.38);
+      border-radius: 999px;
+      padding: 0.28rem 0.6rem;
+      color: #c4ddd5;
+      background: rgba(136, 184, 170, 0.11);
+      text-transform: uppercase;
+      letter-spacing: 0.11em;
+      font-size: 0.65rem;
+      font-weight: 650;
+      line-height: 1;
+    }
+
+    .insights-tag::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #88b8aa;
+      box-shadow: 0 0 0 4px rgba(136, 184, 170, 0.14);
+      flex-shrink: 0;
+    }
+
     .insights {
-      margin-top: 0.12rem;
+      margin-top: 0.04rem;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 0.68rem;
+      gap: 0.76rem;
+      position: relative;
+      z-index: 1;
     }
 
     .insight-card {
-      border: 1px solid #1e252c;
-      border-radius: var(--radius-md);
-      padding: 0.86rem;
-      background: var(--panel-soft);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #28323d;
+      border-radius: 18px;
+      padding: 0.92rem;
+      background:
+        linear-gradient(150deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.012)),
+        rgba(255, 255, 255, 0.012);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
       display: grid;
-      gap: 0.6rem;
+      gap: 0.72rem;
+    }
+
+    .insight-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle 320px at 90% -20%, rgba(213, 179, 120, 0.17), transparent 58%);
+      opacity: 0.64;
+    }
+
+    .insight-card > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .insight-card-head {
+      display: grid;
+      gap: 0.3rem;
+    }
+
+    .insight-card-title {
+      font-size: 1.14rem;
+      line-height: 1.22;
+      font-weight: 640;
+      color: #f2f6fb;
+      letter-spacing: 0.01em;
+    }
+
+    .insight-card-note {
+      font-size: 0.8rem;
+      line-height: 1.52;
+      color: #afbac5;
+      max-width: 42ch;
     }
 
     .kv {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0.48rem;
+      gap: 0.54rem;
     }
 
     .kv-item {
-      border: 1px solid #1e252c;
-      border-radius: 10px;
-      padding: 0.53rem 0.56rem;
-      background: rgba(255, 255, 255, 0.015);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #2a3540;
+      border-radius: 12px;
+      padding: 0.66rem 0.72rem 0.62rem;
+      background: linear-gradient(150deg, rgba(255, 255, 255, 0.022), rgba(255, 255, 255, 0.012));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
       display: grid;
-      gap: 0.1rem;
+      gap: 0.24rem;
     }
 
-    .kv-item strong { font-size: 0.94rem; color: #f0ddb4; line-height: 1.2; }
-    .kv-item span { font-size: 0.73rem; color: var(--muted); }
+    .kv-item::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.03), rgba(213, 179, 120, 0.6), rgba(255, 255, 255, 0.03));
+    }
 
-    .lang-list { display: grid; gap: 0.42rem; }
-    .lang-row { display: grid; gap: 0.25rem; }
+    .kv-label {
+      font-size: 0.67rem;
+      color: #9da9b4;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      line-height: 1.2;
+      font-weight: 560;
+    }
+
+    .kv-item strong {
+      font-size: 1.1rem;
+      color: #f0ddb4;
+      line-height: 1.24;
+      font-weight: 630;
+      letter-spacing: 0.01em;
+    }
+
+    .lang-list {
+      display: grid;
+      gap: 0.54rem;
+    }
+
+    .lang-row {
+      --lang: #d5b378;
+      display: grid;
+      gap: 0.34rem;
+      border: 1px solid #26303a;
+      border-radius: 12px;
+      padding: 0.5rem 0.56rem;
+      background: rgba(255, 255, 255, 0.012);
+    }
 
     .lang-head {
       display: flex;
       justify-content: space-between;
-      gap: 0.5rem;
-      font-size: 0.78rem;
+      align-items: center;
+      gap: 0.56rem;
+      font-size: 0.81rem;
       color: #ced5dc;
+    }
+
+    .lang-name {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.36rem;
+      min-width: 0;
+      font-weight: 560;
+      color: #dce4eb;
+    }
+
+    .lang-name::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--lang);
+      box-shadow: 0 0 0 4px rgba(213, 179, 120, 0.12);
+      flex-shrink: 0;
+    }
+
+    .lang-value {
+      border: 1px solid #2f3944;
+      border-radius: 999px;
+      padding: 0.16rem 0.42rem;
+      background: rgba(255, 255, 255, 0.012);
+      color: #dce3eb;
+      font-size: 0.68rem;
+      line-height: 1;
+      letter-spacing: 0.08em;
+      font-weight: 620;
+      flex-shrink: 0;
     }
 
     .bar {
       width: 100%;
-      height: 7px;
+      height: 8px;
       border-radius: 999px;
       background: #1d242b;
       overflow: hidden;
+      position: relative;
+    }
+
+    .bar::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), transparent 52%);
     }
 
     .bar > span {
@@ -1797,45 +1978,177 @@
       border-radius: inherit;
       transform-origin: left center;
       transform: scaleX(0);
-      background: linear-gradient(130deg, var(--accent), #edd8ad);
+      background: linear-gradient(130deg, var(--lang), #edd8ad);
       animation: grow 0.8s ease forwards;
     }
 
     @keyframes grow { to { transform: scaleX(1); } }
 
+    .resume-panel {
+      position: relative;
+      overflow: hidden;
+      border-color: rgba(213, 179, 120, 0.26);
+      background:
+        radial-gradient(circle 580px at -12% -36%, rgba(213, 179, 120, 0.2), transparent 57%),
+        radial-gradient(circle 520px at 115% 116%, rgba(127, 144, 194, 0.15), transparent 58%),
+        linear-gradient(155deg, rgba(14, 19, 25, 0.95), rgba(9, 13, 19, 0.9));
+    }
+
+    .resume-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(102deg, rgba(255, 255, 255, 0.028), transparent 34%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.014), transparent 26%);
+    }
+
+    .resume-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.66rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.78rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .resume-head .section-title {
+      margin-bottom: 0;
+    }
+
+    .resume-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.38rem;
+      border: 1px solid rgba(213, 179, 120, 0.42);
+      border-radius: 999px;
+      padding: 0.28rem 0.58rem;
+      color: #ecdcb9;
+      background: rgba(213, 179, 120, 0.12);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 0.64rem;
+      font-weight: 640;
+      line-height: 1;
+    }
+
+    .resume-tag::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #d5b378;
+      box-shadow: 0 0 0 4px rgba(213, 179, 120, 0.14);
+      flex-shrink: 0;
+    }
+
     .resume-grid {
-      margin-top: 0.35rem;
+      margin-top: 0.25rem;
       display: grid;
-      grid-template-columns: 0.8fr 1.2fr;
-      gap: 0.7rem;
+      grid-template-columns: minmax(0, 0.84fr) minmax(0, 1.16fr);
+      gap: 0.78rem;
       align-items: stretch;
+      position: relative;
+      z-index: 1;
     }
 
     .resume-card {
-      border: 1px solid #1e252c;
-      border-radius: var(--radius-md);
-      background: var(--panel-soft);
-      padding: 0.95rem;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #2b3540;
+      border-radius: 18px;
+      background:
+        linear-gradient(150deg, rgba(255, 255, 255, 0.032), rgba(255, 255, 255, 0.012)),
+        rgba(255, 255, 255, 0.012);
+      box-shadow:
+        0 16px 34px rgba(0, 0, 0, 0.32),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      padding: 1rem;
       display: grid;
-      gap: 0.6rem;
+      gap: 0.66rem;
       align-content: start;
     }
 
-    .resume-card p {
-      color: var(--muted);
-      font-size: 0.9rem;
+    .resume-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle 320px at 110% -20%, rgba(213, 179, 120, 0.17), transparent 60%);
+      opacity: 0.68;
+    }
+
+    .resume-card > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .resume-card h3 {
+      font-size: 1.58rem;
+      line-height: 1.08;
+      font-family: "Playfair Display", serif;
+      font-weight: 680;
+      color: #f2ede1;
+      letter-spacing: 0.01em;
+      margin-bottom: 0.08rem;
+    }
+
+    .resume-card .resume-lead {
+      color: #b8c2cc;
+      font-size: 0.93rem;
+      line-height: 1.64;
+      border: 1px solid #27323c;
+      border-radius: 13px;
+      background: linear-gradient(150deg, rgba(255, 255, 255, 0.024), rgba(255, 255, 255, 0.01));
+      padding: 0.68rem 0.74rem;
+    }
+
+    .resume-points {
+      list-style: none;
+      display: grid;
+      gap: 0.48rem;
+    }
+
+    .resume-points li {
+      position: relative;
+      padding-left: 0.86rem;
+      color: #c6ced8;
+      font-size: 0.86rem;
+      line-height: 1.5;
+    }
+
+    .resume-points li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.57em;
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #88b8aa;
+      box-shadow: 0 0 0 4px rgba(136, 184, 170, 0.12);
     }
 
     .resume-actions {
       display: grid;
-      gap: 0.5rem;
+      gap: 0.52rem;
+      margin-top: 0.1rem;
+    }
+
+    .resume-actions .btn {
+      min-height: 50px;
+      font-size: 1.02rem;
+      font-weight: 560;
     }
 
     .resume-meta {
       display: inline-flex;
       align-items: center;
       gap: 0.45rem;
-      font-size: 0.78rem;
+      font-size: 0.79rem;
       color: #bcc5cf;
     }
 
@@ -1854,22 +2167,230 @@
     .resume-note {
       font-size: 0.78rem;
       color: #a5aeb8;
+      line-height: 1.5;
     }
 
-    .cv-frame-wrap {
-      border: 1px solid #1e252c;
-      border-radius: var(--radius-md);
-      background: rgba(9, 12, 16, 0.7);
-      min-height: 420px;
+    .cv-viewer {
+      border: 1px solid #2b3540;
+      border-radius: 18px;
+      background:
+        linear-gradient(154deg, rgba(255, 255, 255, 0.028), rgba(255, 255, 255, 0.012)),
+        rgba(9, 12, 16, 0.72);
+      box-shadow:
+        0 18px 38px rgba(0, 0, 0, 0.36),
+        inset 0 1px 0 rgba(255, 255, 255, 0.045);
+      min-height: 520px;
       overflow: hidden;
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+
+    .cv-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.72rem;
+      flex-wrap: wrap;
+      border-bottom: 1px solid #2a3440;
+      padding: 0.62rem 0.72rem;
+      background:
+        linear-gradient(140deg, rgba(213, 179, 120, 0.12), rgba(255, 255, 255, 0.02) 34%, rgba(255, 255, 255, 0.012)),
+        rgba(9, 12, 16, 0.82);
+    }
+
+    .cv-toolbar-meta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      min-width: 0;
+    }
+
+    .cv-file-pill {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid rgba(213, 179, 120, 0.5);
+      border-radius: 999px;
+      padding: 0.25rem 0.52rem;
+      background: rgba(213, 179, 120, 0.12);
+      color: #f2dfb8;
+      font-size: 0.67rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      line-height: 1.2;
+      font-weight: 620;
+    }
+
+    .cv-viewer-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.34rem;
+      border: 1px solid #2f3944;
+      border-radius: 999px;
+      padding: 0.22rem 0.5rem;
+      color: #b6c0cb;
+      background: rgba(255, 255, 255, 0.02);
+      font-size: 0.66rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      line-height: 1;
+      font-weight: 620;
+    }
+
+    .cv-viewer-status::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #9aa7b2;
+      box-shadow: 0 0 0 4px rgba(154, 167, 178, 0.14);
+      flex-shrink: 0;
+    }
+
+    .cv-viewer-status[data-mode="live"] {
+      color: #c4e5d8;
+      border-color: rgba(136, 184, 170, 0.46);
+      background: rgba(136, 184, 170, 0.15);
+    }
+
+    .cv-viewer-status[data-mode="live"]::before {
+      background: #88b8aa;
+      box-shadow: 0 0 0 4px rgba(136, 184, 170, 0.15);
+    }
+
+    .cv-viewer-status[data-mode="warn"] {
+      color: #f2d4b3;
+      border-color: rgba(213, 179, 120, 0.48);
+      background: rgba(213, 179, 120, 0.16);
+    }
+
+    .cv-viewer-status[data-mode="warn"]::before {
+      background: #d5b378;
+      box-shadow: 0 0 0 4px rgba(213, 179, 120, 0.16);
+    }
+
+    .cv-toolbar-controls {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.38rem;
+      flex-wrap: wrap;
+    }
+
+    .cv-control {
+      border: 1px solid #2a3540;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.02);
+      color: #dde4ec;
+      font: inherit;
+      font-size: 0.79rem;
+      font-weight: 560;
+      line-height: 1;
+      padding: 0.42rem 0.54rem;
+      min-width: 42px;
+      min-height: 34px;
+      cursor: pointer;
+      transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease, color 0.16s ease;
+    }
+
+    .cv-control:hover:not(:disabled) {
+      transform: translateY(-1px);
+      border-color: rgba(213, 179, 120, 0.52);
+      background: rgba(213, 179, 120, 0.14);
+      color: #f1e6d1;
+    }
+
+    .cv-control:disabled {
+      opacity: 0.46;
+      cursor: not-allowed;
+    }
+
+    .cv-page-indicator,
+    .cv-zoom-level {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #2f3944;
+      border-radius: 10px;
+      min-height: 34px;
+      padding: 0.32rem 0.48rem;
+      color: #d3dbe3;
+      background: rgba(255, 255, 255, 0.02);
+      font-size: 0.73rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      line-height: 1;
+      font-weight: 620;
+    }
+
+    .cv-page-indicator {
+      min-width: 72px;
+    }
+
+    .cv-zoom-level {
+      min-width: 60px;
+    }
+
+    .cv-canvas-wrap {
+      min-height: 520px;
+      max-height: 760px;
+      overflow: auto;
+      padding: 0.72rem;
+      background:
+        linear-gradient(180deg, rgba(6, 8, 11, 0.4), rgba(8, 11, 15, 0.62)),
+        radial-gradient(circle at 50% -30%, rgba(213, 179, 120, 0.12), transparent 54%);
+      display: grid;
+      place-items: start center;
+      scrollbar-color: #40505f #11161c;
+      scrollbar-width: thin;
+    }
+
+    .cv-canvas-wrap::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+
+    .cv-canvas-wrap::-webkit-scrollbar-track {
+      background: #11161c;
+      border-radius: 999px;
+    }
+
+    .cv-canvas-wrap::-webkit-scrollbar-thumb {
+      background: #40505f;
+      border-radius: 999px;
+      border: 2px solid #11161c;
+    }
+
+    .cv-canvas {
+      display: block;
+      border: 1px solid #2b3540;
+      border-radius: 12px;
+      background: #ffffff;
+      box-shadow:
+        0 16px 32px rgba(0, 0, 0, 0.34),
+        0 0 0 1px rgba(255, 255, 255, 0.08);
+    }
+
+    .cv-fallback {
+      display: none;
+      min-height: 520px;
+    }
+
+    .cv-viewer.is-fallback .cv-canvas-wrap {
+      display: none;
+    }
+
+    .cv-viewer.is-fallback .cv-fallback {
+      display: block;
     }
 
     .cv-frame {
       width: 100%;
       height: 100%;
-      min-height: 420px;
+      min-height: 520px;
       border: 0;
       display: block;
+      background: #10151b;
     }
 
     .contact-layout {
@@ -2019,6 +2540,8 @@
       .repo-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .insights { grid-template-columns: 1fr; }
       .resume-grid { grid-template-columns: 1fr; }
+      .cv-viewer { min-height: 500px; }
+      .cv-canvas-wrap { min-height: 500px; max-height: 680px; }
       .contact-layout { grid-template-columns: 1fr; }
     }
 
@@ -2093,6 +2616,17 @@
       .repo-card { border-radius: 16px; padding: 0.9rem 0.84rem 0.82rem; }
       .repo-card h3 { font-size: 1.03rem; }
       .repo-card p { font-size: 0.87rem; min-height: 2.6em; }
+      .insight-card { padding: 0.84rem; }
+      .insight-card-title { font-size: 1.04rem; }
+      .insight-card-note { font-size: 0.76rem; }
+      .kv-item strong { font-size: 1.01rem; }
+      .resume-head { margin-bottom: 0.68rem; }
+      .resume-tag { font-size: 0.6rem; letter-spacing: 0.09em; }
+      .resume-card h3 { font-size: 1.42rem; }
+      .resume-actions .btn { min-height: 46px; font-size: 0.95rem; }
+      .cv-toolbar { padding: 0.58rem 0.62rem; }
+      .cv-toolbar-controls { width: 100%; }
+      .cv-control, .cv-page-indicator, .cv-zoom-level { min-height: 32px; }
       .contact-row { grid-template-columns: 1fr; }
       .contact-grid { grid-template-columns: 1fr; }
       .repo-modal-head { padding: 0.8rem 0.8rem 0.7rem; }
@@ -2133,6 +2667,27 @@
       .repo-card p { font-size: 0.84rem; min-height: auto; }
       .repo-card .repo-link { flex: 1 1 132px; }
       .repo-status { font-size: 0.8rem; }
+      .insights-head { margin-bottom: 0.72rem; }
+      .insights-tag { font-size: 0.6rem; letter-spacing: 0.09em; }
+      .kv { grid-template-columns: 1fr; }
+      .kv-item { padding: 0.62rem 0.64rem 0.58rem; }
+      .lang-row { padding: 0.44rem 0.48rem; }
+      .lang-head { font-size: 0.77rem; }
+      .resume-head { margin-bottom: 0.62rem; }
+      .resume-card { padding: 0.84rem; gap: 0.56rem; }
+      .resume-card h3 { font-size: 1.26rem; }
+      .resume-card .resume-lead { font-size: 0.87rem; padding: 0.6rem 0.64rem; }
+      .resume-points li { font-size: 0.81rem; padding-left: 0.74rem; }
+      .resume-actions .btn { min-height: 44px; font-size: 0.9rem; }
+      .cv-toolbar { gap: 0.5rem; }
+      .cv-file-pill { font-size: 0.61rem; }
+      .cv-viewer-status { font-size: 0.61rem; }
+      .cv-toolbar-controls { gap: 0.3rem; }
+      .cv-control { min-width: 38px; padding: 0.38rem 0.46rem; font-size: 0.74rem; }
+      .cv-page-indicator { min-width: 64px; }
+      .cv-zoom-level { min-width: 54px; }
+      .cv-viewer { min-height: 430px; }
+      .cv-canvas-wrap { min-height: 430px; max-height: 560px; padding: 0.54rem; }
       .brand { padding: 0.3rem 0.55rem 0.3rem 0.32rem; border-radius: 15px; gap: 0.54rem; }
       .brand-avatar { width: 38px; height: 38px; border-radius: 11px; }
       .brand-status { width: 11px; height: 11px; right: -1px; bottom: -1px; }
@@ -2300,44 +2855,82 @@
       <p id="repo-status" class="repo-status"></p>
     </section>
 
-    <section id="insights" class="section panel" data-reveal>
-      <p class="section-title">Insights</p>
+    <section id="insights" class="section panel insights-panel" data-reveal>
+      <div class="insights-head">
+        <p class="section-title">Insights</p>
+        <span class="insights-tag">Live Analytics</span>
+      </div>
       <div class="insights">
-        <article class="insight-card">
-          <strong>GitHub Live Stats</strong>
+        <article class="insight-card insight-card--stats">
+          <div class="insight-card-head">
+            <h3 class="insight-card-title">GitHub Live Stats</h3>
+            <p class="insight-card-note">Real-time profile metrics and activity snapshots from your public account.</p>
+          </div>
           <div class="kv">
-            <div class="kv-item"><strong id="snap-followers">--</strong><span>Followers</span></div>
-            <div class="kv-item"><strong id="snap-following">--</strong><span>Following</span></div>
-            <div class="kv-item"><strong id="snap-public">--</strong><span>Public Repos</span></div>
-            <div class="kv-item"><strong id="snap-updated">--</strong><span>Latest Activity</span></div>
+            <div class="kv-item"><span class="kv-label">Followers</span><strong id="snap-followers">--</strong></div>
+            <div class="kv-item"><span class="kv-label">Following</span><strong id="snap-following">--</strong></div>
+            <div class="kv-item"><span class="kv-label">Public Repos</span><strong id="snap-public">--</strong></div>
+            <div class="kv-item"><span class="kv-label">Latest Activity</span><strong id="snap-updated">--</strong></div>
           </div>
         </article>
-        <article class="insight-card">
-          <strong>Top Languages</strong>
+        <article class="insight-card insight-card--languages">
+          <div class="insight-card-head">
+            <h3 class="insight-card-title">Top Languages</h3>
+            <p class="insight-card-note">Language distribution calculated from your current public repositories.</p>
+          </div>
           <div id="lang-list" class="lang-list"></div>
         </article>
       </div>
     </section>
 
-    <section id="resume" class="section panel" data-reveal>
-      <p class="section-title">Resume</p>
+    <section id="resume" class="section panel resume-panel" data-reveal>
+      <div class="resume-head">
+        <p class="section-title">Resume</p>
+        <span class="resume-tag">Interactive PDF Preview</span>
+      </div>
       <div class="resume-grid">
         <article class="resume-card">
           <h3>Sadıkcan Çeşka - CV</h3>
-          <p>
-            Download the latest PDF version or preview it directly in the embedded viewer.
+          <p class="resume-lead">
+            Download the latest PDF version or preview it directly in the premium interactive viewer.
           </p>
+          <ul class="resume-points">
+            <li>Product-focused fullstack engineering across modern Next.js and Node.js ecosystems.</li>
+            <li>Strong attention to performance, maintainability, and polished user-facing delivery.</li>
+            <li>Clear architecture thinking with practical execution for scalable digital products.</li>
+          </ul>
           <div class="resume-actions">
             <a id="cv-view-link" class="btn primary" href="#" target="_blank" rel="noreferrer">Open Resume in New Tab</a>
             <a id="cv-download-link" class="btn secondary" href="#" download>Download Resume PDF</a>
           </div>
           <p class="resume-meta"><span class="status-dot" aria-hidden="true"></span><span id="cv-status">Checking resume file...</span></p>
           <p class="resume-note">
-            If the preview does not appear on your browser, use the download button above.
+            If interactive preview is not supported on your device, the viewer switches to a reliable fallback mode automatically.
           </p>
         </article>
-        <div class="cv-frame-wrap">
-          <iframe id="cv-frame" class="cv-frame" title="Sadıkcan Çeşka resume preview" loading="lazy"></iframe>
+        <div id="cv-viewer" class="cv-viewer">
+          <div class="cv-toolbar">
+            <div class="cv-toolbar-meta">
+              <span class="cv-file-pill">Sadikcan-Ceska-CV.pdf</span>
+              <span id="cv-viewer-status" class="cv-viewer-status" data-mode="loading">Initializing preview...</span>
+            </div>
+            <div class="cv-toolbar-controls">
+              <button id="cv-prev" class="cv-control" type="button" aria-label="Previous page">Prev</button>
+              <span id="cv-page-indicator" class="cv-page-indicator">-- / --</span>
+              <button id="cv-next" class="cv-control" type="button" aria-label="Next page">Next</button>
+              <button id="cv-zoom-out" class="cv-control" type="button" aria-label="Zoom out">-</button>
+              <button id="cv-fit" class="cv-control" type="button" aria-label="Fit to width">Fit</button>
+              <button id="cv-zoom-in" class="cv-control" type="button" aria-label="Zoom in">+</button>
+              <span id="cv-zoom-level" class="cv-zoom-level">--%</span>
+              <button id="cv-fullscreen" class="cv-control" type="button" aria-label="Toggle fullscreen">Full</button>
+            </div>
+          </div>
+          <div id="cv-canvas-wrap" class="cv-canvas-wrap">
+            <canvas id="cv-canvas" class="cv-canvas" aria-label="Interactive resume preview"></canvas>
+          </div>
+          <div id="cv-fallback" class="cv-fallback" hidden>
+            <iframe id="cv-frame" class="cv-frame" title="Sadıkcan Çeşka resume preview" loading="lazy"></iframe>
+          </div>
         </div>
       </div>
     </section>
@@ -2460,6 +3053,19 @@
     const cvContactLink = document.getElementById("cv-contact-link");
     const cvFrame = document.getElementById("cv-frame");
     const cvStatus = document.getElementById("cv-status");
+    const cvViewer = document.getElementById("cv-viewer");
+    const cvViewerStatus = document.getElementById("cv-viewer-status");
+    const cvCanvasWrap = document.getElementById("cv-canvas-wrap");
+    const cvCanvas = document.getElementById("cv-canvas");
+    const cvFallback = document.getElementById("cv-fallback");
+    const cvPrevBtn = document.getElementById("cv-prev");
+    const cvNextBtn = document.getElementById("cv-next");
+    const cvZoomOutBtn = document.getElementById("cv-zoom-out");
+    const cvFitBtn = document.getElementById("cv-fit");
+    const cvZoomInBtn = document.getElementById("cv-zoom-in");
+    const cvFullscreenBtn = document.getElementById("cv-fullscreen");
+    const cvPageIndicator = document.getElementById("cv-page-indicator");
+    const cvZoomLevel = document.getElementById("cv-zoom-level");
     const brandAvatar = document.getElementById("brand-avatar");
     const topbar = document.querySelector(".topbar");
     const mobileMenuBtn = document.querySelector(".mobile-menu-btn");
@@ -2493,6 +3099,21 @@
       refreshTimer: null,
       loadPromise: null
     };
+    const resumeViewerState = {
+      pdfDoc: null,
+      page: 1,
+      totalPages: 0,
+      scale: 1,
+      minScale: 0.72,
+      maxScale: 2.8,
+      mode: "fit",
+      renderTask: null,
+      renderToken: 0,
+      initialized: false,
+      eventsBound: false
+    };
+    let resumeResizeTimer = null;
+    let pdfJsLoadPromise = null;
     let activeModalRequest = 0;
 
     function esc(text) {
@@ -2519,6 +3140,242 @@
 
     function isRetriableStatus(status) {
       return status === 403 || status === 408 || status === 425 || status === 429 || status >= 500;
+    }
+
+    function clamp(value, min, max) {
+      return Math.min(max, Math.max(min, value));
+    }
+
+    function setResumeViewerStatus(text, mode = "loading") {
+      if (!cvViewerStatus) return;
+      cvViewerStatus.textContent = text;
+      cvViewerStatus.dataset.mode = mode;
+    }
+
+    function setResumeFallback(enabled) {
+      if (!cvViewer) return;
+      cvViewer.classList.toggle("is-fallback", enabled);
+      if (cvCanvasWrap) cvCanvasWrap.hidden = enabled;
+      if (cvFallback) cvFallback.hidden = !enabled;
+    }
+
+    function updateResumeViewerControls() {
+      const ready = resumeViewerState.initialized && !!resumeViewerState.pdfDoc;
+      const totalPages = resumeViewerState.totalPages || 0;
+      const currentPage = clamp(resumeViewerState.page || 1, 1, Math.max(1, totalPages || 1));
+
+      if (cvPrevBtn) cvPrevBtn.disabled = !ready || currentPage <= 1;
+      if (cvNextBtn) cvNextBtn.disabled = !ready || currentPage >= totalPages;
+      if (cvZoomOutBtn) cvZoomOutBtn.disabled = !ready;
+      if (cvZoomInBtn) cvZoomInBtn.disabled = !ready;
+      if (cvFitBtn) cvFitBtn.disabled = !ready;
+
+      if (cvPageIndicator) cvPageIndicator.textContent = totalPages ? `${currentPage} / ${totalPages}` : "-- / --";
+      if (cvZoomLevel) cvZoomLevel.textContent = ready ? `${Math.round(resumeViewerState.scale * 100)}%` : "--%";
+    }
+
+    function loadPdfJs() {
+      if (window.pdfjsLib) return Promise.resolve(window.pdfjsLib);
+      if (pdfJsLoadPromise) return pdfJsLoadPromise;
+
+      pdfJsLoadPromise = new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        script.src = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js";
+        script.async = true;
+        script.onload = () => {
+          if (!window.pdfjsLib) {
+            reject(new Error("PDF.js failed to initialize."));
+            return;
+          }
+          window.pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+          resolve(window.pdfjsLib);
+        };
+        script.onerror = () => reject(new Error("PDF.js script could not be loaded."));
+        document.head.appendChild(script);
+      });
+
+      return pdfJsLoadPromise;
+    }
+
+    async function renderResumePage(options = {}) {
+      const { forceFit = false } = options;
+      if (!resumeViewerState.pdfDoc || !cvCanvas || !cvCanvasWrap) return;
+
+      resumeViewerState.page = clamp(resumeViewerState.page, 1, Math.max(1, resumeViewerState.totalPages || 1));
+      const renderToken = ++resumeViewerState.renderToken;
+
+      try {
+        if (resumeViewerState.renderTask) {
+          resumeViewerState.renderTask.cancel();
+          resumeViewerState.renderTask = null;
+        }
+      } catch (_) {}
+
+      let page;
+      try {
+        page = await resumeViewerState.pdfDoc.getPage(resumeViewerState.page);
+      } catch (error) {
+        setResumeFallback(true);
+        setResumeViewerStatus("Fallback mode", "warn");
+        updateResumeViewerControls();
+        throw error;
+      }
+
+      if (renderToken !== resumeViewerState.renderToken) return;
+
+      const baseViewport = page.getViewport({ scale: 1 });
+      if (resumeViewerState.mode === "fit" || forceFit) {
+        const availableWidth = Math.max(280, cvCanvasWrap.clientWidth - 24);
+        resumeViewerState.scale = clamp(availableWidth / baseViewport.width, resumeViewerState.minScale, resumeViewerState.maxScale);
+      } else {
+        resumeViewerState.scale = clamp(resumeViewerState.scale, resumeViewerState.minScale, resumeViewerState.maxScale);
+      }
+
+      const viewport = page.getViewport({ scale: resumeViewerState.scale });
+      const pixelRatio = Math.min(2, window.devicePixelRatio || 1);
+      cvCanvas.width = Math.floor(viewport.width * pixelRatio);
+      cvCanvas.height = Math.floor(viewport.height * pixelRatio);
+      cvCanvas.style.width = `${Math.floor(viewport.width)}px`;
+      cvCanvas.style.height = `${Math.floor(viewport.height)}px`;
+
+      const context = cvCanvas.getContext("2d", { alpha: false });
+      context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+      context.clearRect(0, 0, viewport.width, viewport.height);
+      context.fillStyle = "#ffffff";
+      context.fillRect(0, 0, viewport.width, viewport.height);
+
+      setResumeViewerStatus("Rendering...", "loading");
+      const renderTask = page.render({ canvasContext: context, viewport });
+      resumeViewerState.renderTask = renderTask;
+      try {
+        await renderTask.promise;
+      } catch (error) {
+        if (error?.name === "RenderingCancelledException") return;
+        throw error;
+      } finally {
+        if (resumeViewerState.renderTask === renderTask) {
+          resumeViewerState.renderTask = null;
+        }
+      }
+
+      if (renderToken !== resumeViewerState.renderToken) return;
+
+      updateResumeViewerControls();
+      setResumeViewerStatus("Interactive", "live");
+    }
+
+    function bindResumeViewerEvents() {
+      if (resumeViewerState.eventsBound) return;
+      resumeViewerState.eventsBound = true;
+
+      if (cvPrevBtn) {
+        cvPrevBtn.addEventListener("click", () => {
+          if (!resumeViewerState.initialized || resumeViewerState.page <= 1) return;
+          resumeViewerState.page -= 1;
+          renderResumePage({ forceFit: resumeViewerState.mode === "fit" }).catch((error) => {
+            console.warn("Resume page render failed", error);
+          });
+        });
+      }
+
+      if (cvNextBtn) {
+        cvNextBtn.addEventListener("click", () => {
+          if (!resumeViewerState.initialized || resumeViewerState.page >= resumeViewerState.totalPages) return;
+          resumeViewerState.page += 1;
+          renderResumePage({ forceFit: resumeViewerState.mode === "fit" }).catch((error) => {
+            console.warn("Resume page render failed", error);
+          });
+        });
+      }
+
+      if (cvZoomOutBtn) {
+        cvZoomOutBtn.addEventListener("click", () => {
+          if (!resumeViewerState.initialized) return;
+          resumeViewerState.mode = "manual";
+          resumeViewerState.scale = clamp(resumeViewerState.scale - 0.12, resumeViewerState.minScale, resumeViewerState.maxScale);
+          renderResumePage().catch((error) => {
+            console.warn("Resume zoom render failed", error);
+          });
+        });
+      }
+
+      if (cvZoomInBtn) {
+        cvZoomInBtn.addEventListener("click", () => {
+          if (!resumeViewerState.initialized) return;
+          resumeViewerState.mode = "manual";
+          resumeViewerState.scale = clamp(resumeViewerState.scale + 0.12, resumeViewerState.minScale, resumeViewerState.maxScale);
+          renderResumePage().catch((error) => {
+            console.warn("Resume zoom render failed", error);
+          });
+        });
+      }
+
+      if (cvFitBtn) {
+        cvFitBtn.addEventListener("click", () => {
+          if (!resumeViewerState.initialized) return;
+          resumeViewerState.mode = "fit";
+          renderResumePage({ forceFit: true }).catch((error) => {
+            console.warn("Resume fit render failed", error);
+          });
+        });
+      }
+
+      if (cvFullscreenBtn && cvViewer) {
+        cvFullscreenBtn.addEventListener("click", async () => {
+          try {
+            if (document.fullscreenElement === cvViewer) {
+              await document.exitFullscreen();
+            } else if (cvViewer.requestFullscreen) {
+              await cvViewer.requestFullscreen();
+            }
+          } catch (error) {
+            console.warn("Fullscreen request failed", error);
+          }
+        });
+
+        document.addEventListener("fullscreenchange", () => {
+          const isFullscreen = document.fullscreenElement === cvViewer;
+          cvFullscreenBtn.textContent = isFullscreen ? "Exit" : "Full";
+        });
+      }
+
+      window.addEventListener("resize", () => {
+        if (!resumeViewerState.initialized || resumeViewerState.mode !== "fit") return;
+        clearTimeout(resumeResizeTimer);
+        resumeResizeTimer = window.setTimeout(() => {
+          renderResumePage({ forceFit: true }).catch((error) => {
+            console.warn("Resume resize render failed", error);
+          });
+        }, 120);
+      }, { passive: true });
+    }
+
+    async function initInteractiveResumeViewer() {
+      if (!cvViewer || !cvCanvas || !cvCanvasWrap) return;
+
+      try {
+        setResumeViewerStatus("Loading PDF...", "loading");
+        const pdfjsLib = await loadPdfJs();
+        const loadingTask = pdfjsLib.getDocument({ url: resumeFileUrl });
+        const pdfDoc = await loadingTask.promise;
+
+        resumeViewerState.pdfDoc = pdfDoc;
+        resumeViewerState.totalPages = pdfDoc.numPages;
+        resumeViewerState.page = 1;
+        resumeViewerState.scale = 1;
+        resumeViewerState.mode = "fit";
+        resumeViewerState.initialized = true;
+
+        setResumeFallback(false);
+        updateResumeViewerControls();
+        await renderResumePage({ forceFit: true });
+      } catch (error) {
+        console.warn("Interactive resume viewer unavailable", error);
+        resumeViewerState.initialized = false;
+        setResumeFallback(true);
+        setResumeViewerStatus("Fallback mode", "warn");
+        updateResumeViewerControls();
+      }
     }
 
     async function fetchWithTimeout(url, options = {}, timeoutMs = requestTimeoutMs) {
@@ -2926,11 +3783,13 @@
         return;
       }
       const total = languages.reduce((acc, item) => acc + item.count, 0);
+      const languagePalette = ["#d5b378", "#6f9fda", "#88b8aa", "#d489c4", "#8fa0d8", "#d19a62"];
       langList.innerHTML = languages.slice(0, 6).map((item, idx) => {
         const pct = Math.max(3, Math.round((item.count / total) * 100));
+        const tone = languagePalette[idx % languagePalette.length];
         return `
-          <div class="lang-row">
-            <div class="lang-head"><span>${esc(item.name)}</span><span>${pct}%</span></div>
+          <div class="lang-row" style="--lang:${tone}">
+            <div class="lang-head"><span class="lang-name">${esc(item.name)}</span><span class="lang-value">${pct}%</span></div>
             <div class="bar"><span style="width:${pct}%;animation-delay:${idx * 70}ms"></span></div>
           </div>
         `;
@@ -3001,6 +3860,10 @@
       cvDownloadLink.href = resumeFileUrl;
       cvContactLink.href = resumePreviewUrl;
       cvFrame.src = resumePreviewUrl;
+      setResumeViewerStatus("Initializing...", "loading");
+      setResumeFallback(false);
+      bindResumeViewerEvents();
+      updateResumeViewerControls();
       cvStatus.textContent = "Resume is linked and ready.";
       cvStatus.parentElement.classList.remove("warn");
       cvStatus.parentElement.classList.add("ok");
@@ -3015,6 +3878,8 @@
         cvStatus.parentElement.classList.remove("ok");
         cvStatus.parentElement.classList.add("warn");
       }
+
+      await initInteractiveResumeViewer();
     }
 
     async function fetchGitHubData(etags = {}) {
