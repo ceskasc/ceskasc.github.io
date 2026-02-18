@@ -15,6 +15,9 @@
     <filter id="blur-sm" x="-40%" y="-40%" width="180%" height="180%">
       <feGaussianBlur stdDeviation="8"/>
     </filter>
+    <clipPath id="code-clip">
+      <rect x="72" y="84" width="850" height="460" rx="24"/>
+    </clipPath>
   </defs>
 
   <rect width="1600" height="620" fill="url(#bg)"/>
@@ -56,27 +59,29 @@
     <circle cx="140" cy="106" r="6" fill="#FFBD2E"/>
     <circle cx="162" cy="106" r="6" fill="#27C93F"/>
 
-    <text x="102" y="188" fill="#8C93A6" font-size="24" font-family="'Courier New', monospace">// Digital Experience Architect</text>
-    <text x="102" y="244" fill="#A78BFA" font-size="38" font-family="'Courier New', monospace">const</text>
-    <text x="232" y="244" fill="url(#gold)" font-size="38" font-family="'Courier New', monospace">Portfolio</text>
-    <text x="470" y="244" fill="#94A3B8" font-size="38" font-family="'Courier New', monospace">= ({ visitor }) =&gt; {'{'}</text>
+    <g clip-path="url(#code-clip)">
+      <text x="102" y="188" fill="#8C93A6" font-size="24" font-family="'Courier New', monospace">// Digital Experience Architect</text>
+      <text x="102" y="244" fill="#A78BFA" font-size="38" font-family="'Courier New', monospace">const</text>
+      <text x="232" y="244" fill="url(#gold)" font-size="38" font-family="'Courier New', monospace">Portfolio</text>
+      <text x="430" y="244" fill="#94A3B8" font-size="34" font-family="'Courier New', monospace">= ({ visitor }) =&gt; {</text>
 
-    <text x="142" y="304" fill="#A78BFA" font-size="34" font-family="'Courier New', monospace">return</text>
-    <text x="285" y="304" fill="#93C5FD" font-size="34" font-family="'Courier New', monospace">( &lt;Experience</text>
-    <text x="610" y="304" fill="url(#gold)" font-size="34" font-family="'Courier New', monospace">innovative</text>
-    <text x="808" y="304" fill="#93C5FD" font-size="34" font-family="'Courier New', monospace">/&gt; );</text>
+      <text x="142" y="304" fill="#A78BFA" font-size="34" font-family="'Courier New', monospace">return</text>
+      <text x="285" y="304" fill="#93C5FD" font-size="34" font-family="'Courier New', monospace">( &lt;Experience</text>
+      <text x="610" y="304" fill="url(#gold)" font-size="34" font-family="'Courier New', monospace">innovative</text>
+      <text x="808" y="304" fill="#93C5FD" font-size="34" font-family="'Courier New', monospace">/&gt; );</text>
 
-    <text x="142" y="362" fill="#93C5FD" font-size="34" font-family="'Courier New', monospace">};</text>
+      <text x="142" y="362" fill="#93C5FD" font-size="34" font-family="'Courier New', monospace">};</text>
 
-    <text x="102" y="442" fill="#6B7280" font-size="22" font-family="'Courier New', monospace">Ln 12, Col 34</text>
-    <circle cx="330" cy="435" r="6" fill="#D5B378" filter="url(#blur-sm)"/>
-    <text x="350" y="442" fill="#6B7280" font-size="22" font-family="'Courier New', monospace">Prettier</text>
-    <circle cx="488" cy="435" r="6" fill="#60A5FA" filter="url(#blur-sm)"/>
-    <text x="508" y="442" fill="#6B7280" font-size="22" font-family="'Courier New', monospace">TS 5.x</text>
+      <text x="102" y="442" fill="#6B7280" font-size="22" font-family="'Courier New', monospace">Ln 12, Col 34</text>
+      <circle cx="330" cy="435" r="6" fill="#D5B378" filter="url(#blur-sm)"/>
+      <text x="350" y="442" fill="#6B7280" font-size="22" font-family="'Courier New', monospace">Prettier</text>
+      <circle cx="488" cy="435" r="6" fill="#60A5FA" filter="url(#blur-sm)"/>
+      <text x="508" y="442" fill="#6B7280" font-size="22" font-family="'Courier New', monospace">TS 5.x</text>
+    </g>
   </g>
 
   <g>
-    <text x="960" y="182" fill="#FFFFFF" font-size="62" font-family="'Segoe UI', Arial, sans-serif" font-weight="700">Sadikcan Ceska</text>
+    <text x="960" y="182" fill="#FFFFFF" font-size="56" font-family="'Segoe UI', Arial, sans-serif" font-weight="700">Sadık Can Çeşka</text>
     <text x="960" y="240" fill="url(#gold)" font-size="46" font-family="'Segoe UI', Arial, sans-serif" font-style="italic">Digital Architect Portfolio</text>
     <text x="960" y="292" fill="#CBD5E1" font-size="27" font-family="'Segoe UI', Arial, sans-serif">Premium fullstack engineering showcase</text>
     <text x="960" y="328" fill="#CBD5E1" font-size="27" font-family="'Segoe UI', Arial, sans-serif">with cinematic interface language</text>

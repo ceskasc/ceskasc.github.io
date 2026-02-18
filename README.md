@@ -1,7 +1,7 @@
 ﻿<div align="center">
-  <img src="./data/readme-hero.svg" alt="Sadikcan Ceska Portfolio Hero" width="100%" />
+  <img src="./data/readme-hero.svg?v=20260218b" alt="Sadık Can Çeşka Portfolio Hero" width="100%" />
 
-  <h1>Sadikcan Ceska - Digital Architect Portfolio</h1>
+  <h1>Sadık Can Çeşka - Digital Architect Portfolio</h1>
   <p><strong>Premium fullstack portfolio experience engineered for performance and crafted with a cinematic UI language.</strong></p>
 
   <p>
@@ -26,7 +26,7 @@
     <td width="50%" valign="top">
       <h3>What this project is</h3>
       <p>
-        A single-page personal portfolio for <strong>Sadikcan Ceska</strong>, presenting product engineering capability,
+        A single-page personal portfolio for <strong>Sadık Can Çeşka</strong>, presenting product engineering capability,
         selected work, technical stack, and contact pathways.
       </p>
       <p>
