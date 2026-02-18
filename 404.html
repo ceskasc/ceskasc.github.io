@@ -1,78 +1,144 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Page Not Found | Sadıkcan Çeşka</title>
-  <meta name="description" content="The page you requested could not be found." />
-  <meta name="robots" content="noindex" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 | Sadıkcan Çeşka</title>
+  <!-- Tailwind CSS (via CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            void: '#030305',
+            accent: '#E2B714',
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Playfair Display', 'serif'],
+            mono: ['Fira Code', 'monospace'],
+          },
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-20px)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Fira+Code:wght@400;500&display=swap"
+    rel="stylesheet">
   <style>
-    :root {
-      --bg: #0b0e11;
-      --panel: rgba(16, 20, 24, 0.86);
-      --line: #232a31;
-      --text: #f3f4ef;
-      --muted: #9ca6b0;
-      --accent: #d5b378;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      font-family: "Outfit", system-ui, -apple-system, Segoe UI, sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(circle at 14% 12%, rgba(213, 179, 120, 0.14), transparent 30%),
-        linear-gradient(155deg, #090b0d 0%, #0b0e11 45%, #121820 100%);
-      padding: 1rem;
+      background-color: #030305;
+      color: #ffffff;
+      overflow: hidden;
     }
-    .card {
-      width: min(640px, 100%);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: var(--panel);
-      padding: 1.5rem;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-    }
-    h1 {
-      font-size: clamp(2rem, 5vw, 3rem);
-      line-height: 1.05;
-      margin-bottom: 0.55rem;
-    }
-    p {
-      color: var(--muted);
-      margin-bottom: 1.1rem;
-      line-height: 1.6;
-    }
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.6rem;
-    }
-    a {
-      text-decoration: none;
-      color: #111317;
-      font-weight: 600;
-      border-radius: 999px;
-      padding: 0.62rem 0.94rem;
-      background: linear-gradient(130deg, var(--accent), #f1ddb3);
-    }
-    .secondary {
-      color: var(--text);
+
+    .glass {
       background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--line);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .text-gradient {
+      background: linear-gradient(135deg, #fff 0%, #a5a5a5 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
   </style>
 </head>
-<body>
-  <main class="card">
-    <h1>404</h1>
-    <p>The page you requested was not found. You can return to the portfolio home or open the resume directly.</p>
-    <div class="actions">
-      <a href="/">Go Home</a>
-      <a class="secondary" href="/Sadikcan-Ceska-CV.pdf" target="_blank" rel="noreferrer">Open Resume</a>
+
+<body class="bg-void h-screen flex items-center justify-center relative">
+
+  <!-- Background Canvas -->
+  <canvas id="space-background" class="fixed inset-0 w-full h-full pointer-events-none opacity-60"></canvas>
+
+  <!-- Content -->
+  <div class="relative z-10 text-center px-6">
+    <div class="animate-float">
+      <h1
+        class="text-[120px] md:text-[200px] font-serif font-bold text-transparent bg-clip-text bg-gradient-to-b from-white via-gray-200 to-gray-600 leading-none select-none opacity-20 md:opacity-10 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 blur-sm">
+        404
+      </h1>
+      <div class="relative z-20">
+        <div
+          class="w-24 h-24 rounded-full bg-accent/20 blur-[50px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+        </div>
+        <h2 class="text-4xl md:text-6xl font-bold font-serif mb-4 text-white">Lost in the Void?</h2>
+        <p class="text-gray-400 max-w-md mx-auto mb-8 text-lg font-light">
+          The coordinates you are looking for seem to be out of range. Let's navigate you back to safety.
+        </p>
+        <a href="index.html"
+          class="inline-flex items-center gap-2 px-8 py-4 bg-white text-void font-bold rounded-full hover:bg-zinc-200 transition-all duration-300 shadow-xl hover:shadow-2xl hover:-translate-y-1 group">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:-translate-x-1 transition-transform"
+            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          Return to Base
+        </a>
+      </div>
     </div>
-  </main>
+  </div>
+
+  <!-- Simple Star Script -->
+  <script>
+    const canvas = document.getElementById('space-background');
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      initStars();
+    }
+
+    function initStars() {
+      stars = [];
+      const numStars = window.innerWidth < 768 ? 50 : 100;
+      for (let i = 0; i < numStars; i++) {
+        stars.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          size: Math.random() * 2,
+          speed: Math.random() * 0.2 + 0.1
+        });
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+
+      stars.forEach(star => {
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+        ctx.fill();
+
+        star.y += star.speed; // Move down
+        if (star.y > canvas.height) { // Reset at bottom
+          star.y = 0;
+          star.x = Math.random() * canvas.width;
+        }
+      });
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    animate();
+  </script>
 </body>
+
 </html>

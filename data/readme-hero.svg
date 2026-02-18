@@ -1,0 +1,98 @@
+﻿<svg width="1600" height="620" viewBox="0 0 1600 620" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1600" y2="620" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#030305"/>
+      <stop offset="1" stop-color="#10121A"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F4DFB6"/>
+      <stop offset="0.5" stop-color="#D5B378"/>
+      <stop offset="1" stop-color="#B58D50"/>
+    </linearGradient>
+    <filter id="blur-lg" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="36"/>
+    </filter>
+    <filter id="blur-sm" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="8"/>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="620" fill="url(#bg)"/>
+
+  <circle cx="300" cy="130" r="170" fill="#D5B378" opacity="0.16" filter="url(#blur-lg)"/>
+  <circle cx="1290" cy="530" r="220" fill="#3D5AFE" opacity="0.14" filter="url(#blur-lg)"/>
+  <circle cx="1230" cy="120" r="130" fill="#A855F7" opacity="0.11" filter="url(#blur-lg)"/>
+
+  <g opacity="0.65" fill="#F8FAFC">
+    <circle cx="90" cy="70" r="1.8"/>
+    <circle cx="210" cy="160" r="1.4"/>
+    <circle cx="330" cy="48" r="1.7"/>
+    <circle cx="500" cy="125" r="1.3"/>
+    <circle cx="710" cy="84" r="1.5"/>
+    <circle cx="860" cy="44" r="1.9"/>
+    <circle cx="1010" cy="128" r="1.3"/>
+    <circle cx="1180" cy="56" r="1.6"/>
+    <circle cx="1410" cy="96" r="1.5"/>
+    <circle cx="1515" cy="58" r="1.2"/>
+    <circle cx="120" cy="280" r="1.1"/>
+    <circle cx="380" cy="248" r="1.3"/>
+    <circle cx="590" cy="240" r="1.2"/>
+    <circle cx="820" cy="250" r="1.4"/>
+    <circle cx="1090" cy="244" r="1.3"/>
+    <circle cx="1360" cy="228" r="1.2"/>
+    <circle cx="1540" cy="290" r="1.7"/>
+    <circle cx="170" cy="560" r="1.4"/>
+    <circle cx="430" cy="520" r="1.2"/>
+    <circle cx="700" cy="560" r="1.6"/>
+    <circle cx="950" cy="530" r="1.3"/>
+    <circle cx="1200" cy="550" r="1.4"/>
+    <circle cx="1490" cy="520" r="1.2"/>
+  </g>
+
+  <g>
+    <rect x="72" y="84" width="850" height="460" rx="24" fill="#080A0F" fill-opacity="0.64" stroke="#FFFFFF" stroke-opacity="0.13"/>
+    <rect x="96" y="126" width="802" height="1" fill="#FFFFFF" fill-opacity="0.13"/>
+    <circle cx="118" cy="106" r="6" fill="#FF5F56"/>
+    <circle cx="140" cy="106" r="6" fill="#FFBD2E"/>
+    <circle cx="162" cy="106" r="6" fill="#27C93F"/>
+
+    <text x="102" y="188" fill="#8C93A6" font-size="24" font-family="'Courier New', monospace">// Digital Experience Architect</text>
+    <text x="102" y="244" fill="#A78BFA" font-size="38" font-family="'Courier New', monospace">const</text>
+    <text x="232" y="244" fill="url(#gold)" font-size="38" font-family="'Courier New', monospace">Portfolio</text>
+    <text x="470" y="244" fill="#94A3B8" font-size="38" font-family="'Courier New', monospace">= ({ visitor }) =&gt; {'{'}</text>
+
+    <text x="142" y="304" fill="#A78BFA" font-size="34" font-family="'Courier New', monospace">return</text>
+    <text x="285" y="304" fill="#93C5FD" font-size="34" font-family="'Courier New', monospace">( &lt;Experience</text>
+    <text x="610" y="304" fill="url(#gold)" font-size="34" font-family="'Courier New', monospace">innovative</text>
+    <text x="808" y="304" fill="#93C5FD" font-size="34" font-family="'Courier New', monospace">/&gt; );</text>
+
+    <text x="142" y="362" fill="#93C5FD" font-size="34" font-family="'Courier New', monospace">};</text>
+
+    <text x="102" y="442" fill="#6B7280" font-size="22" font-family="'Courier New', monospace">Ln 12, Col 34</text>
+    <circle cx="330" cy="435" r="6" fill="#D5B378" filter="url(#blur-sm)"/>
+    <text x="350" y="442" fill="#6B7280" font-size="22" font-family="'Courier New', monospace">Prettier</text>
+    <circle cx="488" cy="435" r="6" fill="#60A5FA" filter="url(#blur-sm)"/>
+    <text x="508" y="442" fill="#6B7280" font-size="22" font-family="'Courier New', monospace">TS 5.x</text>
+  </g>
+
+  <g>
+    <text x="960" y="182" fill="#FFFFFF" font-size="62" font-family="'Segoe UI', Arial, sans-serif" font-weight="700">Sadikcan Ceska</text>
+    <text x="960" y="240" fill="url(#gold)" font-size="46" font-family="'Segoe UI', Arial, sans-serif" font-style="italic">Digital Architect Portfolio</text>
+    <text x="960" y="292" fill="#CBD5E1" font-size="27" font-family="'Segoe UI', Arial, sans-serif">Premium fullstack engineering showcase</text>
+    <text x="960" y="328" fill="#CBD5E1" font-size="27" font-family="'Segoe UI', Arial, sans-serif">with cinematic interface language</text>
+
+    <g font-family="'Segoe UI', Arial, sans-serif" font-size="20" font-weight="600">
+      <rect x="960" y="380" width="190" height="48" rx="24" fill="#D5B378" fill-opacity="0.2" stroke="#D5B378" stroke-opacity="0.45"/>
+      <text x="997" y="411" fill="#F8FAFC">Void + Gold</text>
+
+      <rect x="1172" y="380" width="205" height="48" rx="24" fill="#FFFFFF" fill-opacity="0.08" stroke="#FFFFFF" stroke-opacity="0.18"/>
+      <text x="1202" y="411" fill="#F8FAFC">Live GitHub API</text>
+
+      <rect x="960" y="444" width="168" height="48" rx="24" fill="#FFFFFF" fill-opacity="0.08" stroke="#FFFFFF" stroke-opacity="0.18"/>
+      <text x="995" y="475" fill="#F8FAFC">PDF Resume</text>
+
+      <rect x="1148" y="444" width="230" height="48" rx="24" fill="#FFFFFF" fill-opacity="0.08" stroke="#FFFFFF" stroke-opacity="0.18"/>
+      <text x="1180" y="475" fill="#F8FAFC">Glassmorphism UI</text>
+    </g>
+  </g>
+</svg>

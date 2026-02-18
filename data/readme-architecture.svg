@@ -1,0 +1,80 @@
+﻿<svg width="1400" height="840" viewBox="0 0 1400 840" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1400" y2="840" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#05060A"/>
+      <stop offset="1" stop-color="#0F111A"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#D5B378"/>
+      <stop offset="1" stop-color="#F4DFB6"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#000000" flood-opacity="0.45"/>
+    </filter>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#D5B378"/>
+    </marker>
+  </defs>
+
+  <rect width="1400" height="840" fill="url(#bg)"/>
+
+  <text x="74" y="90" fill="#FFFFFF" font-size="44" font-family="'Segoe UI', Arial, sans-serif" font-weight="700">Portfolio Runtime Architecture</text>
+  <text x="74" y="132" fill="#94A3B8" font-size="24" font-family="'Segoe UI', Arial, sans-serif">How content, integrations, and interactions flow in the live site</text>
+
+  <g filter="url(#shadow)">
+    <rect x="86" y="192" width="330" height="124" rx="18" fill="#0D1017" stroke="url(#edge)" stroke-opacity="0.8"/>
+    <text x="112" y="240" fill="#D5B378" font-size="24" font-family="'Segoe UI', Arial, sans-serif" font-weight="700">Visitor</text>
+    <text x="112" y="274" fill="#CBD5E1" font-size="20" font-family="'Segoe UI', Arial, sans-serif">Desktop / Mobile Browser</text>
+
+    <rect x="510" y="170" width="380" height="170" rx="18" fill="#0D1017" stroke="#FFFFFF" stroke-opacity="0.18"/>
+    <text x="536" y="220" fill="#D5B378" font-size="24" font-family="'Segoe UI', Arial, sans-serif" font-weight="700">Presentation Layer</text>
+    <text x="536" y="256" fill="#CBD5E1" font-size="20" font-family="'Segoe UI', Arial, sans-serif">Tailwind + custom CSS + Canvas FX</text>
+    <text x="536" y="288" fill="#94A3B8" font-size="18" font-family="'Segoe UI', Arial, sans-serif">Hero, glass panels, starfield, cursor, motion</text>
+
+    <rect x="510" y="388" width="380" height="170" rx="18" fill="#0D1017" stroke="#FFFFFF" stroke-opacity="0.18"/>
+    <text x="536" y="438" fill="#D5B378" font-size="24" font-family="'Segoe UI', Arial, sans-serif" font-weight="700">Application Layer</text>
+    <text x="536" y="474" fill="#CBD5E1" font-size="20" font-family="'Segoe UI', Arial, sans-serif">Vanilla JavaScript State + UI Logic</text>
+    <text x="536" y="506" fill="#94A3B8" font-size="18" font-family="'Segoe UI', Arial, sans-serif">Repo grid, modal, filters, navbar, loaders</text>
+
+    <rect x="980" y="116" width="334" height="120" rx="16" fill="#0D1017" stroke="#FFFFFF" stroke-opacity="0.18"/>
+    <text x="1006" y="164" fill="#D5B378" font-size="22" font-family="'Segoe UI', Arial, sans-serif" font-weight="700">GitHub REST API</text>
+    <text x="1006" y="198" fill="#CBD5E1" font-size="18" font-family="'Segoe UI', Arial, sans-serif">Profile, Repos, README content</text>
+
+    <rect x="980" y="274" width="334" height="120" rx="16" fill="#0D1017" stroke="#FFFFFF" stroke-opacity="0.18"/>
+    <text x="1006" y="322" fill="#D5B378" font-size="22" font-family="'Segoe UI', Arial, sans-serif" font-weight="700">PDF.js CDN</text>
+    <text x="1006" y="356" fill="#CBD5E1" font-size="18" font-family="'Segoe UI', Arial, sans-serif">Resume rendering + fallback</text>
+
+    <rect x="980" y="432" width="334" height="120" rx="16" fill="#0D1017" stroke="#FFFFFF" stroke-opacity="0.18"/>
+    <text x="1006" y="480" fill="#D5B378" font-size="22" font-family="'Segoe UI', Arial, sans-serif" font-weight="700">FormSubmit</text>
+    <text x="1006" y="514" fill="#CBD5E1" font-size="18" font-family="'Segoe UI', Arial, sans-serif">Contact form delivery route</text>
+
+    <rect x="510" y="620" width="380" height="140" rx="18" fill="#0D1017" stroke="#FFFFFF" stroke-opacity="0.18"/>
+    <text x="536" y="670" fill="#D5B378" font-size="24" font-family="'Segoe UI', Arial, sans-serif" font-weight="700">Output Experience</text>
+    <text x="536" y="706" fill="#CBD5E1" font-size="20" font-family="'Segoe UI', Arial, sans-serif">Fast, cinematic, responsive portfolio</text>
+  </g>
+
+  <path d="M416 254 L510 254" stroke="#D5B378" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M700 340 L700 388" stroke="#D5B378" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M890 220 L980 174" stroke="#D5B378" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M890 270 L980 334" stroke="#D5B378" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M890 470 L980 492" stroke="#D5B378" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M700 558 L700 620" stroke="#D5B378" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <g opacity="0.35" fill="#F8FAFC">
+    <circle cx="60" cy="58" r="1.1"/>
+    <circle cx="212" cy="46" r="1.2"/>
+    <circle cx="366" cy="74" r="1.3"/>
+    <circle cx="544" cy="52" r="1.1"/>
+    <circle cx="692" cy="38" r="1.2"/>
+    <circle cx="872" cy="56" r="1.4"/>
+    <circle cx="1026" cy="44" r="1.2"/>
+    <circle cx="1182" cy="60" r="1.3"/>
+    <circle cx="1336" cy="48" r="1.1"/>
+    <circle cx="130" cy="802" r="1.3"/>
+    <circle cx="366" cy="788" r="1.1"/>
+    <circle cx="590" cy="806" r="1.4"/>
+    <circle cx="822" cy="792" r="1.2"/>
+    <circle cx="1040" cy="804" r="1.3"/>
+    <circle cx="1284" cy="790" r="1.2"/>
+  </g>
+</svg>
