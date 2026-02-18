@@ -1,5 +1,5 @@
 ﻿<div align="center">
-  <img src="./data/readme-hero.svg?v=20260218b" alt="Sadık Can Çeşka Portfolio Hero" width="100%" />
+  <img src="./data/readme-hero-v2.svg?v=20260218c" alt="Sadık Can Çeşka Portfolio Hero" width="100%" />
 
   <h1>Sadık Can Çeşka - Digital Architect Portfolio</h1>
   <p><strong>Premium fullstack portfolio experience engineered for performance and crafted with a cinematic UI language.</strong></p>
@@ -271,7 +271,8 @@ const githubApiBase = "https://api.github.com";
 |-- 404.html                   # Branded 404 experience
 |-- README.md                  # This document
 |-- data/
-|   |-- readme-hero.svg        # README visual hero
+|   |-- readme-hero-v2.svg     # README visual hero (current)
+|   |-- readme-hero.svg        # README visual hero (legacy)
 |   `-- readme-architecture.svg # README architecture diagram
 |-- Sadikcan-Ceska-CV.pdf      # Resume asset
 |-- robots.txt                 # Crawl directive
