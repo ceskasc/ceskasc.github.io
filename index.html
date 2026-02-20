@@ -27,11 +27,11 @@
             mono: ['Space Grotesk', 'monospace'],
           },
           colors: {
-            void: '#030305',
+            void: '#090C14',
             panel: 'rgba(255, 255, 255, 0.03)',
             'panel-hover': 'rgba(255, 255, 255, 0.06)',
-            accent: '#d5b378',
-            'accent-glow': '#f4dfb6',
+            accent: '#C31935',
+            'accent-glow': '#E24A5F',
           },
           animation: {
             'blob': 'blob 10s infinite',
@@ -57,8 +57,8 @@
   <style>
     /* Custom Utilities */
     body {
-      background-color: #030305;
-      background-color: #030305;
+      background-color: #090C14;
+      background-color: #090C14;
       /* background-image removed for space canvas */
       color: #e2e8f0;
       overflow-x: hidden;
@@ -71,11 +71,11 @@
 
     .glass-hover:hover {
       background: rgba(255, 255, 255, 0.05);
-      border-color: rgba(213, 179, 120, 0.3);
+      border-color: rgba(195, 25, 53, 0.45);
     }
 
     .text-gradient {
-      background: linear-gradient(135deg, #f3e0b7 0%, #d8b578 50%, #f4e4c2 100%);
+      background: linear-gradient(135deg, #ffe5ea 0%, #ff7a91 48%, #c31935 100%);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
@@ -100,13 +100,13 @@
     .cursor-dot {
       width: 8px;
       height: 8px;
-      background-color: #d5b378;
+      background-color: #C31935;
     }
 
     .cursor-outline {
       width: 40px;
       height: 40px;
-      border: 1px solid rgba(213, 179, 120, 0.5);
+      border: 1px solid rgba(195, 25, 53, 0.6);
       transition: width 0.2s, height 0.2s, background-color 0.2s;
     }
 
@@ -114,7 +114,7 @@
     .loader-overlay {
       position: fixed;
       inset: 0;
-      background: #030305;
+      background: #090C14;
       z-index: 10000;
       display: flex;
       align-items: center;
@@ -185,7 +185,7 @@
 
     /* Nav Scrolled State */
     .nav-scrolled {
-      background: rgba(3, 3, 5, 0.8) !important;
+      background: rgba(9, 12, 20, 0.86) !important;
       backdrop-filter: blur(12px) !important;
       border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
     }
@@ -498,7 +498,7 @@
                 </div>
                 <div class="pl-12 flex items-center">
                   <span class="text-accent">onInspire</span><span class="text-gray-400">=</span><span
-                    class="text-blue-400">{() => </span><span class="text-accent">createMagic</span><span
+                    class="text-rose-300">{() => </span><span class="text-accent">createMagic</span><span
                     class="text-blue-400">()}</span>
                   <span class="w-1.5 h-4 bg-accent/80 ml-1 typing-cursor"></span>
                 </div>
@@ -746,7 +746,7 @@
 
               <!-- Canvas -->
               <div id="cv-canvas-wrap"
-                class="w-full h-[600px] overflow-auto flex items-start justify-center bg-[#1a1a1a] p-8">
+                class="w-full h-[600px] overflow-auto flex items-start justify-center bg-[#111523] p-8">
                 <canvas id="cv-canvas" class="shadow-2xl"></canvas>
               </div>
 
@@ -854,7 +854,7 @@
   <div id="repo-modal" class="fixed inset-0 z-[100] hidden">
     <div class="absolute inset-0 bg-void/80 backdrop-blur-sm" id="repo-modal-overlay"></div>
     <div
-      class="absolute inset-4 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-[800px] md:h-[600px] bg-[#0A0A0C] border border-white/10 rounded-2xl shadow-2xl flex flex-col overflow-hidden transform transition-all">
+      class="absolute inset-4 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-[800px] md:h-[600px] bg-[#0D111B] border border-white/10 rounded-2xl shadow-2xl flex flex-col overflow-hidden transform transition-all">
       <!-- Header -->
       <div class="p-4 border-b border-white/10 flex justify-between items-start bg-void/50">
         <div>
