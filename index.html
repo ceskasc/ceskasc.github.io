@@ -86,8 +86,7 @@
     }
 
     /* Custom Cursor */
-    .cursor-dot,
-    .cursor-outline {
+    .cursor-dot {
       position: fixed;
       top: 0;
       left: 0;
@@ -103,30 +102,7 @@
       border-radius: 999px;
       background-color: #ff8fa2;
       box-shadow: 0 0 12px rgba(226, 74, 95, 0.7);
-      transition: transform 0.18s ease, opacity 0.18s ease;
-    }
-
-    .cursor-outline {
-      width: 26px;
-      height: 26px;
-      border-radius: 8px;
-      border: 1px solid rgba(226, 74, 95, 0.55);
-      background: rgba(195, 25, 53, 0.06);
-      box-shadow: 0 0 16px rgba(195, 25, 53, 0.14);
-      transition: width 0.22s ease, height 0.22s ease, background-color 0.22s ease, border-color 0.22s ease, transform 0.22s ease, opacity 0.22s ease;
-      position: relative;
-    }
-
-    .cursor-outline::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 1px;
-      height: 8px;
-      transform: translate(-50%, -50%);
-      border-radius: 999px;
-      background: rgba(255, 197, 206, 0.75);
+      transition: opacity 0.16s ease;
     }
 
     @media (pointer: fine) {
@@ -327,7 +303,6 @@
 
   <!-- Custom Cursor Elements -->
   <div class="cursor-dot hidden md:block"></div>
-  <div class="cursor-outline hidden md:block"></div>
 
   <!-- Background Ambient Orbs -->
   <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10">
@@ -949,67 +924,33 @@
 
     // --- Cursor Logic ---
     const cursorDot = document.querySelector('.cursor-dot');
-    const cursorOutline = document.querySelector('.cursor-outline');
-
-    if (cursorDot && cursorOutline) {
+    if (cursorDot) {
       let mouseX = window.innerWidth / 2;
       let mouseY = window.innerHeight / 2;
-      let outlineX = mouseX;
-      let outlineY = mouseY;
-      let dotX = mouseX;
-      let dotY = mouseY;
-      const interactiveSelector = 'a, button, .cursor-pointer, input, textarea, select, [role="button"]';
 
-      function setHoverStyles(isHovering) {
-        if (isHovering) {
-          cursorOutline.style.width = '34px';
-          cursorOutline.style.height = '34px';
-          cursorOutline.style.borderColor = 'rgba(255, 143, 162, 0.95)';
-          cursorOutline.style.backgroundColor = 'rgba(226, 74, 95, 0.16)';
-          cursorOutline.style.transform = 'translate(-50%, -50%) rotate(3deg)';
-          cursorDot.style.transform = 'translate(-50%, -50%) scale(0.8)';
-        } else {
-          cursorOutline.style.width = '26px';
-          cursorOutline.style.height = '26px';
-          cursorOutline.style.borderColor = 'rgba(226, 74, 95, 0.55)';
-          cursorOutline.style.backgroundColor = 'rgba(195, 25, 53, 0.06)';
-          cursorOutline.style.transform = 'translate(-50%, -50%) rotate(0deg)';
-          cursorDot.style.transform = 'translate(-50%, -50%) scale(1)';
-        }
-      }
+      const syncCursor = (x, y) => {
+        cursorDot.style.left = `${x}px`;
+        cursorDot.style.top = `${y}px`;
+      };
 
-      function animateCursor() {
-        outlineX += (mouseX - outlineX) * 0.18;
-        outlineY += (mouseY - outlineY) * 0.18;
-        dotX += (mouseX - dotX) * 0.45;
-        dotY += (mouseY - dotY) * 0.45;
-
-        cursorOutline.style.left = `${outlineX}px`;
-        cursorOutline.style.top = `${outlineY}px`;
-        cursorDot.style.left = `${dotX}px`;
-        cursorDot.style.top = `${dotY}px`;
-
-        requestAnimationFrame(animateCursor);
-      }
-
-      window.addEventListener('mousemove', (e) => {
+      window.addEventListener('pointermove', (e) => {
         mouseX = e.clientX;
         mouseY = e.clientY;
-        const hovered = document.elementFromPoint(mouseX, mouseY)?.closest(interactiveSelector);
-        setHoverStyles(Boolean(hovered));
-      });
+        syncCursor(mouseX, mouseY);
+      }, { passive: true });
+
+      // Keep dot in sync even when the page scrolls without pointer movement.
+      window.addEventListener('scroll', () => {
+        syncCursor(mouseX, mouseY);
+      }, { passive: true });
 
       document.addEventListener('mouseleave', () => {
         cursorDot.style.opacity = '0';
-        cursorOutline.style.opacity = '0';
       });
 
       document.addEventListener('mouseenter', () => {
         cursorDot.style.opacity = '0.95';
-        cursorOutline.style.opacity = '0.95';
       });
-
-      requestAnimationFrame(animateCursor);
     }
 
     // --- Tech Stack ---
