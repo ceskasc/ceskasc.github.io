@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sadık Can Çeşka | Fullstack Web Developer</title>
+    <meta name="description" content="Portfolio of Sadık Can Çeşka. Fullstack web developer building cinematic layer digital products." />
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" type="image/png" href="/github-avatar.png" />
+</head>
+<body>
+    <canvas id="matrix-canvas"></canvas>
+    
+    <!-- Custom Cursor -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <nav class="navbar hidden-onload">
+        <div class="nav-brand">
+            <span class="brand-text">sc-ceska</span><span class="blinking-cursor">_</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#about" class="nav-link"><span>01.</span> About</a></li>
+            <li><a href="#experience" class="nav-link"><span>02.</span> Experience</a></li>
+            <li><a href="#projects" class="nav-link"><span>03.</span> Projects</a></li>
+            <li><a href="#contact" class="nav-link btn-resume">Let's Talk</a></li>
+        </ul>
+        <button class="mobile-menu-btn">
+            <div class="menu-bar"></div>
+            <div class="menu-bar"></div>
+            <div class="menu-bar"></div>
+        </button>
+    </nav>
+
+    <!-- Side Social/Email Links -->
+    <div class="side-links left-side hidden-onload">
+        <ul>
+            <li>
+                <a href="https://github.com/ceskasc" target="_blank" rel="noreferrer" title="GitHub">
+                    <svg xmlns="http://www.w3.org/2000/svg" role="img" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                </a>
+            </li>
+            <li><div class="vertical-line"></div></li>
+        </ul>
+    </div>
+    
+    <div class="side-links right-side hidden-onload">
+        <div class="email-wrapper">
+            <a href="mailto:cnceska@gmail.com">hello@ceskasc.dev</a>
+        </div>
+        <div class="vertical-line"></div>
+    </div>
+
+    <main id="content">
+        <!-- Hero Section -->
+        <section id="hero" class="hero-section">
+            <div class="hero-content hidden-onload">
+                <p class="hero-greeting">root@ceskasc:~$ ./start.sh</p>
+                <h1 class="hero-name">Sadık Can Çeşka.</h1>
+                <h2 class="hero-title">I engineer <span class="text-gradient">digital excellence.</span></h2>
+                <div class="hero-terminal">
+                   <div class="terminal-header">
+                       <div class="mac-btns">
+                           <span class="close-btn"></span>
+                           <span class="min-btn"></span>
+                           <span class="max-btn"></span>
+                       </div>
+                       <div class="terminal-title">guest@ceskasc:~</div>
+                   </div>
+                   <div class="terminal-body" id="typing-text"></div>
+                </div>
+                <div class="hero-cta">
+                    <a href="#projects" class="btn-primary">View the Repository</a>
+                </div>
+            </div>
+            
+            <div class="hero-3d-model hidden-onload">
+                <div class="floating-cube">
+                    <div class="cube-face front">{'<dev>'}</div>
+                    <div class="cube-face back">{'</dev>'}</div>
+                    <div class="cube-face right">JS</div>
+                    <div class="cube-face left">TS</div>
+                    <div class="cube-face top">API</div>
+                    <div class="cube-face bottom">SQL</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="about-section scroll-reveal">
+            <h2 class="section-title"><span>01.</span> About Me</h2>
+            <div class="about-content">
+                <div class="about-text text-gray">
+                    <p>Hello! I'm Sadık Can, a full-stack engineer passionate about creating things that live on the internet. Whether that be exceptional websites, modern applications, or complex systems.</p>
+                    <p>My focus is on writing clean, scalable, and efficient code that powers intuitive, pixel-perfect user interfaces.</p>
+                    <p>Here are a few technologies I've been working with recently:</p>
+                    <ul class="skills-list">
+                        <li>JavaScript (ES6+)</li>
+                        <li>TypeScript</li>
+                        <li>React & Next.js</li>
+                        <li>Node.js & Express</li>
+                        <li>Vanilla CSS / CSS-in-JS</li>
+                        <li>PostgreSQL & MongoDB</li>
+                    </ul>
+                </div>
+                <div class="about-image-wrapper">
+                    <div class="about-image">
+                       <img src="https://github.com/ceskasc.png" alt="Sadik Can Ceska - Profile" />
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience / CV Section -->
+        <section id="experience" class="exp-section scroll-reveal">
+            <h2 class="section-title"><span>02.</span> Professional Record</h2>
+            <div class="exp-container">
+                <div class="cv-card glass-panel">
+                    <div class="cv-header">
+                        <h3>Curriculum Vitae</h3>
+                        <span class="cv-status"><span class="pulse-dot"></span> Online</span>
+                    </div>
+                    <p class="text-gray">Explore my professional background, technical stack, and prior accomplishments in detail.</p>
+                    
+                    <div class="cv-actions">
+                        <a href="Sadik_Can_Ceska_Portfolio_CV_PrivacySafe.pdf" target="_blank" class="cv-btn primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                            View Document
+                        </a>
+                        <a href="Sadik_Can_Ceska_Portfolio_CV_PrivacySafe.pdf" download class="cv-btn secondary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                            Download PDF
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="projects-section scroll-reveal">
+            <h2 class="section-title"><span>03.</span> Deployed Architectures</h2>
+            <div class="projects-grid" id="github-projects">
+                <div class="loading-pulse">
+                    <div class="pulse-ring"></div>
+                    Fetching repositories...
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="contact-section scroll-reveal">
+            <h2 class="section-title terminal-title"><span>04.</span> What's Next?</h2>
+            <h2 class="contact-headline">Get In Touch</h2>
+            <p class="contact-subtext text-gray">
+                I'm currently looking for new opportunities. Whether you have a question, a project proposal, or just want to say hi, my inbox is open!
+            </p>
+            <a href="mailto:cnceska@gmail.com" class="btn-primary btn-large">Say Hello</a>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>Designed & Built by <span class="highlight">Sadık Can Çeşka</span></p>
+            <p class="footer-stats">
+              <span class="stat"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 inline"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> Stellar</span>
+              <span class="stat"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 inline"><circle cx="12" cy="12" r="10"></circle><polyline points="12 16 16 12 12 8"></polyline><line x1="8" y1="12" x2="16" y2="12"></line></svg> Future Proof</span>
+            </p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
