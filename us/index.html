@@ -2,276 +2,158 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#160d10" />
-  <meta name="description" content="A small digital place for a love story — quiet, personal, and made to last." />
-  <meta property="og:title" content="OURS — A little universe for two" />
-  <meta property="og:description" content="Some stories deserve a place of their own." />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b090a" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="description" content="OURS — a cinematic digital keepsake for two people and the life they are building together." />
+  <meta property="og:title" content="OURS — A private film for two" />
+  <meta property="og:description" content="Some stories deserve their own place to live." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://ceskasc.github.io/us/" />
+  <meta name="twitter:card" content="summary_large_image" />
   <link rel="canonical" href="https://ceskasc.github.io/us/" />
-  <title>OURS — A little universe for two</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <title>OURS — A private film for two</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=Manrope:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,ital,wght@6..96,400;6..96,500;6..96,600;6..96,400&family=IBM+Plex+Mono:wght@300;400;500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="cinematic.css" />
 </head>
 <body>
-  <a class="skip-link" href="#main">Skip to our story</a>
+  <a class="skip-link" href="#main">Skip to story</a>
 
-  <div class="ambient" aria-hidden="true">
-    <span class="orb orb-one"></span>
-    <span class="orb orb-two"></span>
-    <span class="grain"></span>
+  <div class="intro" id="intro" aria-hidden="true">
+    <div class="intro-frame">
+      <p class="intro-kicker">A private film about two people</p>
+      <div class="intro-title" aria-hidden="true"><span>O</span><span>U</span><span>R</span><span>S</span></div>
+      <div class="intro-rule"><i></i></div>
+      <p class="intro-meta"><span>VOL. I</span><span>EST. SOMEWHERE BETWEEN THEN & FOREVER</span></p>
+    </div>
+    <button class="intro-skip" type="button">Skip intro</button>
   </div>
 
-  <header class="site-header">
-    <a class="wordmark" href="#top" aria-label="OURS — Home">
-      <span class="wordmark-dot"></span>
-      <span>OURS</span>
+  <div class="film-layer" aria-hidden="true">
+    <div class="film-grain"></div>
+    <div class="film-vignette"></div>
+    <div class="light-leak leak-a"></div>
+    <div class="light-leak leak-b"></div>
+  </div>
+
+  <aside class="progress-rail" aria-hidden="true">
+    <span class="progress-index">00</span>
+    <div class="progress-track"><i id="progress-fill"></i></div>
+    <span class="progress-index">05</span>
+  </aside>
+
+  <header class="site-header" id="site-header">
+    <a class="brand" href="#top" aria-label="OURS — home">
+      <span class="brand-glyph">O</span>
+      <span class="brand-name">OURS</span>
     </a>
-
     <nav class="desktop-nav" aria-label="Primary navigation">
-      <a href="#chapters">Chapters</a>
-      <a href="#little-things">Little things</a>
-      <a href="#open-when">Open when</a>
-      <a href="#someday">Someday</a>
+      <a href="#acts"><span>01</span> Story</a>
+      <a href="#details"><span>02</span> Details</a>
+      <a href="#letters"><span>03</span> Letters</a>
+      <a href="#future"><span>04</span> Future</a>
     </nav>
-
-    <button class="menu-button" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open navigation">
-      <span></span>
-      <span></span>
-    </button>
+    <div class="header-meta"><span class="live-dot"></span><span>STILL IN PROGRESS</span></div>
+    <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="mobile-nav"><span></span><span></span></button>
   </header>
 
   <div class="mobile-nav" id="mobile-nav" aria-hidden="true">
-    <nav aria-label="Mobile navigation">
-      <a href="#chapters"><span>01</span> Chapters</a>
-      <a href="#little-things"><span>02</span> Little things</a>
-      <a href="#open-when"><span>03</span> Open when</a>
-      <a href="#someday"><span>04</span> Someday</a>
-    </nav>
-    <p>Two people. One small universe.</p>
+    <div class="mobile-nav-inner">
+      <p class="mobile-nav-label">CONTENTS / 2026</p>
+      <nav aria-label="Mobile navigation">
+        <a href="#acts"><span>01</span><strong>Story</strong></a>
+        <a href="#details"><span>02</span><strong>Details</strong></a>
+        <a href="#letters"><span>03</span><strong>Letters</strong></a>
+        <a href="#future"><span>04</span><strong>Future</strong></a>
+      </nav>
+      <div class="mobile-nav-footer"><span>TWO PEOPLE</span><i></i><span>ONE CONTINUING STORY</span></div>
+    </div>
   </div>
 
   <main id="main">
     <section class="hero" id="top" aria-labelledby="hero-title">
-      <div class="hero-topline reveal">
-        <span>A digital place for two</span>
-        <span class="hero-coordinate">somewhere between then & forever</span>
-      </div>
-
-      <div class="hero-content">
+      <div class="hero-gridline hero-gridline-a" aria-hidden="true"></div>
+      <div class="hero-gridline hero-gridline-b" aria-hidden="true"></div>
+      <div class="hero-meta hero-meta-top" data-reveal><span>A DIGITAL KEEPSAKE</span><span>PRIVATE FEELING / PUBLIC URL</span><span>VOL. I</span></div>
+      <div class="hero-stage">
         <div class="hero-copy">
-          <p class="eyebrow reveal">Our little universe</p>
-          <h1 id="hero-title" class="reveal">
-            Some stories don't need an audience.
-            <em>Just a place to live.</em>
-          </h1>
-          <p class="hero-lede reveal">
-            Not a timeline for everyone else. Not a highlight reel. Just a quiet corner of the internet for the moments, habits, jokes, dreams and ordinary days that slowly became <strong>us.</strong>
-          </p>
+          <p class="eyebrow" data-reveal>For the ordinary moments that became everything</p>
+          <h1 id="hero-title" data-reveal><span class="hero-line">Not a love story.</span><span class="hero-line hero-line-serif">Our <em>life in progress.</em></span></h1>
+          <p class="hero-lede" data-reveal>A quiet place for the things that never fit inside a caption: the routines, the pauses, the stupid jokes, the difficult days, the future tense — and the choice to keep becoming <strong>us.</strong></p>
         </div>
-
-        <div class="hero-emblem reveal" aria-hidden="true">
-          <div class="orbit orbit-one"></div>
-          <div class="orbit orbit-two"></div>
-          <div class="orbit-center">
-            <span>∞</span>
-            <small>still choosing</small>
-          </div>
+        <div class="hero-object" id="hero-object" aria-hidden="true" data-reveal>
+          <div class="object-halo halo-one"></div><div class="object-halo halo-two"></div><div class="object-orbit orbit-a"></div><div class="object-orbit orbit-b"></div>
+          <div class="object-core"><span class="core-mark">∞</span><small>TAKE / 01</small></div>
+          <span class="object-caption object-caption-a">YOU</span><span class="object-caption object-caption-b">ME</span>
         </div>
       </div>
-
-      <div class="hero-footer reveal">
-        <a href="#chapters" class="scroll-link">Enter our story <span>↓</span></a>
-        <p>Made for memory, not for metrics.</p>
+      <div class="hero-bottom" data-reveal>
+        <a class="enter-link" href="#acts"><span>Enter the film</span><i>↓</i></a>
+        <div class="timecode" aria-label="Decorative timecode"><span>REC</span><b id="timecode">00:00:00</b></div>
+        <p>Made to remember how it felt, not how it looked online.</p>
       </div>
     </section>
 
-    <section class="manifesto section-shell" aria-label="What this place is">
-      <p class="section-index reveal">00 / Why it exists</p>
-      <blockquote class="reveal">
-        “Love is rarely one big moment. It is a thousand small ones that keep choosing the same person.”
-      </blockquote>
-      <div class="manifesto-note reveal">
-        <p>This page is built around those small ones.</p>
-        <span>Quiet things. Real things. Ours.</span>
+    <section class="statement section-pad" aria-labelledby="statement-title">
+      <div class="section-label" data-reveal><span>00</span><p>PROLOGUE</p></div>
+      <div class="statement-copy"><p class="statement-small" data-reveal>Most relationships are remembered through milestones.</p><h2 id="statement-title" data-reveal>We want to remember the <em>texture between them.</em></h2></div>
+      <div class="statement-foot" data-reveal><span>THE CALLS</span><span>THE SILENCE</span><span>THE LAUGHTER</span><span>THE RETURNING</span></div>
+    </section>
+
+    <section class="acts" id="acts" aria-labelledby="acts-title">
+      <div class="acts-intro section-pad">
+        <div class="section-label" data-reveal><span>01</span><p>THE STORY</p></div>
+        <div><h2 id="acts-title" data-reveal>A story told in <em>four acts.</em></h2><p data-reveal>Not because four chapters are enough. Because every good film knows what to leave unsaid.</p></div>
+      </div>
+      <div class="act-list">
+        <article class="act act-dark" data-act="01"><div class="act-sticky"><div class="act-index"><span>ACT</span><strong>I</strong></div><div class="act-copy"><p class="act-kicker">Before there was an “us”</p><h3>Two separate lives, <em>slightly changing direction.</em></h3><p>The beginning rarely announces itself. Sometimes it is only a message you reread, a conversation that runs too long, or the first time someone's absence becomes noticeable.</p></div><div class="act-side"><span>FADE IN</span><i></i><span>01 / 04</span></div></div></article>
+        <article class="act act-paper" data-act="02"><div class="act-sticky"><div class="act-index"><span>ACT</span><strong>II</strong></div><div class="act-copy"><p class="act-kicker">The becoming</p><h3>Ordinary things started carrying <em>your name.</em></h3><p>A song. A place. A phrase. A time of night. Nothing about them changed, except that somehow they stopped belonging only to themselves.</p></div><div class="act-side"><span>MEMORY</span><i></i><span>02 / 04</span></div></div></article>
+        <article class="act act-red" data-act="03"><div class="act-sticky"><div class="act-index"><span>ACT</span><strong>III</strong></div><div class="act-copy"><p class="act-kicker">The uncinematic part</p><h3>The days that look like nothing, <em>but become a life.</em></h3><p>Checking in. Being tired. Being difficult. Making up. Eating. Waiting. Laughing at something nobody else would understand. Love becoming less like an event and more like a place to return to.</p></div><div class="act-side"><span>HOLD</span><i></i><span>03 / 04</span></div></div></article>
+        <article class="act act-deep" data-act="04"><div class="act-sticky"><div class="act-index"><span>ACT</span><strong>IV</strong></div><div class="act-copy"><p class="act-kicker">Still choosing</p><h3>No final scene. <em>Only direction.</em></h3><p>The point was never to arrive at a perfect version of us. It is to keep making room for the next one — older, changed, still familiar.</p></div><div class="act-side"><span>CONTINUE</span><i></i><span>04 / ∞</span></div></div></article>
       </div>
     </section>
 
-    <section class="chapters section-shell" id="chapters" aria-labelledby="chapters-title">
-      <div class="section-heading reveal">
-        <p class="section-index">01 / Chapters</p>
-        <h2 id="chapters-title">Not dates. <em>Phases of becoming us.</em></h2>
-      </div>
-
-      <div class="chapter-list">
-        <article class="chapter reveal">
-          <div class="chapter-number">I</div>
-          <div class="chapter-copy">
-            <p class="chapter-kicker">The beginning</p>
-            <h3>Before “us” had a name.</h3>
-            <p>That strange little period where a message mattered more than it should, time moved differently, and neither of us knew yet how much space the other person would eventually take up in life.</p>
-          </div>
-          <div class="chapter-mark">01</div>
-        </article>
-
-        <article class="chapter reveal">
-          <div class="chapter-number">II</div>
-          <div class="chapter-copy">
-            <p class="chapter-kicker">The becoming</p>
-            <h3>When ordinary things started feeling like ours.</h3>
-            <p>Places, songs, phrases, routines. Nothing officially changed about them, but somehow they stopped being random and started carrying a memory of you.</p>
-          </div>
-          <div class="chapter-mark">02</div>
-        </article>
-
-        <article class="chapter reveal">
-          <div class="chapter-number">III</div>
-          <div class="chapter-copy">
-            <p class="chapter-kicker">The everyday</p>
-            <h3>The part nobody photographs enough.</h3>
-            <p>The quiet calls, bad moods, small check-ins, sleepy conversations, stupid jokes and simply knowing someone is there. Maybe the least cinematic part. Maybe the most important.</p>
-          </div>
-          <div class="chapter-mark">03</div>
-        </article>
-
-        <article class="chapter reveal">
-          <div class="chapter-number">IV</div>
-          <div class="chapter-copy">
-            <p class="chapter-kicker">Still choosing</p>
-            <h3>Not a finish line. A direction.</h3>
-            <p>There is no final chapter here. Just a future page we have not written yet, and the quiet intention to keep meeting each other there.</p>
-          </div>
-          <div class="chapter-mark">∞</div>
-        </article>
+    <section class="details section-pad" id="details" aria-labelledby="details-title">
+      <div class="section-label" data-reveal><span>02</span><p>THE DETAILS</p></div>
+      <div class="details-head"><h2 id="details-title" data-reveal>Things too small for a milestone. <em>Too important to lose.</em></h2><p data-reveal>If somebody else read this list, most of it would mean almost nothing. That is exactly the point.</p></div>
+      <div class="detail-table">
+        <article class="detail-row" data-reveal><span class="detail-no">01</span><h3>Late-night conversations</h3><p>The ones that begin nowhere and end somewhere unexpectedly honest.</p><span class="detail-mark">01:47 AM</span></article>
+        <article class="detail-row" data-reveal><span class="detail-no">02</span><h3>Shared songs</h3><p>Music that stopped belonging only to whoever wrote it.</p><span class="detail-mark">PLAY / REPEAT</span></article>
+        <article class="detail-row" data-reveal><span class="detail-no">03</span><h3>Untranslatable jokes</h3><p>Proof that intimacy sometimes sounds completely ridiculous from the outside.</p><span class="detail-mark">NO CONTEXT</span></article>
+        <article class="detail-row" data-reveal><span class="detail-no">04</span><h3>The calm after a hard day</h3><p>Not fixing everything. Just knowing where to put the weight for a while.</p><span class="detail-mark">STAY HERE</span></article>
+        <article class="detail-row" data-reveal><span class="detail-no">05</span><h3>Speaking in future tense</h3><p>The tiny shift from “I should” to “we should.”</p><span class="detail-mark">SOMEDAY</span></article>
       </div>
     </section>
 
-    <section class="little-things" id="little-things" aria-labelledby="little-things-title">
-      <div class="section-shell">
-        <div class="section-heading light reveal">
-          <p class="section-index">02 / Little things</p>
-          <h2 id="little-things-title">The things that would mean nothing <em>to anyone else.</em></h2>
-        </div>
+    <section class="interlude" aria-label="Interlude quote"><div class="interlude-line interlude-line-top"></div><div class="interlude-inner section-pad"><p class="interlude-label" data-reveal>INTERLUDE / 02:17</p><blockquote data-reveal>“Maybe home is not a place at all. Maybe it is the person around whom you stop rehearsing.”</blockquote><div class="interlude-note" data-reveal><span>NO PERFORMANCE</span><i></i><span>NO AUDIENCE</span></div></div><div class="interlude-line interlude-line-bottom"></div></section>
 
-        <div class="things-grid">
-          <article class="thing-card thing-large reveal">
-            <span class="thing-icon">◌</span>
-            <p class="thing-number">01</p>
-            <h3>Late-night conversations</h3>
-            <p>The kind that begin with nothing and somehow end up containing everything.</p>
-          </article>
-
-          <article class="thing-card reveal">
-            <span class="thing-icon">♫</span>
-            <p class="thing-number">02</p>
-            <h3>Shared songs</h3>
-            <p>Music that stopped belonging only to the artist.</p>
-          </article>
-
-          <article class="thing-card reveal">
-            <span class="thing-icon">↺</span>
-            <p class="thing-number">03</p>
-            <h3>Inside jokes</h3>
-            <p>Completely unexplainable. Completely ours.</p>
-          </article>
-
-          <article class="thing-card reveal">
-            <span class="thing-icon">⌂</span>
-            <p class="thing-number">04</p>
-            <h3>Feeling like home</h3>
-            <p>Not a place. More like the absence of needing to perform.</p>
-          </article>
-
-          <article class="thing-card thing-wide reveal">
-            <span class="thing-icon">→</span>
-            <p class="thing-number">05</p>
-            <h3>The future tense</h3>
-            <p>That quiet shift from “I want to do this someday” to “we should do this someday.”</p>
-          </article>
-        </div>
+    <section class="letters section-pad" id="letters" aria-labelledby="letters-title">
+      <div class="section-label" data-reveal><span>03</span><p>OPEN WHEN</p></div>
+      <div class="letters-head"><h2 id="letters-title" data-reveal>Four letters for <em>four kinds of days.</em></h2><p data-reveal>Small words left in advance. For moments when timing matters more than eloquence.</p></div>
+      <div class="letter-list">
+        <button class="letter" type="button" data-letter="miss" data-reveal><span class="letter-index">01</span><span class="letter-title">You miss me</span><span class="letter-state">SEALED</span><span class="letter-arrow">↗</span></button>
+        <button class="letter" type="button" data-letter="heavy" data-reveal><span class="letter-index">02</span><span class="letter-title">The day feels heavy</span><span class="letter-state">SEALED</span><span class="letter-arrow">↗</span></button>
+        <button class="letter" type="button" data-letter="angry" data-reveal><span class="letter-index">03</span><span class="letter-title">You are angry with me</span><span class="letter-state">SEALED</span><span class="letter-arrow">↗</span></button>
+        <button class="letter" type="button" data-letter="future" data-reveal><span class="letter-index">04</span><span class="letter-title">You think about our future</span><span class="letter-state">SEALED</span><span class="letter-arrow">↗</span></button>
       </div>
     </section>
 
-    <section class="open-when section-shell" id="open-when" aria-labelledby="open-when-title">
-      <div class="section-heading reveal">
-        <p class="section-index">03 / Open when</p>
-        <h2 id="open-when-title">A few words for <em>specific kinds of days.</em></h2>
-      </div>
-
-      <div class="letter-grid">
-        <button class="letter-card reveal" data-letter="miss" type="button">
-          <span class="letter-seal">01</span>
-          <span class="letter-title">Open when you miss me</span>
-          <span class="letter-arrow">↗</span>
-        </button>
-
-        <button class="letter-card reveal" data-letter="hard" type="button">
-          <span class="letter-seal">02</span>
-          <span class="letter-title">Open when the day feels heavy</span>
-          <span class="letter-arrow">↗</span>
-        </button>
-
-        <button class="letter-card reveal" data-letter="angry" type="button">
-          <span class="letter-seal">03</span>
-          <span class="letter-title">Open when you're annoyed with me</span>
-          <span class="letter-arrow">↗</span>
-        </button>
-
-        <button class="letter-card reveal" data-letter="future" type="button">
-          <span class="letter-seal">04</span>
-          <span class="letter-title">Open when you think about our future</span>
-          <span class="letter-arrow">↗</span>
-        </button>
-      </div>
+    <section class="future" id="future" aria-labelledby="future-title">
+      <div class="future-glow" aria-hidden="true"></div>
+      <div class="future-inner section-pad"><div class="section-label" data-reveal><span>04</span><p>THE FUTURE</p></div><div class="future-grid"><div class="future-copy"><p class="future-kicker" data-reveal>Nothing carved in stone</p><h2 id="future-title" data-reveal>Just a few things worth <em>walking toward together.</em></h2></div><ol class="future-list"><li data-reveal><span>01</span><p>See a city neither of us knows yet.</p></li><li data-reveal><span>02</span><p>Make traditions that sound boring to everyone else.</p></li><li data-reveal><span>03</span><p>Take photographs of days that were not supposed to be important.</p></li><li data-reveal><span>04</span><p>Hear an old song and remember exactly who we were.</p></li><li data-reveal><span>05</span><p>Keep becoming people we would choose again.</p></li></ol></div></div>
     </section>
 
-    <section class="someday" id="someday" aria-labelledby="someday-title">
-      <div class="section-shell someday-shell">
-        <div class="someday-copy reveal">
-          <p class="section-index">04 / Someday</p>
-          <h2 id="someday-title">A life made of <em>small future plans.</em></h2>
-          <p>Not promises carved in stone. Just things worth looking forward to together.</p>
-        </div>
-
-        <div class="dream-list reveal" aria-label="Things to do together someday">
-          <div><span>01</span><p>See a city neither of us has seen before.</p></div>
-          <div><span>02</span><p>Take too many photos on an ordinary day.</p></div>
-          <div><span>03</span><p>Find a song years from now that brings all of this back.</p></div>
-          <div><span>04</span><p>Build rituals that only make sense to us.</p></div>
-          <div><span>05</span><p>Keep becoming people we would choose again.</p></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="closing section-shell" aria-labelledby="closing-title">
-      <p class="closing-kicker reveal">No ending here.</p>
-      <h2 id="closing-title" class="reveal">Just <em>to be continued.</em></h2>
-      <div class="closing-line reveal">
-        <span>two people</span>
-        <i></i>
-        <span>one little universe</span>
-      </div>
-    </section>
+    <section class="credits section-pad" aria-labelledby="credits-title"><p class="credits-kicker" data-reveal>END CREDITS / FOR NOW</p><h2 id="credits-title" data-reveal><span>TO BE</span><em>continued.</em></h2><div class="credits-meta" data-reveal><div><span>STARRING</span><strong>YOU / ME</strong></div><div><span>DIRECTED BY</span><strong>TIME</strong></div><div><span>FORMAT</span><strong>ONGOING</strong></div><div><span>STATUS</span><strong>STILL CHOOSING</strong></div></div><a class="replay-link" href="#top" data-reveal><span>Replay from the beginning</span><i>↑</i></a></section>
   </main>
 
-  <footer class="site-footer">
-    <a class="wordmark" href="#top"><span class="wordmark-dot"></span><span>OURS</span></a>
-    <p>Made with care, somewhere on the internet.</p>
-    <a href="#top">Back to top ↑</a>
-  </footer>
+  <footer class="site-footer"><a class="brand brand-footer" href="#top"><span class="brand-glyph">O</span><span class="brand-name">OURS</span></a><p>A small place on the internet for a story that is still being written.</p><span>VOL. I / ∞</span></footer>
 
-  <dialog class="letter-dialog" id="letter-dialog" aria-labelledby="dialog-title">
-    <button class="dialog-close" type="button" aria-label="Close letter">×</button>
-    <p class="dialog-label">A note for you</p>
-    <h2 id="dialog-title"></h2>
-    <div class="dialog-copy" id="dialog-copy"></div>
-    <div class="dialog-signoff">— always, us.</div>
-  </dialog>
+  <dialog class="letter-dialog" id="letter-dialog" aria-labelledby="dialog-title"><div class="dialog-chrome"><span>PRIVATE NOTE / OPENED</span><button class="dialog-close" type="button" aria-label="Close letter">Close ×</button></div><div class="dialog-body"><p class="dialog-number" id="dialog-number">01</p><h2 id="dialog-title"></h2><div class="dialog-copy" id="dialog-copy"></div><div class="dialog-signoff">— always, us.</div></div></dialog>
 
-  <script src="script.js"></script>
+  <script src="cinematic.js" defer></script>
 </body>
 </html>
