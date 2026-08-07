@@ -3,27 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#0a0a0a" />
-  <meta name="description" content="Sadık Can Çeşka — Software Engineer building thoughtful, reliable digital products across web, backend, and product systems." />
+  <meta name="theme-color" content="#f5f3ee" />
+  <meta name="description" content="Sadık Can Çeşka — Software Engineer focused on thoughtful full-stack products, reliable systems, and polished web experiences." />
   <meta name="author" content="Sadık Can Çeşka" />
   <meta property="og:title" content="Sadık Can Çeşka — Software Engineer" />
   <meta property="og:description" content="Selected work, engineering practice, and contact information." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://ceskasc.github.io/" />
-  <meta property="og:image" content="https://github.com/ceskasc.png" />
+  <meta property="og:image" content="https://github.com/ceskasc.png?size=1200" />
   <meta name="twitter:card" content="summary_large_image" />
+  <link rel="canonical" href="https://ceskasc.github.io/" />
   <title>Sadık Can Çeşka — Software Engineer</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://github.com" />
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
 </head>
 <body>
-  <div class="page-noise" aria-hidden="true"></div>
+  <a class="skip-link" href="#main-content">Skip to content</a>
 
   <header class="site-header" id="top">
-    <a class="brand" href="#top" aria-label="Home">
+    <a class="brand" href="#top" aria-label="Sadık Can Çeşka — Home">
       <span class="brand-mark">SC</span>
       <span class="brand-copy">Sadık Can Çeşka</span>
     </a>
@@ -32,64 +35,83 @@
       <a href="#work">Work</a>
       <a href="#about">About</a>
       <a href="#contact">Contact</a>
-      <a class="nav-pill" href="Sadik_Can_Ceska_Portfolio_CV_PrivacySafe.pdf" target="_blank" rel="noreferrer">Résumé ↗</a>
+      <a class="nav-pill" href="Sadik_Can_Ceska_Portfolio_CV_PrivacySafe.pdf" target="_blank" rel="noreferrer">Résumé <span aria-hidden="true">↗</span></a>
     </nav>
 
-    <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false">
+    <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="mobile-menu">
       <span></span><span></span>
     </button>
   </header>
 
-  <div class="mobile-menu" aria-hidden="true">
+  <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
     <nav aria-label="Mobile navigation">
       <a href="#work">Work</a>
       <a href="#about">About</a>
       <a href="#contact">Contact</a>
-      <a href="Sadik_Can_Ceska_Portfolio_CV_PrivacySafe.pdf" target="_blank" rel="noreferrer">Résumé ↗</a>
+      <a href="Sadik_Can_Ceska_Portfolio_CV_PrivacySafe.pdf" target="_blank" rel="noreferrer">Résumé <span aria-hidden="true">↗</span></a>
     </nav>
   </div>
 
-  <main>
+  <main id="main-content">
     <section class="hero section-shell" aria-labelledby="hero-title">
       <div class="hero-kicker reveal">
         <span class="status-dot" aria-hidden="true"></span>
-        <span>Software Engineer · Türkiye</span>
+        <span>Software Engineer · Türkiye · Building for the web</span>
       </div>
 
       <div class="hero-grid">
         <div class="hero-copy">
-          <h1 id="hero-title" class="reveal">I build digital products that feel <em>clear, fast, and intentional.</em></h1>
-          <p class="hero-lede reveal">I’m Sadık Can Çeşka, a software engineer focused on turning complex product ideas into polished web experiences and reliable systems.</p>
+          <p class="hero-overline reveal">Product-minded full-stack engineering</p>
+          <h1 id="hero-title" class="reveal">Digital products, engineered with <em>clarity and intent.</em></h1>
+          <p class="hero-lede reveal">I’m Sadık Can Çeşka. I turn product ideas into fast, reliable, carefully crafted web experiences — from interface details to backend foundations.</p>
 
           <div class="hero-actions reveal">
-            <a class="button button-primary" href="#work">Explore selected work</a>
-            <a class="button button-ghost" href="mailto:cnceska@gmail.com">Start a conversation ↗</a>
+            <a class="button button-dark" href="#work">
+              <span class="button-label">Explore selected work</span>
+              <span class="button-icon" aria-hidden="true">↓</span>
+            </a>
+            <a class="button button-soft" href="mailto:cnceska@gmail.com">
+              <span class="button-label">Start a conversation</span>
+              <span class="button-icon" aria-hidden="true">↗</span>
+            </a>
           </div>
         </div>
 
-        <aside class="hero-card reveal" aria-label="Profile snapshot">
-          <div class="profile-row">
-            <img src="github-avatar.png" alt="Portrait of Sadık Can Çeşka" />
-            <div>
-              <strong>Sadık Can Çeşka</strong>
-              <span>@ceskasc</span>
-            </div>
+        <aside class="profile-card reveal" aria-label="Profile snapshot">
+          <div class="profile-photo-wrap">
+            <img
+              id="profile-avatar"
+              class="profile-photo"
+              src="https://github.com/ceskasc.png?size=480"
+              alt="Sadık Can Çeşka"
+              width="480"
+              height="480"
+              decoding="async"
+              fetchpriority="high"
+            />
+            <span class="profile-photo-badge">GitHub profile photo</span>
           </div>
 
-          <div class="hero-card-divider"></div>
+          <div class="profile-card-body">
+            <div class="profile-identity">
+              <div>
+                <strong>Sadık Can Çeşka</strong>
+                <span>@ceskasc</span>
+              </div>
+              <a class="icon-link" href="https://github.com/ceskasc" target="_blank" rel="noreferrer" aria-label="Open GitHub profile">↗</a>
+            </div>
 
-          <dl class="snapshot-list">
-            <div><dt>Focus</dt><dd>Full-stack product engineering</dd></div>
-            <div><dt>Approach</dt><dd>Simple interfaces, solid foundations</dd></div>
-            <div><dt>Stack</dt><dd>JavaScript · TypeScript · React · Node.js</dd></div>
-          </dl>
-
-          <a class="text-link" href="https://github.com/ceskasc" target="_blank" rel="noreferrer">View GitHub profile ↗</a>
+            <dl class="snapshot-list">
+              <div><dt>Focus</dt><dd>Full-stack product engineering</dd></div>
+              <div><dt>Core</dt><dd>TypeScript · React · Node.js</dd></div>
+              <div><dt>Bias</dt><dd>Clarity, maintainability, delivery</dd></div>
+            </dl>
+          </div>
         </aside>
       </div>
 
       <div class="hero-meta reveal" aria-label="Engineering principles">
-        <span>01 / Product thinking</span>
+        <span>01 / Product judgment</span>
         <span>02 / System quality</span>
         <span>03 / Interface craft</span>
       </div>
@@ -99,57 +121,59 @@
       <div class="section-heading reveal">
         <div>
           <span class="eyebrow">Selected work</span>
-          <h2 id="work-title">Projects with real product intent.</h2>
+          <h2 id="work-title">A focused view of what I build.</h2>
         </div>
-        <p>A curated view of recent public repositories. The portfolio prioritizes useful context over decorative tech badges.</p>
+        <p>Recent public work, curated for signal. Project links distinguish between a live product and its source repository when both are available.</p>
       </div>
 
-      <div class="project-feature reveal" id="featured-project">
+      <div class="project-feature reveal" id="featured-project" aria-live="polite">
         <div class="project-feature-index">01</div>
         <div class="project-feature-copy">
           <span class="project-label">Featured project</span>
-          <h3>Loading latest work…</h3>
-          <p>Fetching project information from GitHub.</p>
+          <h3>Loading selected work…</h3>
+          <p>Preparing the latest project data.</p>
         </div>
       </div>
 
       <div class="project-list" id="project-list" aria-live="polite"></div>
 
       <div class="work-footer reveal">
-        <p>Want the full engineering trail?</p>
-        <a class="text-link" href="https://github.com/ceskasc?tab=repositories" target="_blank" rel="noreferrer">Browse all repositories ↗</a>
+        <p>More experiments, utilities, and iterations live on GitHub.</p>
+        <a class="text-link" href="https://github.com/ceskasc?tab=repositories" target="_blank" rel="noreferrer">Browse all repositories <span aria-hidden="true">↗</span></a>
       </div>
     </section>
 
-    <section class="about-section section-shell" id="about" aria-labelledby="about-title">
-      <div class="about-grid">
-        <div class="section-heading reveal">
-          <div>
-            <span class="eyebrow">About</span>
-            <h2 id="about-title">Engineering with taste and restraint.</h2>
+    <section class="about-section" id="about" aria-labelledby="about-title">
+      <div class="about-shell section-shell">
+        <div class="about-grid">
+          <div class="section-heading reveal">
+            <div>
+              <span class="eyebrow">About</span>
+              <h2 id="about-title">Engineering that feels considered.</h2>
+            </div>
           </div>
-        </div>
 
-        <div class="about-copy reveal">
-          <p class="about-lead">I care about the space where software engineering, product judgment, and visual quality meet.</p>
-          <p>My work spans front-end interfaces, backend services, APIs, data-backed applications, and the product decisions that connect them. I prefer maintainable systems, focused experiences, and implementation choices that stay understandable as a project grows.</p>
-          <p>I’m especially interested in building products where speed, clarity, reliability, and a strong visual standard all matter at the same time.</p>
+          <div class="about-copy reveal">
+            <p class="about-lead">The best software feels obvious to use and boring to maintain — in the best possible way.</p>
+            <p>I work across front-end interfaces, backend services, APIs, and product architecture. I care about the decisions between those layers just as much as the code inside them.</p>
+            <p>My preference is simple: fewer fragile abstractions, stronger fundamentals, and enough visual restraint that the product itself stays in focus.</p>
 
-          <div class="capability-grid">
-            <div>
-              <span>01</span>
-              <h3>Frontend</h3>
-              <p>Responsive interfaces, component systems, interaction design, accessibility.</p>
-            </div>
-            <div>
-              <span>02</span>
-              <h3>Backend</h3>
-              <p>APIs, application logic, data flows, authentication, service integration.</p>
-            </div>
-            <div>
-              <span>03</span>
-              <h3>Product</h3>
-              <p>Scoping, architecture choices, UX trade-offs, iteration and delivery.</p>
+            <div class="capability-grid">
+              <article>
+                <span>01</span>
+                <h3>Interface systems</h3>
+                <p>Responsive UI, component architecture, accessibility, interaction and visual consistency.</p>
+              </article>
+              <article>
+                <span>02</span>
+                <h3>Application systems</h3>
+                <p>APIs, data flows, authentication, integration boundaries and maintainable backend logic.</p>
+              </article>
+              <article>
+                <span>03</span>
+                <h3>Product delivery</h3>
+                <p>Scoping, trade-offs, implementation choices and shipping with a clear quality bar.</p>
+              </article>
             </div>
           </div>
         </div>
@@ -159,38 +183,47 @@
     <section class="principles-section section-shell" aria-labelledby="principles-title">
       <div class="section-heading reveal">
         <div>
-          <span class="eyebrow">How I work</span>
-          <h2 id="principles-title">Less noise. Better decisions.</h2>
+          <span class="eyebrow">Working principles</span>
+          <h2 id="principles-title">Quality is a system, not a finishing touch.</h2>
         </div>
       </div>
 
       <div class="principle-list">
         <article class="principle reveal">
           <span>01</span>
-          <h3>Design the system before polishing the screen.</h3>
-          <p>Strong interfaces depend on sensible information architecture, state, data, and component boundaries.</p>
+          <h3>Make the structure legible.</h3>
+          <p>Clear data flow, state ownership, naming, and component boundaries make products easier to extend and safer to change.</p>
         </article>
         <article class="principle reveal">
           <span>02</span>
-          <h3>Make quality visible in the details.</h3>
-          <p>Typography, spacing, loading states, responsive behavior, copy, and performance all shape perceived quality.</p>
+          <h3>Treat details as product behavior.</h3>
+          <p>Typography, loading states, empty states, keyboard access, responsive layouts, and performance all affect trust.</p>
         </article>
         <article class="principle reveal">
           <span>03</span>
-          <h3>Prefer durable solutions over clever ones.</h3>
-          <p>I value code that another engineer can understand, extend, and trust six months later.</p>
+          <h3>Prefer durable over clever.</h3>
+          <p>I choose solutions that remain understandable after the initial excitement of shipping has passed.</p>
         </article>
       </div>
     </section>
 
     <section class="contact-section section-shell" id="contact" aria-labelledby="contact-title">
       <div class="contact-panel reveal">
-        <span class="eyebrow">Contact</span>
-        <h2 id="contact-title">Have a product worth building?</h2>
-        <p>I’m open to thoughtful engineering work, collaborations, and conversations around ambitious digital products.</p>
+        <div class="contact-copy">
+          <span class="eyebrow">Contact</span>
+          <h2 id="contact-title">Let’s build something worth using.</h2>
+          <p>For product engineering, collaboration, or a thoughtful conversation about software, you can reach me directly.</p>
+        </div>
+
         <div class="contact-actions">
-          <a class="button button-light" href="mailto:cnceska@gmail.com">cnceska@gmail.com ↗</a>
-          <a class="button button-outline-light" href="https://github.com/ceskasc" target="_blank" rel="noreferrer">GitHub ↗</a>
+          <a class="button button-light" href="mailto:cnceska@gmail.com">
+            <span class="button-label">cnceska@gmail.com</span>
+            <span class="button-icon" aria-hidden="true">↗</span>
+          </a>
+          <a class="button button-outline-light" href="https://github.com/ceskasc" target="_blank" rel="noreferrer">
+            <span class="button-label">GitHub</span>
+            <span class="button-icon" aria-hidden="true">↗</span>
+          </a>
         </div>
       </div>
     </section>
@@ -199,9 +232,9 @@
   <footer class="site-footer section-shell">
     <div>
       <span>© <span id="year"></span> Sadık Can Çeşka</span>
-      <span>Designed and built with restraint.</span>
+      <span>Software engineering · product systems · web</span>
     </div>
-    <a href="#top">Back to top ↑</a>
+    <a href="#top">Back to top <span aria-hidden="true">↑</span></a>
   </footer>
 
   <script src="script.js"></script>
