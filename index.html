@@ -1,177 +1,209 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sadık Can Çeşka | Fullstack Web Developer</title>
-    <meta name="description" content="Portfolio of Sadık Can Çeşka. Fullstack web developer building cinematic layer digital products." />
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css" />
-    <link rel="icon" type="image/png" href="/github-avatar.png" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0a0a0a" />
+  <meta name="description" content="Sadık Can Çeşka — Software Engineer building thoughtful, reliable digital products across web, backend, and product systems." />
+  <meta name="author" content="Sadık Can Çeşka" />
+  <meta property="og:title" content="Sadık Can Çeşka — Software Engineer" />
+  <meta property="og:description" content="Selected work, engineering practice, and contact information." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://ceskasc.github.io/" />
+  <meta property="og:image" content="https://github.com/ceskasc.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <title>Sadık Can Çeşka — Software Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
 </head>
 <body>
-    <canvas id="matrix-canvas"></canvas>
-    
-    <!-- Custom Cursor -->
-    <div class="cursor-dot"></div>
-    <div class="cursor-outline"></div>
+  <div class="page-noise" aria-hidden="true"></div>
 
-    <nav class="navbar hidden-onload">
-        <div class="nav-brand">
-            <span class="brand-text">sc-ceska</span><span class="blinking-cursor">_</span>
-        </div>
-        <ul class="nav-links">
-            <li><a href="#about" class="nav-link"><span>01.</span> About</a></li>
-            <li><a href="#experience" class="nav-link"><span>02.</span> Experience</a></li>
-            <li><a href="#projects" class="nav-link"><span>03.</span> Projects</a></li>
-            <li><a href="#contact" class="nav-link btn-resume">Let's Talk</a></li>
-        </ul>
-        <button class="mobile-menu-btn">
-            <div class="menu-bar"></div>
-            <div class="menu-bar"></div>
-            <div class="menu-bar"></div>
-        </button>
+  <header class="site-header" id="top">
+    <a class="brand" href="#top" aria-label="Home">
+      <span class="brand-mark">SC</span>
+      <span class="brand-copy">Sadık Can Çeşka</span>
+    </a>
+
+    <nav class="desktop-nav" aria-label="Primary navigation">
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+      <a class="nav-pill" href="Sadik_Can_Ceska_Portfolio_CV_PrivacySafe.pdf" target="_blank" rel="noreferrer">Résumé ↗</a>
     </nav>
 
-    <!-- Side Social/Email Links -->
-    <div class="side-links left-side hidden-onload">
-        <ul>
-            <li>
-                <a href="https://github.com/ceskasc" target="_blank" rel="noreferrer" title="GitHub">
-                    <svg xmlns="http://www.w3.org/2000/svg" role="img" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
-                </a>
-            </li>
-            <li><div class="vertical-line"></div></li>
-        </ul>
-    </div>
-    
-    <div class="side-links right-side hidden-onload">
-        <div class="email-wrapper">
-            <a href="mailto:cnceska@gmail.com">hello@ceskasc.dev</a>
+    <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false">
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <div class="mobile-menu" aria-hidden="true">
+    <nav aria-label="Mobile navigation">
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+      <a href="Sadik_Can_Ceska_Portfolio_CV_PrivacySafe.pdf" target="_blank" rel="noreferrer">Résumé ↗</a>
+    </nav>
+  </div>
+
+  <main>
+    <section class="hero section-shell" aria-labelledby="hero-title">
+      <div class="hero-kicker reveal">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span>Software Engineer · Türkiye</span>
+      </div>
+
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <h1 id="hero-title" class="reveal">I build digital products that feel <em>clear, fast, and intentional.</em></h1>
+          <p class="hero-lede reveal">I’m Sadık Can Çeşka, a software engineer focused on turning complex product ideas into polished web experiences and reliable systems.</p>
+
+          <div class="hero-actions reveal">
+            <a class="button button-primary" href="#work">Explore selected work</a>
+            <a class="button button-ghost" href="mailto:cnceska@gmail.com">Start a conversation ↗</a>
+          </div>
         </div>
-        <div class="vertical-line"></div>
-    </div>
 
-    <main id="content">
-        <!-- Hero Section -->
-        <section id="hero" class="hero-section">
-            <div class="hero-content hidden-onload">
-                <p class="hero-greeting">root@ceskasc:~$ ./start.sh</p>
-                <h1 class="hero-name">Sadık Can Çeşka.</h1>
-                <h2 class="hero-title">I engineer <span class="text-gradient">digital excellence.</span></h2>
-                <div class="hero-terminal">
-                   <div class="terminal-header">
-                       <div class="mac-btns">
-                           <span class="close-btn"></span>
-                           <span class="min-btn"></span>
-                           <span class="max-btn"></span>
-                       </div>
-                       <div class="terminal-title">guest@ceskasc:~</div>
-                   </div>
-                   <div class="terminal-body" id="typing-text"></div>
-                </div>
-                <div class="hero-cta">
-                    <a href="#projects" class="btn-primary">View the Repository</a>
-                </div>
+        <aside class="hero-card reveal" aria-label="Profile snapshot">
+          <div class="profile-row">
+            <img src="github-avatar.png" alt="Portrait of Sadık Can Çeşka" />
+            <div>
+              <strong>Sadık Can Çeşka</strong>
+              <span>@ceskasc</span>
             </div>
-            
-            <div class="hero-3d-model hidden-onload">
-                <div class="floating-cube">
-                    <div class="cube-face front">{'<dev>'}</div>
-                    <div class="cube-face back">{'</dev>'}</div>
-                    <div class="cube-face right">JS</div>
-                    <div class="cube-face left">TS</div>
-                    <div class="cube-face top">API</div>
-                    <div class="cube-face bottom">SQL</div>
-                </div>
-            </div>
-        </section>
+          </div>
 
-        <!-- About Section -->
-        <section id="about" class="about-section scroll-reveal">
-            <h2 class="section-title"><span>01.</span> About Me</h2>
-            <div class="about-content">
-                <div class="about-text text-gray">
-                    <p>Hello! I'm Sadık Can, a full-stack engineer passionate about creating things that live on the internet. Whether that be exceptional websites, modern applications, or complex systems.</p>
-                    <p>My focus is on writing clean, scalable, and efficient code that powers intuitive, pixel-perfect user interfaces.</p>
-                    <p>Here are a few technologies I've been working with recently:</p>
-                    <ul class="skills-list">
-                        <li>JavaScript (ES6+)</li>
-                        <li>TypeScript</li>
-                        <li>React & Next.js</li>
-                        <li>Node.js & Express</li>
-                        <li>Vanilla CSS / CSS-in-JS</li>
-                        <li>PostgreSQL & MongoDB</li>
-                    </ul>
-                </div>
-                <div class="about-image-wrapper">
-                    <div class="about-image">
-                       <img src="https://github.com/ceskasc.png" alt="Sadik Can Ceska - Profile" />
-                    </div>
-                </div>
-            </div>
-        </section>
+          <div class="hero-card-divider"></div>
 
-        <!-- Experience / CV Section -->
-        <section id="experience" class="exp-section scroll-reveal">
-            <h2 class="section-title"><span>02.</span> Professional Record</h2>
-            <div class="exp-container">
-                <div class="cv-card glass-panel">
-                    <div class="cv-header">
-                        <h3>Curriculum Vitae</h3>
-                        <span class="cv-status"><span class="pulse-dot"></span> Online</span>
-                    </div>
-                    <p class="text-gray">Explore my professional background, technical stack, and prior accomplishments in detail.</p>
-                    
-                    <div class="cv-actions">
-                        <a href="Sadik_Can_Ceska_Portfolio_CV_PrivacySafe.pdf" target="_blank" class="cv-btn primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                            View Document
-                        </a>
-                        <a href="Sadik_Can_Ceska_Portfolio_CV_PrivacySafe.pdf" download class="cv-btn secondary">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                            Download PDF
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
+          <dl class="snapshot-list">
+            <div><dt>Focus</dt><dd>Full-stack product engineering</dd></div>
+            <div><dt>Approach</dt><dd>Simple interfaces, solid foundations</dd></div>
+            <div><dt>Stack</dt><dd>JavaScript · TypeScript · React · Node.js</dd></div>
+          </dl>
 
-        <!-- Projects Section -->
-        <section id="projects" class="projects-section scroll-reveal">
-            <h2 class="section-title"><span>03.</span> Deployed Architectures</h2>
-            <div class="projects-grid" id="github-projects">
-                <div class="loading-pulse">
-                    <div class="pulse-ring"></div>
-                    Fetching repositories...
-                </div>
-            </div>
-        </section>
+          <a class="text-link" href="https://github.com/ceskasc" target="_blank" rel="noreferrer">View GitHub profile ↗</a>
+        </aside>
+      </div>
 
-        <!-- Contact Section -->
-        <section id="contact" class="contact-section scroll-reveal">
-            <h2 class="section-title terminal-title"><span>04.</span> What's Next?</h2>
-            <h2 class="contact-headline">Get In Touch</h2>
-            <p class="contact-subtext text-gray">
-                I'm currently looking for new opportunities. Whether you have a question, a project proposal, or just want to say hi, my inbox is open!
-            </p>
-            <a href="mailto:cnceska@gmail.com" class="btn-primary btn-large">Say Hello</a>
-        </section>
-    </main>
+      <div class="hero-meta reveal" aria-label="Engineering principles">
+        <span>01 / Product thinking</span>
+        <span>02 / System quality</span>
+        <span>03 / Interface craft</span>
+      </div>
+    </section>
 
-    <footer>
-        <div class="footer-content">
-            <p>Designed & Built by <span class="highlight">Sadık Can Çeşka</span></p>
-            <p class="footer-stats">
-              <span class="stat"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 inline"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> Stellar</span>
-              <span class="stat"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 inline"><circle cx="12" cy="12" r="10"></circle><polyline points="12 16 16 12 12 8"></polyline><line x1="8" y1="12" x2="16" y2="12"></line></svg> Future Proof</span>
-            </p>
+    <section class="work-section section-shell" id="work" aria-labelledby="work-title">
+      <div class="section-heading reveal">
+        <div>
+          <span class="eyebrow">Selected work</span>
+          <h2 id="work-title">Projects with real product intent.</h2>
         </div>
-    </footer>
+        <p>A curated view of recent public repositories. The portfolio prioritizes useful context over decorative tech badges.</p>
+      </div>
 
-    <script src="script.js"></script>
+      <div class="project-feature reveal" id="featured-project">
+        <div class="project-feature-index">01</div>
+        <div class="project-feature-copy">
+          <span class="project-label">Featured project</span>
+          <h3>Loading latest work…</h3>
+          <p>Fetching project information from GitHub.</p>
+        </div>
+      </div>
+
+      <div class="project-list" id="project-list" aria-live="polite"></div>
+
+      <div class="work-footer reveal">
+        <p>Want the full engineering trail?</p>
+        <a class="text-link" href="https://github.com/ceskasc?tab=repositories" target="_blank" rel="noreferrer">Browse all repositories ↗</a>
+      </div>
+    </section>
+
+    <section class="about-section section-shell" id="about" aria-labelledby="about-title">
+      <div class="about-grid">
+        <div class="section-heading reveal">
+          <div>
+            <span class="eyebrow">About</span>
+            <h2 id="about-title">Engineering with taste and restraint.</h2>
+          </div>
+        </div>
+
+        <div class="about-copy reveal">
+          <p class="about-lead">I care about the space where software engineering, product judgment, and visual quality meet.</p>
+          <p>My work spans front-end interfaces, backend services, APIs, data-backed applications, and the product decisions that connect them. I prefer maintainable systems, focused experiences, and implementation choices that stay understandable as a project grows.</p>
+          <p>I’m especially interested in building products where speed, clarity, reliability, and a strong visual standard all matter at the same time.</p>
+
+          <div class="capability-grid">
+            <div>
+              <span>01</span>
+              <h3>Frontend</h3>
+              <p>Responsive interfaces, component systems, interaction design, accessibility.</p>
+            </div>
+            <div>
+              <span>02</span>
+              <h3>Backend</h3>
+              <p>APIs, application logic, data flows, authentication, service integration.</p>
+            </div>
+            <div>
+              <span>03</span>
+              <h3>Product</h3>
+              <p>Scoping, architecture choices, UX trade-offs, iteration and delivery.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="principles-section section-shell" aria-labelledby="principles-title">
+      <div class="section-heading reveal">
+        <div>
+          <span class="eyebrow">How I work</span>
+          <h2 id="principles-title">Less noise. Better decisions.</h2>
+        </div>
+      </div>
+
+      <div class="principle-list">
+        <article class="principle reveal">
+          <span>01</span>
+          <h3>Design the system before polishing the screen.</h3>
+          <p>Strong interfaces depend on sensible information architecture, state, data, and component boundaries.</p>
+        </article>
+        <article class="principle reveal">
+          <span>02</span>
+          <h3>Make quality visible in the details.</h3>
+          <p>Typography, spacing, loading states, responsive behavior, copy, and performance all shape perceived quality.</p>
+        </article>
+        <article class="principle reveal">
+          <span>03</span>
+          <h3>Prefer durable solutions over clever ones.</h3>
+          <p>I value code that another engineer can understand, extend, and trust six months later.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="contact-section section-shell" id="contact" aria-labelledby="contact-title">
+      <div class="contact-panel reveal">
+        <span class="eyebrow">Contact</span>
+        <h2 id="contact-title">Have a product worth building?</h2>
+        <p>I’m open to thoughtful engineering work, collaborations, and conversations around ambitious digital products.</p>
+        <div class="contact-actions">
+          <a class="button button-light" href="mailto:cnceska@gmail.com">cnceska@gmail.com ↗</a>
+          <a class="button button-outline-light" href="https://github.com/ceskasc" target="_blank" rel="noreferrer">GitHub ↗</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer section-shell">
+    <div>
+      <span>© <span id="year"></span> Sadık Can Çeşka</span>
+      <span>Designed and built with restraint.</span>
+    </div>
+    <a href="#top">Back to top ↑</a>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
