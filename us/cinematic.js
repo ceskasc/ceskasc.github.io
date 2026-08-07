@@ -3,6 +3,11 @@
   const qsa = (selector, scope = document) => [...scope.querySelectorAll(selector)];
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  const fontLink = document.createElement('link');
+  fontLink.rel = 'stylesheet';
+  fontLink.href = 'https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@300;400;500&family=Manrope:wght@400;500;600;700&display=swap';
+  document.head.appendChild(fontLink);
+
   const intro = qs('#intro');
   const introSkip = qs('.intro-skip');
   const header = qs('#site-header');
@@ -17,6 +22,7 @@
   const dialogNumber = qs('#dialog-number');
   const dialogCopy = qs('#dialog-copy');
   const dialogClose = qs('.dialog-close');
+  let lastLetterTrigger = null;
 
   const letters = {
     miss: {
@@ -57,6 +63,14 @@
     }
   };
 
+  function getSessionFlag(key) {
+    try { return sessionStorage.getItem(key); } catch { return null; }
+  }
+
+  function setSessionFlag(key, value) {
+    try { sessionStorage.setItem(key, value); } catch { /* storage can be unavailable */ }
+  }
+
   function hideIntro() {
     if (!intro || intro.classList.contains('is-hidden')) return;
     intro.classList.add('is-hidden');
@@ -64,11 +78,11 @@
   }
 
   if (intro) {
-    const seen = sessionStorage.getItem('ours-intro-seen');
+    const seen = getSessionFlag('ours-intro-seen');
     if (reduceMotion || seen) {
       intro.remove();
     } else {
-      sessionStorage.setItem('ours-intro-seen', '1');
+      setSessionFlag('ours-intro-seen', '1');
       window.setTimeout(hideIntro, 2350);
       introSkip?.addEventListener('click', hideIntro);
     }
@@ -166,9 +180,10 @@
     });
   }
 
-  function openLetter(key) {
+  function openLetter(key, trigger) {
     const letter = letters[key];
     if (!letter || !dialog || !dialogTitle || !dialogCopy || !dialogNumber) return;
+    lastLetterTrigger = trigger || null;
     dialogNumber.textContent = letter.number;
     dialogTitle.textContent = letter.title;
     dialogCopy.replaceChildren(...letter.paragraphs.map(text => {
@@ -185,9 +200,10 @@
     if (!dialog?.open) return;
     dialog.close();
     document.body.classList.remove('dialog-open');
+    lastLetterTrigger?.focus({ preventScroll: true });
   }
 
-  qsa('.letter').forEach(letter => letter.addEventListener('click', () => openLetter(letter.dataset.letter)));
+  qsa('.letter').forEach(letter => letter.addEventListener('click', () => openLetter(letter.dataset.letter, letter)));
   dialogClose?.addEventListener('click', closeDialog);
   dialog?.addEventListener('click', event => {
     const rect = dialog.getBoundingClientRect();
