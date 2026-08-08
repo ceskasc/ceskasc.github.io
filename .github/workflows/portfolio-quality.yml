@@ -1,0 +1,66 @@
+name: Portfolio quality
+
+on:
+  pull_request:
+    paths:
+      - 'index.html'
+      - 'style.css'
+      - 'script.js'
+      - 'og-card.svg'
+      - '.github/workflows/portfolio-quality.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'style.css'
+      - 'script.js'
+      - 'og-card.svg'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check JavaScript syntax
+        run: node --check script.js
+
+      - name: Parse HTML and verify critical local assets
+        shell: python
+        run: |
+          from html.parser import HTMLParser
+          from pathlib import Path
+
+          class Parser(HTMLParser):
+              pass
+
+          html = Path('index.html').read_text(encoding='utf-8')
+          Parser().feed(html)
+
+          required = [
+              'style.css',
+              'script.js',
+              'favicon.svg',
+              'Sadik_Can_Ceska_Portfolio_CV_PrivacySafe.pdf',
+              'og-card.svg',
+          ]
+          missing = [path for path in required if not Path(path).exists()]
+          if missing:
+              raise SystemExit(f'Missing required assets: {missing}')
+
+          for token in ['id="work"', 'id="practice"', 'id="about"', 'id="contact"', 'id="project-grid"']:
+              if token not in html:
+                  raise SystemExit(f'Missing required markup: {token}')
+
+          print('HTML parse and asset checks passed.')
+
+      - name: Guard accessibility and responsive hooks
+        run: |
+          grep -q 'prefers-reduced-motion' style.css
+          grep -q 'aria-expanded' index.html
+          grep -q 'aria-live' index.html
+          grep -q 'IntersectionObserver' script.js
+          echo 'Accessibility and progressive enhancement hooks present.'
