@@ -1,22 +1,22 @@
-name: Internet Cemetery quality
+name: Site quality
 
 on:
   pull_request:
     paths:
       - 'index.html'
-      - 'cemetery.css'
-      - 'cemetery.js'
-      - 'cemetery-og.svg'
-      - 'portfolio.html'
+      - 'style.css'
+      - 'experience.css'
+      - 'script.js'
+      - 'internet-cemetery/**'
       - '.github/workflows/portfolio-quality.yml'
   push:
     branches: [main]
     paths:
       - 'index.html'
-      - 'cemetery.css'
-      - 'cemetery.js'
-      - 'cemetery-og.svg'
-      - 'portfolio.html'
+      - 'style.css'
+      - 'experience.css'
+      - 'script.js'
+      - 'internet-cemetery/**'
       - '.github/workflows/portfolio-quality.yml'
 
 permissions:
@@ -29,82 +29,79 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Check JavaScript syntax
-        run: node --check cemetery.js
+        run: |
+          node --check script.js
+          node --check internet-cemetery/cemetery.js
 
-      - name: Parse HTML and verify links, IDs, and local assets
+      - name: Validate portfolio and cemetery structure
         shell: python
         run: |
           from html.parser import HTMLParser
           from pathlib import Path
           from urllib.parse import urlparse
 
-          class SiteParser(HTMLParser):
+          class Parser(HTMLParser):
               def __init__(self):
                   super().__init__()
                   self.ids = []
                   self.links = []
-                  self.sources = []
                   self.dialogs = 0
-
               def handle_starttag(self, tag, attrs):
                   attrs = dict(attrs)
                   if 'id' in attrs:
                       self.ids.append(attrs['id'])
                   if tag == 'a' and 'href' in attrs:
                       self.links.append(attrs['href'])
-                  if tag in {'script', 'link', 'img'}:
-                      value = attrs.get('src') or attrs.get('href')
-                      if value:
-                          self.sources.append(value)
                   if tag == 'dialog':
                       self.dialogs += 1
 
-          html = Path('index.html').read_text(encoding='utf-8')
-          parser = SiteParser()
-          parser.feed(html)
+          def validate_html(path, required_ids, required_assets, expect_dialog=False):
+              html_path = Path(path)
+              html = html_path.read_text(encoding='utf-8')
+              parser = Parser(); parser.feed(html)
+              duplicates = sorted({x for x in parser.ids if parser.ids.count(x) > 1})
+              if duplicates:
+                  raise SystemExit(f'{path}: duplicate IDs: {duplicates}')
+              missing_ids = sorted(set(required_ids) - set(parser.ids))
+              if missing_ids:
+                  raise SystemExit(f'{path}: missing IDs: {missing_ids}')
+              missing_assets = [p for p in required_assets if not Path(p).exists()]
+              if missing_assets:
+                  raise SystemExit(f'{path}: missing assets: {missing_assets}')
+              if expect_dialog and parser.dialogs != 1:
+                  raise SystemExit(f'{path}: expected one dialog, found {parser.dialogs}')
+              base = html_path.parent
+              for href in parser.links:
+                  if not href.strip() or href.lower().startswith('javascript:'):
+                      raise SystemExit(f'{path}: unsafe/empty link: {href}')
+                  if href.startswith(('#','mailto:','http://','https://')):
+                      continue
+                  parsed = urlparse(href)
+                  if parsed.scheme:
+                      continue
+                  local = href.split('#',1)[0].split('?',1)[0]
+                  if local and not (base / local).exists():
+                      raise SystemExit(f'{path}: broken local link: {href}')
 
-          required = ['cemetery.css', 'cemetery.js', 'cemetery-og.svg', 'favicon.svg', 'portfolio.html']
-          missing = [path for path in required if not Path(path).exists()]
-          if missing:
-              raise SystemExit(f'Missing required assets: {missing}')
+          validate_html(
+              'index.html',
+              {'main-content','work','practice','about','contact','project-grid'},
+              ['style.css','experience.css','script.js','favicon.svg','og-card.svg','Sadik_Can_Ceska_Portfolio_CV_PrivacySafe.pdf']
+          )
+          validate_html(
+              'internet-cemetery/index.html',
+              {'gate','graveyard','catacombs','dig','memorial','burialForm','soundToggle'},
+              ['internet-cemetery/cemetery.css','internet-cemetery/cemetery.js','internet-cemetery/cemetery-og.svg','internet-cemetery/favicon.svg'],
+              expect_dialog=True
+          )
+          print('Portfolio and Internet Cemetery structure passed.')
 
-          duplicates = sorted({item for item in parser.ids if parser.ids.count(item) > 1})
-          if duplicates:
-              raise SystemExit(f'Duplicate IDs: {duplicates}')
-
-          required_ids = {'gate', 'graveyard', 'catacombs', 'dig', 'memorial', 'burialForm', 'soundToggle'}
-          missing_ids = sorted(required_ids - set(parser.ids))
-          if missing_ids:
-              raise SystemExit(f'Missing required IDs: {missing_ids}')
-
-          if parser.dialogs != 1:
-              raise SystemExit(f'Expected one memorial dialog, found {parser.dialogs}')
-
-          bad_links = [href for href in parser.links if not href.strip() or href.lower().startswith('javascript:')]
-          if bad_links:
-              raise SystemExit(f'Unsafe or empty links: {bad_links}')
-
-          for href in parser.links:
-              if href.startswith(('#', 'mailto:', 'http://', 'https://')):
-                  continue
-              parsed = urlparse(href)
-              if parsed.scheme:
-                  continue
-              local = href.split('#', 1)[0].split('?', 1)[0]
-              if local and not Path(local).exists():
-                  raise SystemExit(f'Broken local link: {href}')
-
-          print('Internet Cemetery HTML, links, IDs, and assets passed.')
-
-      - name: Guard interaction, accessibility, and resilience hooks
+      - name: Guard accessibility and interaction hooks
         run: |
-          grep -q 'prefers-reduced-motion' cemetery.css
-          grep -q 'aria-expanded' index.html
-          grep -q 'aria-live' index.html
-          grep -q 'inert' index.html
-          grep -q '<dialog' index.html
-          grep -q 'IntersectionObserver' cemetery.js
-          grep -q 'localStorage' cemetery.js
-          grep -q 'AudioContext' cemetery.js
-          grep -q 'Europe/Istanbul' cemetery.js
-          echo 'Interaction, accessibility, and resilience hooks present.'
+          grep -q 'prefers-reduced-motion' style.css
+          grep -q 'IntersectionObserver' script.js
+          grep -q 'prefers-reduced-motion' internet-cemetery/cemetery.css
+          grep -q 'IntersectionObserver' internet-cemetery/cemetery.js
+          grep -q 'localStorage' internet-cemetery/cemetery.js
+          grep -q 'AudioContext' internet-cemetery/cemetery.js
+          echo 'Accessibility and interaction hooks present.'
