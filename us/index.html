@@ -19,6 +19,17 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=IBM+Plex+Mono:wght@300;400;500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="personal.css" />
+  <style>
+    .brand{gap:0}.brand-copy{padding-left:0}.brand-copy strong{font-size:9px;letter-spacing:.16em}.brand-copy small{margin-top:4px}
+    .spotify-premium{margin-top:34px!important;display:grid!important;grid-template-columns:44px minmax(0,1fr) 28px;align-items:center;gap:15px;width:min(100%,390px);padding:11px 12px!important;border:1px solid rgba(241,237,231,.16)!important;border-radius:0!important;background:linear-gradient(135deg,rgba(255,255,255,.035),rgba(255,255,255,.012))!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.025);transition:transform .35s var(--ease),border-color .35s,background .35s!important}
+    .spotify-premium:hover,.spotify-premium:focus-visible{transform:translateY(-2px);border-color:rgba(211,167,155,.5)!important;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.018))!important}
+    .spotify-premium-icon{width:44px;height:44px;display:grid;place-items:center;border:1px solid rgba(241,237,231,.14);background:rgba(255,255,255,.025)}
+    .spotify-premium-icon svg{width:20px;height:20px;fill:#f1ede7;opacity:.9}
+    .spotify-premium-copy{display:grid;gap:5px;text-align:left}.spotify-premium-copy small{font:400 7px/1 var(--mono);letter-spacing:.16em;color:#746e69}.spotify-premium-copy strong{font:500 13px/1.1 var(--sans);letter-spacing:-.015em;color:#eee8e1}
+    .spotify-premium-arrow{font:300 18px/1 var(--sans);color:#a79e98;transition:transform .35s var(--ease),color .35s}.spotify-premium:hover .spotify-premium-arrow{transform:translate(3px,-3px);color:var(--rose)}
+    @media(max-width:640px){.spotify-premium{width:100%;grid-template-columns:42px minmax(0,1fr) 26px}.spotify-premium-icon{width:42px;height:42px}}
+    @media(prefers-reduced-motion:reduce){.spotify-premium,.spotify-premium-arrow{transition:none!important}}
+  </style>
 </head>
 <body>
   <a class="skip-link" href="#hikaye">Hikâyeye geç</a>
@@ -27,7 +38,6 @@
 
   <header class="site-header" id="site-header">
     <a class="brand" href="#top" aria-label="Sadık Can ve Fatma Nur — başa dön">
-      <span class="brand-mark">S×F</span>
       <span class="brand-copy"><strong>30.05.2019</strong><small>devam ediyor</small></span>
     </a>
     <nav class="desktop-nav" aria-label="Ana menü">
@@ -140,7 +150,11 @@
     <section class="music section-shell" id="muzik" aria-labelledby="music-title">
       <div class="section-label reveal"><span>03</span><p>FON MÜZİĞİMİZ</p></div>
       <div class="music-grid">
-        <div class="music-copy"><p class="kicker reveal">Spotify / ortak playlist</p><h2 id="music-title" class="reveal">Bazı şarkılar sadece çalmaz.<br><em>Bir dönemi geri getirir.</em></h2><p class="reveal">Bu listeyi ikimiz ekliyoruz. O yüzden tek bir kişinin zevki değil; yıllar içinde oluşan ortak sesimiz.</p><a class="spotify-button reveal" href="https://open.spotify.com/playlist/6ynvzdgqNZl13WNLihpSQc" target="_blank" rel="noreferrer"><span class="spotify-dot" aria-hidden="true">▶</span> Spotify'da aç <i>↗</i></a></div>
+        <div class="music-copy"><p class="kicker reveal">Spotify / ortak playlist</p><h2 id="music-title" class="reveal">Bazı şarkılar sadece çalmaz.<br><em>Bir dönemi geri getirir.</em></h2><p class="reveal">Bu listeyi ikimiz ekliyoruz. O yüzden tek bir kişinin zevki değil; yıllar içinde oluşan ortak sesimiz.</p><a class="spotify-button spotify-premium reveal" href="https://open.spotify.com/playlist/6ynvzdgqNZl13WNLihpSQc" target="_blank" rel="noreferrer" aria-label="Ortak playlistimizi Spotify'da aç">
+          <span class="spotify-premium-icon" aria-hidden="true"><svg viewBox="0 0 24 24" role="img"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm4.59 14.42a.62.62 0 0 1-.86.2c-2.37-1.45-5.36-1.78-8.88-.98a.625.625 0 1 1-.28-1.22c3.85-.88 7.15-.5 9.81 1.12.3.18.39.58.21.88Zm1.23-2.73a.78.78 0 0 1-1.08.26c-2.72-1.67-6.87-2.15-10.09-1.18a.78.78 0 1 1-.45-1.5c3.68-1.11 8.25-.57 11.36 1.34.37.22.48.7.26 1.08Zm.1-2.85C14.66 8.9 9.29 8.72 6.17 9.66a.94.94 0 1 1-.54-1.8c3.58-1.08 9.5-.87 13.25 1.35a.94.94 0 0 1-.96 1.63Z"/></svg></span>
+          <span class="spotify-premium-copy"><small>ORTAK PLAYLIST</small><strong>Spotify’da dinle</strong></span>
+          <span class="spotify-premium-arrow" aria-hidden="true">↗</span>
+        </a></div>
         <div class="spotify-frame reveal"><iframe title="Sadık Can ve Fatma Nur'un ortak Spotify playlisti" src="https://open.spotify.com/embed/playlist/6ynvzdgqNZl13WNLihpSQc?utm_source=generator&theme=0" width="100%" height="352" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe></div>
       </div>
     </section>
