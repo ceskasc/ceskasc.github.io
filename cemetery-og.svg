@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <radialGradient id="bg"><stop stop-color="#1a2018"/><stop offset="1" stop-color="#080a08"/></radialGradient>
+    <radialGradient id="moon"><stop stop-color="#d8ddce"/><stop offset="1" stop-color="#8f9689"/></radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="600" cy="190" r="74" fill="url(#moon)" opacity=".9"/>
+  <circle cx="600" cy="190" r="132" fill="none" stroke="#bdff4a" stroke-opacity=".08" stroke-width="30"/>
+  <path d="M0 530 Q300 455 600 530 T1200 520 V630 H0Z" fill="#0b0e0b"/>
+  <g fill="#131713" opacity=".85"><path d="M100 520V402H85v-20h15v-36h18v36h17v20h-17v118z"/><path d="M1040 525V390h-20v-20h20v-45h20v45h22v20h-22v135z"/><path d="M900 520V430h-14v-15h14v-28h15v28h15v15h-15v90z"/></g>
+  <text x="600" y="330" fill="#e0e4d8" font-family="Arial, sans-serif" font-size="86" font-weight="700" text-anchor="middle" letter-spacing="-5">THE INTERNET</text>
+  <text x="600" y="425" fill="#bdff4a" font-family="Georgia, serif" font-size="112" font-style="italic" text-anchor="middle" letter-spacing="-7">Cemetery</text>
+  <text x="600" y="475" fill="#828a7f" font-family="Courier New, monospace" font-size="16" text-anchor="middle" letter-spacing="3">NOTHING ON THE INTERNET TRULY DIES.</text>
+  <text x="600" y="500" fill="#5f675d" font-family="Courier New, monospace" font-size="12" text-anchor="middle" letter-spacing="2">IT JUST STOPS LOADING.</text>
+</svg>
