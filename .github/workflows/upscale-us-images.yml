@@ -24,10 +24,11 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y imagemagick webp
 
-      - name: Upscale and sharpen relationship photos
+      - name: Rebuild relationship photos for full-screen rendering
         shell: bash
         run: |
           set -euo pipefail
+          SOURCE_COMMIT="0aaa261a92297ff73c56a0f5584fa61f06a00d9d"
           files=(
             us/assets/film.webp
             us/assets/konya.webp
@@ -37,21 +38,21 @@ jobs:
           )
 
           for file in "${files[@]}"; do
-            test -f "$file"
-            echo "Before: $(identify -format '%f %wx%h %b' "$file")"
-            tmp="${file%.webp}.hq.webp"
-            convert "$file" \
+            source_file="${file%.webp}.source.webp"
+            git show "${SOURCE_COMMIT}:${file}" > "$source_file"
+            echo "Source: $(identify -format '%f %wx%h %b' "$source_file")"
+            convert "$source_file" \
               -filter Lanczos \
-              -resize 200% \
-              -unsharp 0x0.78+0.78+0.008 \
+              -resize '1800x1800<' \
+              -unsharp 0x0.65+0.65+0.006 \
               -strip \
-              -quality 88 \
-              "$tmp"
-            mv "$tmp" "$file"
-            echo "After:  $(identify -format '%f %wx%h %b' "$file")"
+              -quality 90 \
+              "$file"
+            rm "$source_file"
+            echo "Final:  $(identify -format '%f %wx%h %b' "$file")"
           done
 
-      - name: Commit upgraded assets
+      - name: Commit final high-density assets
         shell: bash
         run: |
           set -euo pipefail
@@ -62,6 +63,6 @@ jobs:
             echo 'No image changes to commit.'
             exit 0
           fi
-          git commit -m 'fix(us): upscale relationship photos'
+          git commit -m 'fix(us): rebuild photos for high-density displays'
           git pull --rebase origin main
           git push origin HEAD:main
