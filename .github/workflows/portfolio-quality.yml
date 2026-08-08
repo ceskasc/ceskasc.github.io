@@ -1,20 +1,23 @@
-name: Portfolio quality
+name: Internet Cemetery quality
 
 on:
   pull_request:
     paths:
       - 'index.html'
-      - 'style.css'
-      - 'script.js'
-      - 'og-card.svg'
+      - 'cemetery.css'
+      - 'cemetery.js'
+      - 'cemetery-og.svg'
+      - 'portfolio.html'
       - '.github/workflows/portfolio-quality.yml'
   push:
     branches: [main]
     paths:
       - 'index.html'
-      - 'style.css'
-      - 'script.js'
-      - 'og-card.svg'
+      - 'cemetery.css'
+      - 'cemetery.js'
+      - 'cemetery-og.svg'
+      - 'portfolio.html'
+      - '.github/workflows/portfolio-quality.yml'
 
 permissions:
   contents: read
@@ -26,7 +29,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Check JavaScript syntax
-        run: node --check script.js
+        run: node --check cemetery.js
 
       - name: Parse HTML and verify links, IDs, and local assets
         shell: python
@@ -35,12 +38,13 @@ jobs:
           from pathlib import Path
           from urllib.parse import urlparse
 
-          class PortfolioParser(HTMLParser):
+          class SiteParser(HTMLParser):
               def __init__(self):
                   super().__init__()
                   self.ids = []
                   self.links = []
                   self.sources = []
+                  self.dialogs = 0
 
               def handle_starttag(self, tag, attrs):
                   attrs = dict(attrs)
@@ -52,18 +56,14 @@ jobs:
                       value = attrs.get('src') or attrs.get('href')
                       if value:
                           self.sources.append(value)
+                  if tag == 'dialog':
+                      self.dialogs += 1
 
           html = Path('index.html').read_text(encoding='utf-8')
-          parser = PortfolioParser()
+          parser = SiteParser()
           parser.feed(html)
 
-          required = [
-              'style.css',
-              'script.js',
-              'favicon.svg',
-              'Sadik_Can_Ceska_Portfolio_CV_PrivacySafe.pdf',
-              'og-card.svg',
-          ]
+          required = ['cemetery.css', 'cemetery.js', 'cemetery-og.svg', 'favicon.svg', 'portfolio.html']
           missing = [path for path in required if not Path(path).exists()]
           if missing:
               raise SystemExit(f'Missing required assets: {missing}')
@@ -72,10 +72,13 @@ jobs:
           if duplicates:
               raise SystemExit(f'Duplicate IDs: {duplicates}')
 
-          required_ids = {'main-content', 'work', 'practice', 'about', 'contact', 'project-grid'}
+          required_ids = {'gate', 'graveyard', 'catacombs', 'dig', 'memorial', 'burialForm', 'soundToggle'}
           missing_ids = sorted(required_ids - set(parser.ids))
           if missing_ids:
               raise SystemExit(f'Missing required IDs: {missing_ids}')
+
+          if parser.dialogs != 1:
+              raise SystemExit(f'Expected one memorial dialog, found {parser.dialogs}')
 
           bad_links = [href for href in parser.links if not href.strip() or href.lower().startswith('javascript:')]
           if bad_links:
@@ -91,19 +94,17 @@ jobs:
               if local and not Path(local).exists():
                   raise SystemExit(f'Broken local link: {href}')
 
-          if 'brand-seal' in html:
-              raise SystemExit('Legacy circular SC seal must not return.')
-          if 'project-visual' in html or 'mini-project-art' in html:
-              raise SystemExit('Decorative project artwork must not return.')
+          print('Internet Cemetery HTML, links, IDs, and assets passed.')
 
-          print('HTML, links, IDs, and asset checks passed.')
-
-      - name: Guard accessibility and progressive enhancement hooks
+      - name: Guard interaction, accessibility, and resilience hooks
         run: |
-          grep -q 'prefers-reduced-motion' style.css
+          grep -q 'prefers-reduced-motion' cemetery.css
           grep -q 'aria-expanded' index.html
           grep -q 'aria-live' index.html
           grep -q 'inert' index.html
-          grep -q 'IntersectionObserver' script.js
-          grep -q 'GitHub snapshot unavailable; static portfolio content remains active.' script.js
-          echo 'Accessibility and progressive enhancement hooks present.'
+          grep -q '<dialog' index.html
+          grep -q 'IntersectionObserver' cemetery.js
+          grep -q 'localStorage' cemetery.js
+          grep -q 'AudioContext' cemetery.js
+          grep -q 'Europe/Istanbul' cemetery.js
+          echo 'Interaction, accessibility, and resilience hooks present.'
