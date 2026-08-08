@@ -1,0 +1,52 @@
+name: Restore relationship images from Git blobs
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/fix-us-images-v2.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  restore:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Restore valid WebP blobs
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p us/assets
+          restore_blob() {
+            local name="$1"
+            local sha="$2"
+            gh api "repos/${GITHUB_REPOSITORY}/git/blobs/${sha}" --jq '.content' | tr -d '\n' | base64 --decode > "us/assets/${name}.webp"
+            test -s "us/assets/${name}.webp"
+            test "$(head -c 4 "us/assets/${name}.webp")" = "RIFF"
+            test "$(dd if="us/assets/${name}.webp" bs=1 skip=8 count=4 status=none)" = "WEBP"
+          }
+          restore_blob film aa67542f53fbc70a6fbf85cb9c5663d22712674e
+          restore_blob konya 8ee339c5d40eb654d948e507c8232cf73f1c2229
+          restore_blob heart 425e6d193019e50133feedeafdc2972956067fa1
+          restore_blob night f3eabc9d517246a22d0a9baab08d90f49c37812f
+          restore_blob coffee 134d791e60131f8606314bf9ec9a6ebe177f8fa2
+
+      - name: Commit repair and remove temporary repair files
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf us/assets-src
+          rm -f us/.image-fix-placeholder us/.image-fix-branch-marker us/.ignore-this us/.temp us/.delete-me us/.will-clean
+          rm -f .github/workflows/fix-us-images.yml .github/workflows/fix-us-images-v2.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "fix(us): restore relationship images and clean repair files"
+          git push
