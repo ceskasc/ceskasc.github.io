@@ -6,7 +6,6 @@ const header = qs('.site-header');
 const menuToggle = qs('.menu-toggle');
 const mobileMenu = qs('.mobile-menu');
 const progress = qs('#scroll-progress');
-const profileAvatar = qs('#profile-avatar');
 const repoCount = qs('#repo-count');
 
 qsa('.current-year').forEach((node) => {
@@ -113,7 +112,7 @@ if ('IntersectionObserver' in window) {
     sectionLinks.forEach((link, id) => link.classList.toggle('is-active', id === active.target.id));
   }, { rootMargin: '-30% 0px -58%', threshold: [0.01, 0.2, 0.5] });
 
-  ['work', 'practice', 'about', 'contact'].forEach((id) => {
+  ['work', 'experience', 'practice', 'about', 'contact'].forEach((id) => {
     const section = document.getElementById(id);
     if (section) sectionObserver.observe(section);
   });
@@ -157,10 +156,6 @@ async function enhanceFromSnapshot() {
       repoCount.textContent = `${snapshot.profile.public_repos} public repos`;
     }
 
-    if (profileAvatar && snapshot.profile?.avatar_url) {
-      profileAvatar.src = `${snapshot.profile.avatar_url}${snapshot.profile.avatar_url.includes('?') ? '&' : '?'}size=960`;
-    }
-
     (snapshot.repos || []).forEach(enhanceProjectCard);
   } catch (error) {
     console.info('GitHub snapshot unavailable; static portfolio content remains active.', error);
@@ -168,7 +163,3 @@ async function enhanceFromSnapshot() {
 }
 
 enhanceFromSnapshot();
-
-profileAvatar?.addEventListener('error', () => {
-  profileAvatar.src = 'https://avatars.githubusercontent.com/u/152553355?v=4&size=960';
-}, { once: true });
