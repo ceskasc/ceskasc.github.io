@@ -28,17 +28,34 @@ jobs:
       - name: Check JavaScript syntax
         run: node --check script.js
 
-      - name: Parse HTML and verify critical local assets
+      - name: Parse HTML and verify links, IDs, and local assets
         shell: python
         run: |
           from html.parser import HTMLParser
           from pathlib import Path
+          from urllib.parse import urlparse
 
-          class Parser(HTMLParser):
-              pass
+          class PortfolioParser(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.ids = []
+                  self.links = []
+                  self.sources = []
+
+              def handle_starttag(self, tag, attrs):
+                  attrs = dict(attrs)
+                  if 'id' in attrs:
+                      self.ids.append(attrs['id'])
+                  if tag == 'a' and 'href' in attrs:
+                      self.links.append(attrs['href'])
+                  if tag in {'script', 'link', 'img'}:
+                      value = attrs.get('src') or attrs.get('href')
+                      if value:
+                          self.sources.append(value)
 
           html = Path('index.html').read_text(encoding='utf-8')
-          Parser().feed(html)
+          parser = PortfolioParser()
+          parser.feed(html)
 
           required = [
               'style.css',
@@ -51,16 +68,42 @@ jobs:
           if missing:
               raise SystemExit(f'Missing required assets: {missing}')
 
-          for token in ['id="work"', 'id="practice"', 'id="about"', 'id="contact"', 'id="project-grid"']:
-              if token not in html:
-                  raise SystemExit(f'Missing required markup: {token}')
+          duplicates = sorted({item for item in parser.ids if parser.ids.count(item) > 1})
+          if duplicates:
+              raise SystemExit(f'Duplicate IDs: {duplicates}')
 
-          print('HTML parse and asset checks passed.')
+          required_ids = {'main-content', 'work', 'practice', 'about', 'contact', 'project-grid'}
+          missing_ids = sorted(required_ids - set(parser.ids))
+          if missing_ids:
+              raise SystemExit(f'Missing required IDs: {missing_ids}')
 
-      - name: Guard accessibility and responsive hooks
+          bad_links = [href for href in parser.links if not href.strip() or href.lower().startswith('javascript:')]
+          if bad_links:
+              raise SystemExit(f'Unsafe or empty links: {bad_links}')
+
+          for href in parser.links:
+              if href.startswith(('#', 'mailto:', 'http://', 'https://')):
+                  continue
+              parsed = urlparse(href)
+              if parsed.scheme:
+                  continue
+              local = href.split('#', 1)[0].split('?', 1)[0]
+              if local and not Path(local).exists():
+                  raise SystemExit(f'Broken local link: {href}')
+
+          if 'brand-seal' in html:
+              raise SystemExit('Legacy circular SC seal must not return.')
+          if 'project-visual' in html or 'mini-project-art' in html:
+              raise SystemExit('Decorative project artwork must not return.')
+
+          print('HTML, links, IDs, and asset checks passed.')
+
+      - name: Guard accessibility and progressive enhancement hooks
         run: |
           grep -q 'prefers-reduced-motion' style.css
           grep -q 'aria-expanded' index.html
           grep -q 'aria-live' index.html
+          grep -q 'inert' index.html
           grep -q 'IntersectionObserver' script.js
+          grep -q 'GitHub snapshot unavailable; static portfolio content remains active.' script.js
           echo 'Accessibility and progressive enhancement hooks present.'
