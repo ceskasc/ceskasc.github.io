@@ -3,266 +3,309 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="theme-color" content="#080a08" />
-  <meta name="color-scheme" content="dark" />
-  <meta name="description" content="The Internet Cemetery — a walk through the products, platforms and rituals the web left behind." />
-  <meta name="author" content="CESKA" />
-  <meta property="og:title" content="The Internet Cemetery" />
-  <meta property="og:description" content="Nothing on the internet truly dies. It just stops loading." />
+  <meta name="theme-color" content="#0d0e0c" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="description" content="Sadık Can Çeşka — Full-stack software engineer with professional experience across Crytek, NeoGroup, Yandex, A.S.A.M, and independent freelance work." />
+  <meta name="author" content="Sadık Can Çeşka" />
+  <meta property="og:title" content="Sadık Can Çeşka — Full-stack Software Engineer" />
+  <meta property="og:description" content="Selected work, professional experience, engineering practice, and product-minded full-stack software development." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://ceskasc.github.io/" />
-  <meta property="og:image" content="https://ceskasc.github.io/cemetery-og.svg" />
+  <meta property="og:image" content="https://ceskasc.github.io/og-card.svg" />
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="canonical" href="https://ceskasc.github.io/" />
+  <title>Sadık Can Çeşka — Full-stack Software Engineer</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="experience.css" />
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="cemetery.css" />
-  <title>The Internet Cemetery — CESKA</title>
+
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Person",
+    "name":"Sadık Can Çeşka",
+    "url":"https://ceskasc.github.io/",
+    "jobTitle":"Full-stack Software Engineer",
+    "worksFor":{"@type":"Organization","name":"Crytek"},
+    "sameAs":["https://github.com/ceskasc"]
+  }
+  </script>
 </head>
 <body>
-  <div class="boot" id="boot" aria-hidden="true">
-    <div class="boot-mark">†</div>
-    <div class="boot-copy">
-      <span>ARCHIVE NODE 1995—∞</span>
-      <strong>THE INTERNET CEMETERY</strong>
-      <i><b id="bootBar"></b></i>
-      <small id="bootText">recovering dead links…</small>
-    </div>
-  </div>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <div class="scroll-progress" aria-hidden="true"><i id="scroll-progress"></i></div>
 
-  <div class="noise" aria-hidden="true"></div>
-  <div class="scanlines" aria-hidden="true"></div>
-  <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
-
-  <header class="topbar">
-    <a class="wordmark" href="#gate" aria-label="The Internet Cemetery home">
-      <span class="sigil">†</span>
-      <span><b>INTERNET</b><small>CEMETERY</small></span>
+  <header class="site-header" id="top">
+    <a class="brand" href="#top" aria-label="Sadık Can Çeşka — Home">
+      <span class="brand-name">Sadık Can Çeşka</span>
+      <span class="brand-role">Software Engineer</span>
     </a>
-    <nav class="topnav" aria-label="Primary navigation">
-      <a href="#graveyard">Graves</a>
-      <a href="#catacombs">Catacombs</a>
-      <a href="#dig">Bury Something</a>
+
+    <nav class="desktop-nav" aria-label="Primary navigation">
+      <a href="#work" data-nav="work">Work</a>
+      <a href="#experience" data-nav="experience">Experience</a>
+      <a href="#practice" data-nav="practice">Practice</a>
+      <a href="#about" data-nav="about">About</a>
+      <a href="#contact" data-nav="contact">Contact</a>
     </nav>
-    <div class="top-actions">
-      <button class="icon-button" id="soundToggle" type="button" aria-pressed="false" aria-label="Turn ambient sound on">
-        <span class="sound-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-        <span class="sound-label">sound off</span>
+
+    <div class="header-actions">
+      <a class="resume-link" href="Sadik_Can_Ceska_Portfolio_CV_PrivacySafe.pdf" target="_blank" rel="noreferrer">Résumé <span aria-hidden="true">↗</span></a>
+      <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="mobile-menu">
+        <span></span><span></span>
       </button>
-      <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="mobileNav" aria-label="Open menu"><i></i><i></i></button>
     </div>
   </header>
 
-  <div class="mobile-nav" id="mobileNav" inert>
-    <a href="#graveyard"><small>01</small> Graves</a>
-    <a href="#catacombs"><small>02</small> Catacombs</a>
-    <a href="#dig"><small>03</small> Bury Something</a>
-    <p>Nothing on the internet truly dies.<br>It just stops loading.</p>
+  <div class="mobile-menu" id="mobile-menu" aria-hidden="true" inert>
+    <div class="mobile-menu-top">
+      <span>Navigation</span>
+      <span>Portfolio / <span class="current-year"></span></span>
+    </div>
+    <nav aria-label="Mobile navigation">
+      <a href="#work"><small>01</small><span>Work</span></a>
+      <a href="#experience"><small>02</small><span>Experience</span></a>
+      <a href="#practice"><small>03</small><span>Practice</span></a>
+      <a href="#about"><small>04</small><span>About</span></a>
+      <a href="#contact"><small>05</small><span>Contact</span></a>
+    </nav>
+    <div class="mobile-menu-bottom">
+      <a href="Sadik_Can_Ceska_Portfolio_CV_PrivacySafe.pdf" target="_blank" rel="noreferrer">Résumé ↗</a>
+      <a href="https://github.com/ceskasc" target="_blank" rel="noreferrer">GitHub ↗</a>
+    </div>
   </div>
 
-  <main>
-    <section class="gate" id="gate" aria-labelledby="gateTitle">
-      <div class="moon-wrap" id="moon" role="button" tabindex="0" aria-label="Moon">
-        <div class="moon"><span></span><span></span><span></span></div>
-        <div class="moon-halo"></div>
-      </div>
-      <div class="stars" aria-hidden="true"></div>
-      <div class="distant-crosses" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
-      <div class="fog fog-a" aria-hidden="true"></div>
-      <div class="fog fog-b" aria-hidden="true"></div>
-
-      <div class="gate-copy">
-        <p class="kicker"><span>EST. 1995</span><i></i><span>LAST UPDATED: NEVER</span></p>
-        <h1 id="gateTitle"><span>THE INTERNET</span><em>CEMETERY</em></h1>
-        <p class="intro">A quiet place for abandoned platforms, obsolete rituals, dead links, lost sounds and six-second memories.</p>
-        <a class="enter" href="#graveyard"><span>Enter the grounds</span><b>↓</b></a>
+  <main id="main-content">
+    <section class="hero section-shell" aria-labelledby="hero-title">
+      <div class="hero-rail reveal">
+        <span>Türkiye / UTC+3</span>
+        <span id="istanbul-time">Local time · --:--</span>
+        <span>Portfolio / <span class="current-year"></span></span>
       </div>
 
-      <div class="gate-meta">
-        <span>37° 44′ N / 26° 58′ E</span>
-        <span id="archiveClock">ARCHIVE TIME — --:--:--</span>
-        <span>VISITORS ARE BEING WATCHED*</span>
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow reveal">Full-stack software engineering · Product systems · Interface craft</p>
+          <h1 id="hero-title" class="reveal">
+            Software with
+            <span>clarity at the surface,</span>
+            <em>discipline underneath.</em>
+          </h1>
+          <div class="hero-bottom reveal">
+            <p>I design and engineer web products from interface behavior to application architecture — with a bias toward precise execution, maintainable systems, and useful details.</p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="#work"><span>View selected work</span><b aria-hidden="true">↓</b></a>
+              <a class="button button-secondary" href="Sadik_Can_Ceska_Portfolio_CV_PrivacySafe.pdf" target="_blank" rel="noreferrer"><span>View résumé / CV</span><b aria-hidden="true">↗</b></a>
+              <a class="button button-secondary" href="mailto:cnceska@gmail.com"><span>Start a conversation</span><b aria-hidden="true">↗</b></a>
+            </div>
+          </div>
+        </div>
+
+        <aside class="profile-panel reveal" aria-label="Profile summary">
+          <div class="profile-image-wrap">
+            <img src="profile-photo.webp" alt="Sadık Can Çeşka and Fatma Nur" width="720" height="720" fetchpriority="high" decoding="async" />
+          </div>
+          <div class="profile-meta">
+            <div><span>Name</span><strong>Sadık Can Çeşka</strong></div>
+            <div><span>Now</span><strong>Crytek · Freelance</strong></div>
+            <div><span>Focus</span><strong>Full-stack product engineering</strong></div>
+            <div><span>Core</span><strong>TypeScript · React · Node.js</strong></div>
+            <a href="https://github.com/ceskasc" target="_blank" rel="noreferrer">GitHub / @ceskasc <span aria-hidden="true">↗</span></a>
+          </div>
+        </aside>
       </div>
-      <div class="ground-front" aria-hidden="true"></div>
+
+      <div class="signal-bar reveal" aria-label="Portfolio signals">
+        <div><small>01</small><strong>Product judgment</strong><span>Scope before polish.</span></div>
+        <div><small>02</small><strong>Interface precision</strong><span>States, hierarchy, access, speed.</span></div>
+        <div><small>03</small><strong>Durable systems</strong><span>Readable architecture over novelty.</span></div>
+        <div><small>Live</small><strong id="repo-count">10 public repos</strong><span>GitHub snapshot connected.</span></div>
+      </div>
     </section>
 
-    <section class="manifesto section-shell" aria-label="Cemetery statement">
-      <p class="section-index">/ 000</p>
-      <p class="manifesto-line">Nothing on the internet truly dies. <em>It just stops loading.</em></p>
-      <div class="manifesto-note">
-        <span>NO ACCOUNT REQUIRED</span>
-        <span>NO COOKIES TO MOURN</span>
-        <span>OPEN AFTER MIDNIGHT</span>
-      </div>
+    <section class="manifesto section-shell" aria-label="Engineering statement">
+      <span class="manifesto-index reveal">/ 00</span>
+      <p class="manifesto-copy reveal">The goal is not more interface. It is <em>less friction,</em> better decisions, and software that keeps making sense after it ships.</p>
     </section>
 
-    <section class="graveyard" id="graveyard" aria-labelledby="graveyardTitle">
+    <section class="work" id="work" aria-labelledby="work-title">
       <div class="section-shell">
-        <div class="section-heading">
+        <div class="section-head reveal">
+          <div class="section-label"><span>01</span><i></i><small>Selected work</small></div>
           <div>
-            <p class="section-index">/ 001 — PUBLIC GROUNDS</p>
-            <h2 id="graveyardTitle">Here lie the things<br><em>we swore we'd never leave.</em></h2>
+            <h2 id="work-title">Public work,<br><em>edited for signal.</em></h2>
+            <p>No decorative mockups. No filler case studies. A concise view of projects, implementation focus, and source.</p>
           </div>
-          <p class="heading-copy">Tap a stone. Every grave still remembers one thing about being alive.</p>
         </div>
 
-        <div class="grave-filters" role="group" aria-label="Filter graves">
-          <button class="filter is-active" data-filter="all" type="button">All remains <span>12</span></button>
-          <button class="filter" data-filter="social" type="button">Social <span>4</span></button>
-          <button class="filter" data-filter="software" type="button">Software <span>5</span></button>
-          <button class="filter" data-filter="culture" type="button">Web culture <span>3</span></button>
+        <div class="project-ledger" id="project-grid" aria-live="polite">
+          <article class="project-feature reveal" data-repo="appanvil">
+            <div class="project-index">01</div>
+            <div class="project-main">
+              <div class="project-kicker"><span>Featured project</span><span data-project-language>TypeScript</span></div>
+              <h3>AppAnvil</h3>
+              <p>A product-focused TypeScript build centered on practical full-stack execution, clear structure, and maintainable implementation.</p>
+            </div>
+            <div class="project-side">
+              <div class="project-meta"><span data-project-date>Public repository</span><span data-project-stars>GitHub</span></div>
+              <a data-project-link href="https://github.com/ceskasc/appanvil" target="_blank" rel="noreferrer">View repository <span aria-hidden="true">↗</span></a>
+            </div>
+          </article>
+
+          <article class="project-row reveal" data-repo="NoirWave">
+            <div class="project-index">02</div>
+            <div class="project-main"><div class="project-kicker"><span>Web experience</span><span data-project-language>TypeScript</span></div><h3>NoirWave</h3><p>A visually driven TypeScript web experience exploring strong art direction, responsive composition, and interface craft.</p></div>
+            <div class="project-side"><div class="project-meta"><span data-project-date>Public repository</span><span data-project-stars>GitHub</span></div><a data-project-link href="https://github.com/ceskasc/NoirWave" target="_blank" rel="noreferrer">Open project <span aria-hidden="true">↗</span></a></div>
+          </article>
+
+          <article class="project-row reveal" data-repo="norform">
+            <div class="project-index">03</div>
+            <div class="project-main"><div class="project-kicker"><span>Product utility</span><span data-project-language>TypeScript</span></div><h3>Norform</h3><p>A compact TypeScript project focused on structured form experiences, dependable states, and low-friction user flows.</p></div>
+            <div class="project-side"><div class="project-meta"><span data-project-date>Public repository</span><span data-project-stars>GitHub</span></div><a data-project-link href="https://github.com/ceskasc/norform" target="_blank" rel="noreferrer">Open project <span aria-hidden="true">↗</span></a></div>
+          </article>
+
+          <article class="project-row reveal" data-repo="tetris">
+            <div class="project-index">04</div>
+            <div class="project-main"><div class="project-kicker"><span>Interactive build</span><span data-project-language>TypeScript</span></div><h3>Tetris</h3><p>A browser implementation of the classic game with TypeScript logic, responsive controls, and focused interaction design.</p></div>
+            <div class="project-side"><div class="project-meta"><span data-project-date>Public repository</span><span data-project-stars>GitHub</span></div><a data-project-link href="https://github.com/ceskasc/tetris" target="_blank" rel="noreferrer">Open project <span aria-hidden="true">↗</span></a></div>
+          </article>
+
+          <article class="project-row reveal" data-repo="qr-generator">
+            <div class="project-index">05</div>
+            <div class="project-main"><div class="project-kicker"><span>Web utility</span><span data-project-language>CSS</span></div><h3>QR Generator</h3><p>A direct QR utility designed around speed, clarity, and a deliberately low-friction web experience.</p></div>
+            <div class="project-side"><div class="project-meta"><span data-project-date>Public repository</span><span data-project-stars>GitHub</span></div><a data-project-link href="https://github.com/ceskasc/qr-generator" target="_blank" rel="noreferrer">Open project <span aria-hidden="true">↗</span></a></div>
+          </article>
+
+          <article class="project-row reveal" data-repo="architect-portfolio">
+            <div class="project-index">06</div>
+            <div class="project-main"><div class="project-kicker"><span>Editorial frontend</span><span data-project-language>CSS</span></div><h3>Architect Portfolio</h3><p>A presentation-focused portfolio experiment exploring hierarchy, responsive editorial composition, and visual restraint.</p></div>
+            <div class="project-side"><div class="project-meta"><span data-project-date>Public repository</span><span data-project-stars>GitHub</span></div><a data-project-link href="https://github.com/ceskasc/architect-portfolio" target="_blank" rel="noreferrer">Open project <span aria-hidden="true">↗</span></a></div>
+          </article>
         </div>
 
-        <div class="graves-grid" id="gravesGrid">
-          <button class="grave grave-tall" data-id="msn" data-category="social" type="button" aria-label="Open MSN Messenger memorial">
-            <span class="grave-icon">☻</span><small>1999 — 2013</small><strong>MSN<br>MESSENGER</strong><i>“nudge me one last time.”</i><b>RIP 001</b>
-          </button>
-          <button class="grave grave-round" data-id="flash" data-category="software" type="button" aria-label="Open Adobe Flash Player memorial">
-            <span class="grave-icon">⚡</span><small>1996 — 2020</small><strong>ADOBE<br>FLASH</strong><i>“allow plugin?”</i><b>RIP 002</b>
-          </button>
-          <button class="grave grave-cross" data-id="ie" data-category="software" type="button" aria-label="Open Internet Explorer memorial">
-            <span class="grave-icon">e</span><small>1995 — 2022</small><strong>INTERNET<br>EXPLORER</strong><i>“downloading Chrome… 3%”</i><b>RIP 003</b>
-          </button>
-          <button class="grave grave-slab" data-id="vine" data-category="social" type="button" aria-label="Open Vine memorial">
-            <span class="grave-icon">V</span><small>2013 — 2017</small><strong>VINE</strong><i>“six seconds was enough.”</i><b>RIP 004</b>
-          </button>
-          <button class="grave grave-tall" data-id="winamp" data-category="software" type="button" aria-label="Open Winamp memorial">
-            <span class="grave-icon">▰</span><small>1997 — ∞</small><strong>WINAMP<br>ERA</strong><i>“it really whipped.”</i><b>RIP 005</b>
-          </button>
-          <button class="grave grave-round" data-id="limewire" data-category="culture" type="button" aria-label="Open LimeWire memorial">
-            <span class="grave-icon">⌁</span><small>2000 — 2010</small><strong>LIMEWIRE</strong><i>“song.mp3.exe”</i><b>RIP 006</b>
-          </button>
-          <button class="grave grave-slab" data-id="myspace" data-category="social" type="button" aria-label="Open MySpace memorial">
-            <span class="grave-icon">♟</span><small>2003 — 2008*</small><strong>MYSPACE<br>TOP 8</strong><i>“friendship, ranked publicly.”</i><b>RIP 007</b>
-          </button>
-          <button class="grave grave-cross" data-id="googleplus" data-category="social" type="button" aria-label="Open Google Plus memorial">
-            <span class="grave-icon">g+</span><small>2011 — 2019</small><strong>GOOGLE+</strong><i>“you were in 47 circles.”</i><b>RIP 008</b>
-          </button>
-          <button class="grave grave-round" data-id="yahoo" data-category="software" type="button" aria-label="Open Yahoo Messenger memorial">
-            <span class="grave-icon">Y!</span><small>1998 — 2018</small><strong>YAHOO!<br>MESSENGER</strong><i>“BUZZ!!!”</i><b>RIP 009</b>
-          </button>
-          <button class="grave grave-tall" data-id="orkut" data-category="culture" type="button" aria-label="Open Orkut memorial">
-            <span class="grave-icon">○</span><small>2004 — 2014</small><strong>ORKUT</strong><i>“testimonials were forever.”</i><b>RIP 010</b>
-          </button>
-          <button class="grave grave-slab" data-id="guestbook" data-category="culture" type="button" aria-label="Open Guestbook memorial">
-            <span class="grave-icon">✎</span><small>1994 — ???</small><strong>WEBSITE<br>GUESTBOOKS</strong><i>“cool site!!! sign mine?”</i><b>RIP 011</b>
-          </button>
-          <button class="grave grave-cross" data-id="realplayer" data-category="software" type="button" aria-label="Open RealPlayer memorial">
-            <span class="grave-icon">▶</span><small>1995 — 2000s</small><strong>REAL<br>PLAYER</strong><i>“buffering was a lifestyle.”</i><b>RIP 012</b>
-          </button>
+        <div class="work-footer reveal">
+          <p>More experiments, utilities, and earlier iterations live on GitHub.</p>
+          <a href="https://github.com/ceskasc?tab=repositories" target="_blank" rel="noreferrer">Browse all repositories <span aria-hidden="true">↗</span></a>
         </div>
       </div>
     </section>
 
-    <section class="catacombs" id="catacombs" aria-labelledby="catacombsTitle">
-      <div class="catacomb-wall" aria-hidden="true"></div>
-      <div class="section-shell catacomb-inner">
-        <div class="section-heading inverted">
+    <section class="experience section-shell" id="experience" aria-labelledby="experience-title">
+      <div class="section-head reveal">
+        <div class="section-label"><span>02</span><i></i><small>Experience</small></div>
+        <div>
+          <h2 id="experience-title">Built across<br><em>different scales.</em></h2>
+          <p>A professional path through established technology organizations and independent client work — currently at Crytek while continuing a parallel freelance practice.</p>
+        </div>
+      </div>
+
+      <div class="experience-ledger" aria-label="Professional experience">
+        <article class="experience-row is-current reveal">
+          <span class="experience-index">01</span>
+          <div class="experience-company"><small>Current</small><h3>Crytek</h3></div>
+          <div class="experience-context"><strong>Professional role</strong><span>Current chapter</span></div>
+          <span class="experience-state"><i></i> Now</span>
+        </article>
+        <article class="experience-row is-current reveal">
+          <span class="experience-index">02</span>
+          <div class="experience-company"><small>Independent</small><h3>Freelance</h3></div>
+          <div class="experience-context"><strong>Software & digital product work</strong><span>Parallel practice</span></div>
+          <span class="experience-state"><i></i> Active</span>
+        </article>
+        <article class="experience-row reveal">
+          <span class="experience-index">03</span>
+          <div class="experience-company"><small>Previous</small><h3>NeoGroup</h3></div>
+          <div class="experience-context"><strong>Professional experience</strong><span>Previous chapter</span></div>
+          <span class="experience-state">03 / 05</span>
+        </article>
+        <article class="experience-row reveal">
+          <span class="experience-index">04</span>
+          <div class="experience-company"><small>Previous</small><h3>Yandex</h3></div>
+          <div class="experience-context"><strong>Professional experience</strong><span>Earlier chapter</span></div>
+          <span class="experience-state">04 / 05</span>
+        </article>
+        <article class="experience-row reveal">
+          <span class="experience-index">05</span>
+          <div class="experience-company"><small>Earlier</small><h3>A.S.A.M</h3></div>
+          <div class="experience-context"><strong>Professional experience</strong><span>Starting chapter</span></div>
+          <span class="experience-state">05 / 05</span>
+        </article>
+      </div>
+
+      <div class="experience-route reveal" aria-label="Career sequence">
+        <span>A.S.A.M</span><i>→</i><span>Yandex</span><i>→</i><span>NeoGroup</span><i>→</i><strong>Crytek</strong><em>+</em><strong>Freelance</strong>
+      </div>
+    </section>
+
+    <section class="practice section-shell" id="practice" aria-labelledby="practice-title">
+      <div class="section-head reveal">
+        <div class="section-label"><span>03</span><i></i><small>Practice</small></div>
+        <div>
+          <h2 id="practice-title">Across the stack,<br><em>one quality bar.</em></h2>
+          <p>I work where product, interface, and application architecture meet — because the seams are usually where quality is won or lost.</p>
+        </div>
+      </div>
+
+      <div class="practice-grid">
+        <article class="practice-card reveal"><span>01 / Interface</span><h3>Interaction systems</h3><p>Responsive UI, component architecture, accessibility, motion, typography, and state design that make a product feel intentional.</p><div><small>React</small><small>Next.js</small><small>TypeScript</small><small>CSS systems</small></div></article>
+        <article class="practice-card reveal"><span>02 / Application</span><h3>Product infrastructure</h3><p>APIs, authentication, data flow, integrations, and backend boundaries designed to stay legible as the product changes.</p><div><small>Node.js</small><small>APIs</small><small>Auth</small><small>Data flow</small></div></article>
+        <article class="practice-card reveal"><span>03 / Delivery</span><h3>Engineering judgment</h3><p>Scoping, trade-offs, implementation strategy, and shipping the highest-value version without quietly creating tomorrow’s debt.</p><div><small>Architecture</small><small>Product thinking</small><small>Quality</small><small>Iteration</small></div></article>
+      </div>
+    </section>
+
+    <section class="about" id="about" aria-labelledby="about-title">
+      <div class="section-shell about-shell">
+        <div class="section-head reveal">
+          <div class="section-label"><span>04</span><i></i><small>About</small></div>
+          <div><h2 id="about-title">A bias for clarity.<br><em>A taste for detail.</em></h2></div>
+        </div>
+
+        <div class="about-grid">
+          <div class="about-copy reveal">
+            <p class="about-lead">The best software feels obvious to use and surprisingly uneventful to maintain.</p>
+            <p>I care about clean boundaries, useful defaults, responsive behavior, keyboard access, loading and empty states, performance, and the dozens of small decisions that create trust.</p>
+            <p>My preference is simple: fewer fragile abstractions, stronger fundamentals, and enough visual discipline that the product — not the decoration — stays in focus.</p>
+          </div>
+          <div class="principle-list reveal">
+            <article><span>01</span><div><strong>Make structure legible.</strong><p>Readable systems are easier to extend, debug, and hand over.</p></div></article>
+            <article><span>02</span><div><strong>Design behavior, not decoration.</strong><p>States, timing, hierarchy, and feedback are part of the product.</p></div></article>
+            <article><span>03</span><div><strong>Prefer durable over clever.</strong><p>A strong solution should still make sense after the initial excitement is gone.</p></div></article>
+          </div>
+        </div>
+
+        <div class="technology-rail reveal" aria-label="Technology focus">
+          <span>TypeScript</span><i>/</i><span>React</span><i>/</i><span>Next.js</span><i>/</i><span>Node.js</span><i>/</i><span>APIs</span><i>/</i><span>Product UI</span><i>/</i><span>Systems thinking</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact section-shell" id="contact" aria-labelledby="contact-title">
+      <div class="contact-card reveal">
+        <div class="contact-meta"><span>05 / Contact</span><span id="contact-time">Türkiye · --:--</span></div>
+        <div class="contact-grid">
+          <h2 id="contact-title">Build something<br><em>worth keeping.</em></h2>
           <div>
-            <p class="section-index">/ 002 — CATACOMBS</p>
-            <h2 id="catacombsTitle">Artifacts recovered<br><em>from the old web.</em></h2>
+            <p>For product engineering, collaboration, or a thoughtful conversation about software, reach me directly.</p>
+            <div class="contact-actions">
+              <a class="button button-light" href="mailto:cnceska@gmail.com"><span>cnceska@gmail.com</span><b aria-hidden="true">↗</b></a>
+              <a class="button button-dark-outline" href="https://github.com/ceskasc" target="_blank" rel="noreferrer"><span>GitHub</span><b aria-hidden="true">↗</b></a>
+            </div>
           </div>
-          <p class="heading-copy">Some things didn't need a platform. They were the platform.</p>
-        </div>
-
-        <div class="artifact-grid">
-          <article class="artifact modem" tabindex="0">
-            <div class="artifact-top"><span>56K MODEM</span><small>ARTIFACT A01</small></div>
-            <div class="modem-box"><i></i><i></i><i></i><i></i><b>56K</b></div>
-            <p>Before the feed came a ritual: clicks, static, a scream from the phone line — and then, maybe, the internet.</p>
-            <button type="button" data-artifact="modem">Reconstruct handshake ↗</button>
-          </article>
-          <article class="artifact cursor-card" tabindex="0">
-            <div class="artifact-top"><span>CURSOR TRAILS</span><small>ARTIFACT A02</small></div>
-            <div class="cursor-demo" id="cursorDemo"><span>✦</span><span>✧</span><span>✦</span><span>✧</span><b>↖</b></div>
-            <p>Your cursor didn't simply point. It sparkled, glittered, burned, snowed and announced your entire personality.</p>
-            <button type="button" data-artifact="cursor">Enable terrible cursor ↗</button>
-          </article>
-          <article class="artifact counter-card" tabindex="0">
-            <div class="artifact-top"><span>HIT COUNTER</span><small>ARTIFACT A03</small></div>
-            <div class="counter" id="hitCounter" aria-label="Visitor counter">0001337</div>
-            <p>Analytics before analytics. Every visitor mattered because the number visibly went up by one.</p>
-            <button type="button" data-artifact="counter">Become visitor #1338 ↗</button>
-          </article>
-          <article class="artifact under-construction" tabindex="0">
-            <div class="artifact-top"><span>UNDER CONSTRUCTION</span><small>ARTIFACT A04</small></div>
-            <div class="construction-sign"><span>⚠</span><b>UNDER<br>CONSTRUCTION</b><span>⚠</span></div>
-            <p>The original product roadmap. A permanent promise that something better was almost here.</p>
-            <button type="button" data-artifact="construction">Check again in 1998 ↗</button>
-          </article>
         </div>
       </div>
-    </section>
-
-    <section class="dig" id="dig" aria-labelledby="digTitle">
-      <div class="section-shell dig-grid">
-        <div class="dig-copy">
-          <p class="section-index">/ 003 — PRIVATE PLOT</p>
-          <h2 id="digTitle">Bury something<br><em>you stopped opening.</em></h2>
-          <p>Every browser remembers a different internet. Add one thing from yours. The grave stays on this device — just like a memory nobody else can verify.</p>
-          <div class="plot-number"><span>YOUR PLOT</span><b id="plotNumber">#????</b></div>
-        </div>
-
-        <form class="burial-form" id="burialForm">
-          <label>
-            <span>WHAT ARE WE BURYING?</span>
-            <input id="burialName" name="name" maxlength="24" placeholder="e.g. AIM away messages" autocomplete="off" required />
-          </label>
-          <label>
-            <span>EPITAPH</span>
-            <input id="burialEpitaph" name="epitaph" maxlength="52" placeholder="e.g. brb never came back" autocomplete="off" required />
-          </label>
-          <label>
-            <span>LAST SEEN</span>
-            <input id="burialYear" name="year" inputmode="numeric" maxlength="9" placeholder="e.g. 2012" autocomplete="off" />
-          </label>
-          <button class="bury-button" type="submit"><span>Dig the grave</span><b>†</b></button>
-          <p class="form-note">Stored locally in your browser. No account. No database. No resurrection.</p>
-        </form>
-
-        <div class="personal-plot" id="personalPlot" hidden aria-live="polite">
-          <div class="fresh-soil"></div>
-          <div class="personal-stone">
-            <small id="personalYear">???? — 2026</small>
-            <strong id="personalName">YOUR DEAD THING</strong>
-            <i id="personalEpitaph">“gone, apparently.”</i>
-            <b id="personalPlotNo">PLOT #0000</b>
-          </div>
-          <button id="removeGrave" type="button">Exhume this memory</button>
-        </div>
-      </div>
-    </section>
-
-    <section class="last-page" aria-label="Final message">
-      <div class="last-moon" aria-hidden="true"></div>
-      <p>YOU HAVE REACHED<br>THE END OF THE INTERNET.</p>
-      <h2>Please close your browser<br><em>and go outside.</em></h2>
-      <a href="#gate">Return to the gate ↑</a>
-      <small>CURATED IN THE DARK BY <a href="https://github.com/ceskasc" target="_blank" rel="noreferrer">CESKA ↗</a> · 2026</small>
     </section>
   </main>
 
-  <dialog class="memorial" id="memorial" aria-labelledby="memorialName">
-    <div class="memorial-shell">
-      <div class="memorial-bar">
-        <span id="memorialCode">MEMORIAL / 001</span>
-        <button id="closeMemorial" type="button" aria-label="Close memorial">Close ×</button>
-      </div>
-      <div class="memorial-grid">
-        <div class="memorial-copy">
-          <p id="memorialYears">1999—2013</p>
-          <h2 id="memorialName">MSN Messenger</h2>
-          <p id="memorialText">The little green person who knew exactly when your crush came online.</p>
-          <div class="memorial-stats" id="memorialStats"></div>
-        </div>
-        <div class="memorial-experience" id="memorialExperience" aria-live="polite"></div>
-      </div>
-      <div class="memorial-foot"><span>Click anywhere inside the exhibit.</span><span>ESC TO LEAVE</span></div>
-    </div>
-  </dialog>
+  <footer class="site-footer section-shell">
+    <div class="footer-identity"><strong>Sadık Can Çeşka</strong><span>Software Engineer · Türkiye</span></div>
+    <div class="footer-meta"><span>© <span class="current-year"></span></span><span>Designed and engineered with intent.</span></div>
+    <a href="#top">Back to top <span aria-hidden="true">↑</span></a>
+  </footer>
 
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <div class="trail" id="trail" aria-hidden="true"></div>
-
-  <script src="cemetery.js" defer></script>
+  <script src="script.js" defer></script>
 </body>
 </html>
