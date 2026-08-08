@@ -1,0 +1,67 @@
+name: Upscale relationship photos
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/upscale-us-images.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  upscale:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install image tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y imagemagick webp
+
+      - name: Upscale and sharpen relationship photos
+        shell: bash
+        run: |
+          set -euo pipefail
+          files=(
+            us/assets/film.webp
+            us/assets/konya.webp
+            us/assets/heart.webp
+            us/assets/night.webp
+            us/assets/coffee.webp
+          )
+
+          for file in "${files[@]}"; do
+            test -f "$file"
+            echo "Before: $(identify -format '%f %wx%h %b' "$file")"
+            tmp="${file%.webp}.hq.webp"
+            convert "$file" \
+              -filter Lanczos \
+              -resize 200% \
+              -unsharp 0x0.78+0.78+0.008 \
+              -strip \
+              -quality 88 \
+              "$tmp"
+            mv "$tmp" "$file"
+            echo "After:  $(identify -format '%f %wx%h %b' "$file")"
+          done
+
+      - name: Commit upgraded assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add us/assets/film.webp us/assets/konya.webp us/assets/heart.webp us/assets/night.webp us/assets/coffee.webp
+          if git diff --cached --quiet; then
+            echo 'No image changes to commit.'
+            exit 0
+          fi
+          git commit -m 'fix(us): upscale relationship photos'
+          git pull --rebase origin main
+          git push origin HEAD:main
