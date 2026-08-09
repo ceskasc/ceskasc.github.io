@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+<defs><radialGradient id="g"><stop stop-color="#302752"/><stop offset=".55" stop-color="#12111b"/><stop offset="1" stop-color="#070709"/></radialGradient><filter id="b"><feGaussianBlur stdDeviation="18"/></filter></defs>
+<rect width="1200" height="630" fill="url(#g)"/>
+<circle cx="835" cy="315" r="184" fill="none" stroke="#b8ffea" stroke-opacity=".22" stroke-width="35" filter="url(#b)"/>
+<circle cx="835" cy="315" r="184" fill="none" stroke="#f6f2ea" stroke-width="3"/>
+<text x="100" y="260" fill="#f6f2ea" font-family="Arial, sans-serif" font-size="88" font-weight="600" letter-spacing="-4">DRAW</text>
+<text x="100" y="345" fill="#f6f2ea" font-family="Georgia, serif" font-size="96" font-style="italic">perfection.</text>
+<text x="104" y="410" fill="#aaa5b4" font-family="Arial, sans-serif" font-size="22" letter-spacing="6">CÍRCLE — AN INTERACTIVE EXPERIMENT</text>
+</svg>

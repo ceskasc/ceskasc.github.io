@@ -1,0 +1,10 @@
+{
+  "name": "CÍRCLE — Draw perfection",
+  "short_name": "CÍRCLE",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#070709",
+  "theme_color": "#070709",
+  "description": "How close can your hand get to a perfect circle?",
+  "icons": []
+}

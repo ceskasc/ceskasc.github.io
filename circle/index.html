@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+  <meta name="theme-color" content="#070709" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="description" content="CÍRCLE — Draw perfection. A tiny interactive experiment in human geometry." />
+  <meta property="og:title" content="CÍRCLE — Draw perfection" />
+  <meta property="og:description" content="How close can your hand get to a perfect circle?" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="./og.svg" />
+  <title>CÍRCLE — Draw perfection.</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <canvas id="field" aria-hidden="true"></canvas>
+  <canvas id="draw" aria-label="Drawing surface"></canvas>
+  <div id="grain" aria-hidden="true"></div>
+  <div id="vignette" aria-hidden="true"></div>
+  <header class="topbar">
+    <button class="brand" id="brandButton" type="button" aria-label="Return home"><span class="brand-mark" aria-hidden="true"></span><span>CÍRCLE</span></button>
+    <div class="topbar-right"><span id="bestBadge" class="best-badge" hidden>BEST <strong>—</strong></span><button id="soundButton" class="icon-button" type="button" aria-label="Toggle sound" aria-pressed="true"><span class="sound-icon" aria-hidden="true"></span></button></div>
+  </header>
+  <main id="app" class="app">
+    <section id="intro" class="screen screen-intro is-active" aria-labelledby="introTitle">
+      <div class="eyebrow reveal">AN INTERACTIVE GEOMETRY EXPERIMENT</div>
+      <h1 id="introTitle" class="hero reveal">Draw<br><em>perfection.</em></h1>
+      <p class="lede reveal">One stroke. No guides. We measure how close your hand gets to mathematical purity.</p>
+      <button id="beginButton" class="primary-button magnetic reveal" type="button"><span>BEGIN</span><span class="button-orbit" aria-hidden="true"></span></button>
+      <div class="microcopy reveal">Best on touch. Works beautifully with a mouse.</div>
+    </section>
+    <section id="ready" class="screen screen-ready" aria-labelledby="readyTitle">
+      <div class="ready-wrap"><div class="orbital-hint" aria-hidden="true"><span></span><span></span></div><div class="eyebrow">ONE CONTINUOUS STROKE</div><h2 id="readyTitle">Draw a circle<br><em>anywhere.</em></h2><p>Touch and hold. Close the loop. Release when you’re done.</p></div>
+      <div id="touchHint" class="touch-hint"><span></span> START DRAWING</div>
+    </section>
+    <section id="result" class="screen screen-result" aria-live="polite">
+      <div class="result-copy"><div id="resultKicker" class="eyebrow">YOUR CIRCLE</div><div class="score-line"><span id="scoreValue">0.000</span><span class="percent">%</span></div><h2 id="verdict">ANALYZING</h2><p id="resultNote" class="result-note">Your stroke is being compared against its ideal mathematical fit.</p></div>
+      <div class="metrics" aria-label="Circle analysis"><div class="metric"><span>CIRCULARITY</span><strong id="mCircularity">—</strong></div><div class="metric"><span>CLOSURE</span><strong id="mClosure">—</strong></div><div class="metric"><span>SYMMETRY</span><strong id="mSymmetry">—</strong></div><div class="metric"><span>FLOW</span><strong id="mFlow">—</strong></div></div>
+      <div class="result-actions"><button id="againButton" class="primary-button magnetic" type="button"><span>TRY AGAIN</span><span class="button-orbit" aria-hidden="true"></span></button><button id="shareButton" class="secondary-button" type="button">SHARE RESULT</button></div>
+      <div id="personalBest" class="personal-best" hidden>NEW DEVICE BEST</div>
+    </section>
+  </main>
+  <aside id="drawHud" class="draw-hud" aria-hidden="true"><span id="pointCount">000</span><span class="hud-line"></span><span>RAW HAND DATA</span></aside>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
