@@ -3,22 +3,38 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
-  <meta name="theme-color" content="#030304" />
+  <meta name="theme-color" content="#050508" />
   <meta name="color-scheme" content="dark" />
   <meta name="description" content="CÍRCLE — A real-time experiment in human geometry." />
   <meta property="og:title" content="CÍRCLE — Draw perfection" />
   <meta property="og:description" content="One stroke. No guide. How close can your hand get to a perfect circle?" />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="./og.svg" />
+  <meta property="og:image" content="./og.svg?v=3" />
   <title>CÍRCLE — Human Geometry</title>
-  <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
-  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="icon" href="./favicon.svg?v=3" type="image/svg+xml" />
+  <link rel="manifest" href="./manifest.webmanifest?v=3" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Inter+Tight:opsz,wght@14..32,300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./styles.css" />
+  <style>
+    html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#050508;color:#f2f1ed;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    body:before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at 62% 35%,rgba(117,92,207,.18),transparent 34%),radial-gradient(circle at 24% 72%,rgba(73,197,181,.12),transparent 30%),#050508;z-index:-2}
+    .stage{position:fixed;inset:0;z-index:10}.scene{position:absolute;inset:0}.scene:not(.is-active){display:none}.scene-intro.is-active{display:grid;color:#f2f1ed}
+    body.mobile-safe #field{display:none!important}
+    body.boot-failed #field{display:none!important}body.boot-failed .scene-intro{display:grid!important;opacity:1!important;visibility:visible!important}
+  </style>
+  <link rel="stylesheet" href="./styles.css?v=3" />
 </head>
 <body data-mode="intro">
+  <script>
+    (()=>{
+      const ua=navigator.userAgent||'';
+      if(/Android|SamsungBrowser|; wv\)|\bwv\b/i.test(ua)) document.body.classList.add('mobile-safe');
+      if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(rs=>rs.forEach(r=>r.unregister())).catch(()=>{});}
+      if('caches' in window){caches.keys().then(keys=>keys.filter(k=>k.startsWith('circle-')).forEach(k=>caches.delete(k))).catch(()=>{});}
+      window.__circleBootTimer=setTimeout(()=>document.body.classList.add('boot-failed'),2200);
+    })();
+  </script>
   <canvas id="field" aria-hidden="true"></canvas>
   <canvas id="draw" aria-label="Circle drawing surface"></canvas>
   <div class="optics" aria-hidden="true"></div>
@@ -42,6 +58,6 @@
     </section>
   </main>
   <aside class="telemetry" id="drawHud" aria-hidden="true"><span>TRACE</span><b id="pointCount">000</b><i></i><span>COALESCED POINTER DATA</span></aside><div class="draw-command" id="drawCommand" aria-hidden="true">KEEP THE LOOP CONTINUOUS</div><div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script type="module" src="./main.js"></script>
+  <script type="module" src="./main.js?v=3"></script>
 </body>
 </html>
