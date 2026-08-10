@@ -11,6 +11,19 @@ const tx={
  verifying:tr?'İZ DOĞRULANIYOR…':'VERIFYING TRACE…',verified:tr?'DOĞRULANDI':'VERIFIED',local:tr?'YALNIZCA YEREL':'LOCAL ONLY',
  loading:tr?'ARŞİV OKUNUYOR…':'READING THE ARCHIVE…',empty:tr?'Henüz doğrulanmış iz yok. İlk iz seninki olabilir.':'No verified traces yet. Yours could be the first.'
 };
+const staticCopy=tr?{
+ verificationLabel:'GLOBAL ARŞİV',rankLabel:'DÜNYA SIRASI',identityLabel:'KİMLİK',openArchive:'ARŞİVİ AÇ',
+ identityEyebrow:'İZDEN ÖNCE, BİR İSİM.',identityTitle:'ARŞİV SENİ<br><em>NASIL HATIRLASIN?</em>',identityCopy:'Herkese açık bir takma ad seç. E-posta, telefon numarası veya hesap gerekmez.',nicknameLabel:'HERKESE AÇIK İSİM',claimIdentity:'BU KİMLİĞİ AL',privacyNote:'Bu ismi aynı cihazda sana bağlamak için rastgele bir cihaz kimliği yalnızca bu cihazda saklanır.',
+ archiveTitle:'İZLER ARŞİVİ',archiveSubtitle:'Her el geride bir iz bırakır.',archivePlayers:'ELLER',archiveAttempts:'İZLER',archiveBest:'EN YAKIN',archiveScore:'YAKINLIK',archiveLoading:'ARŞİV OKUNUYOR…',archiveFoot:'Burada her kimliğin yalnızca en iyi doğrulanmış izi görünür.'
+}:{
+ verificationLabel:'GLOBAL ARCHIVE',rankLabel:'WORLD RANK',identityLabel:'IDENTITY',openArchive:'OPEN THE ARCHIVE',
+ identityEyebrow:'BEFORE THE TRACE, A NAME.',identityTitle:'HOW SHOULD THE<br><em>ARCHIVE REMEMBER YOU?</em>',identityCopy:'Choose a public pseudonym. No email, phone number or account is required.',nicknameLabel:'PUBLIC NAME',claimIdentity:'CLAIM THIS IDENTITY',privacyNote:'A random device ID stays on this device so this name remains associated with you here.',
+ archiveTitle:'THE ARCHIVE',archiveSubtitle:'Every hand leaves a trace.',archivePlayers:'HANDS',archiveAttempts:'TRACES',archiveBest:'CLOSEST',archiveScore:'PROXIMITY',archiveLoading:'READING THE ARCHIVE…',archiveFoot:'Only each identity’s best verified trace appears here.'
+};
+for(const [key,value] of Object.entries(staticCopy)){
+  document.querySelectorAll(`[data-i18n="${key}"]`).forEach(el=>el.textContent=value);
+  document.querySelectorAll(`[data-i18n-html="${key}"]`).forEach(el=>el.innerHTML=value);
+}
 let install=localStorage.getItem(INSTALL);if(!install||!/^[0-9a-f-]{36}$/i.test(install)){install=crypto.randomUUID();localStorage.setItem(INSTALL,install)}
 let name=localStorage.getItem(NAME)||'',challenge=null,challengePromise=null,points=[],drawing=false,lastArchive=null,pendingStart=false;
 const gate=$('identityGate'),nick=$('nicknameInput'),err=$('identityError'),confirm=$('identityConfirm'),close=$('identityClose'),playerBadge=$('playerBadge'),archive=$('archiveOverlay'),list=$('archiveList'),verify=$('verifyState'),rank=$('worldRank'),identity=$('resultIdentity');
