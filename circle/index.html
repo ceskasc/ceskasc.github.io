@@ -2,49 +2,46 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
-  <meta name="theme-color" content="#070709" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
+  <meta name="theme-color" content="#030304" />
   <meta name="color-scheme" content="dark" />
-  <meta name="description" content="CÍRCLE — Draw perfection. A tiny interactive experiment in human geometry." />
+  <meta name="description" content="CÍRCLE — A real-time experiment in human geometry." />
   <meta property="og:title" content="CÍRCLE — Draw perfection" />
-  <meta property="og:description" content="How close can your hand get to a perfect circle?" />
+  <meta property="og:description" content="One stroke. No guide. How close can your hand get to a perfect circle?" />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="./og.svg" />
-  <title>CÍRCLE — Draw perfection.</title>
+  <title>CÍRCLE — Human Geometry</title>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
   <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Inter+Tight:opsz,wght@14..32,300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./styles.css" />
 </head>
-<body>
+<body data-mode="intro">
   <canvas id="field" aria-hidden="true"></canvas>
-  <canvas id="draw" aria-label="Drawing surface"></canvas>
-  <div id="grain" aria-hidden="true"></div>
-  <div id="vignette" aria-hidden="true"></div>
-  <header class="topbar">
-    <button class="brand" id="brandButton" type="button" aria-label="Return home"><span class="brand-mark" aria-hidden="true"></span><span>CÍRCLE</span></button>
-    <div class="topbar-right"><span id="bestBadge" class="best-badge" hidden>BEST <strong>—</strong></span><button id="soundButton" class="icon-button" type="button" aria-label="Toggle sound" aria-pressed="true"><span class="sound-icon" aria-hidden="true"></span></button></div>
+  <canvas id="draw" aria-label="Circle drawing surface"></canvas>
+  <div class="optics" aria-hidden="true"></div>
+  <div class="noise" aria-hidden="true"></div>
+  <div class="cursor" id="cursor" aria-hidden="true"><i></i></div>
+  <header class="chrome">
+    <button class="wordmark" id="brandButton" type="button" aria-label="Return to intro"><span class="wordmark-orb" aria-hidden="true"></span><span>CÍRCLE</span><small>01</small></button>
+    <div class="chrome-meta"><span id="bestBadge" class="best" hidden>PB <b>—</b></span><span class="render-tag">REAL-TIME / GPU</span><button class="sound" id="soundButton" type="button" aria-label="Toggle sound" aria-pressed="true"><span></span><span></span><span></span></button></div>
   </header>
-  <main id="app" class="app">
-    <section id="intro" class="screen screen-intro is-active" aria-labelledby="introTitle">
-      <div class="eyebrow reveal">AN INTERACTIVE GEOMETRY EXPERIMENT</div>
-      <h1 id="introTitle" class="hero reveal">Draw<br><em>perfection.</em></h1>
-      <p class="lede reveal">One stroke. No guides. We measure how close your hand gets to mathematical purity.</p>
-      <button id="beginButton" class="primary-button magnetic reveal" type="button"><span>BEGIN</span><span class="button-orbit" aria-hidden="true"></span></button>
-      <div class="microcopy reveal">Best on touch. Works beautifully with a mouse.</div>
+  <main class="stage">
+    <section class="scene scene-intro is-active" id="intro" aria-labelledby="introTitle">
+      <div class="intro-index">EXPERIMENT / 001</div>
+      <div class="intro-core"><p class="kicker">A STUDY OF HUMAN IMPRECISION</p><h1 id="introTitle"><span>DRAW</span><em>PERFECTION</em></h1><div class="intro-copy"><p>One continuous gesture. No guide, no correction. Your stroke is compared to its mathematical ideal in real time.</p><button id="beginButton" class="enter magnetic" type="button"><span class="enter-label">ENTER EXPERIMENT</span><span class="enter-disc" aria-hidden="true"><i></i></span></button></div></div>
+      <div class="intro-foot"><span>TOUCH / POINTER</span><span>WEBGL2 / CANVAS / AUDIO</span></div>
     </section>
-    <section id="ready" class="screen screen-ready" aria-labelledby="readyTitle">
-      <div class="ready-wrap"><div class="orbital-hint" aria-hidden="true"><span></span><span></span></div><div class="eyebrow">ONE CONTINUOUS STROKE</div><h2 id="readyTitle">Draw a circle<br><em>anywhere.</em></h2><p>Touch and hold. Close the loop. Release when you’re done.</p></div>
-      <div id="touchHint" class="touch-hint"><span></span> START DRAWING</div>
+    <section class="scene scene-ready" id="ready" aria-labelledby="readyTitle">
+      <div class="ready-reticle" aria-hidden="true"><i></i><i></i><i></i></div><div class="ready-copy"><p class="kicker">ONE STROKE ONLY</p><h2 id="readyTitle">PRESS.<br><em>DRAW.</em><br>RELEASE.</h2><p>Draw anywhere. The interface disappears when your hand takes over.</p></div><div class="ready-status"><span class="live-dot"></span><span>WAITING FOR GESTURE</span></div>
     </section>
-    <section id="result" class="screen screen-result" aria-live="polite">
-      <div class="result-copy"><div id="resultKicker" class="eyebrow">YOUR CIRCLE</div><div class="score-line"><span id="scoreValue">0.000</span><span class="percent">%</span></div><h2 id="verdict">ANALYZING</h2><p id="resultNote" class="result-note">Your stroke is being compared against its ideal mathematical fit.</p></div>
-      <div class="metrics" aria-label="Circle analysis"><div class="metric"><span>CIRCULARITY</span><strong id="mCircularity">—</strong></div><div class="metric"><span>CLOSURE</span><strong id="mClosure">—</strong></div><div class="metric"><span>SYMMETRY</span><strong id="mSymmetry">—</strong></div><div class="metric"><span>FLOW</span><strong id="mFlow">—</strong></div></div>
-      <div class="result-actions"><button id="againButton" class="primary-button magnetic" type="button"><span>TRY AGAIN</span><span class="button-orbit" aria-hidden="true"></span></button><button id="shareButton" class="secondary-button" type="button">SHARE RESULT</button></div>
-      <div id="personalBest" class="personal-best" hidden>NEW DEVICE BEST</div>
+    <section class="scene scene-result" id="result" aria-live="polite">
+      <div class="result-eyebrow"><span>MEASUREMENT COMPLETE</span><span id="resultIndex">RUN / 001</span></div><div class="result-grid"><div class="result-score"><span class="score-label">GEOMETRIC FIDELITY</span><div class="score"><span id="scoreValue">0.000</span><sup>%</sup></div><h2 id="verdict">ANALYZING.</h2><p id="resultNote">Your stroke is being compared against its ideal mathematical fit.</p></div><div class="result-metrics" aria-label="Circle analysis"><div><span>RADIAL</span><b id="mCircularity">—</b></div><div><span>CLOSURE</span><b id="mClosure">—</b></div><div><span>SYMMETRY</span><b id="mSymmetry">—</b></div><div><span>FLOW</span><b id="mFlow">—</b></div></div></div><div class="result-bottom"><div id="personalBest" class="new-best" hidden>NEW PERSONAL BEST</div><div class="result-actions"><button id="againButton" class="text-action magnetic" type="button">DRAW AGAIN <span>↗</span></button><button id="shareButton" class="text-action" type="button">SHARE RESULT <span>↗</span></button></div></div>
     </section>
   </main>
-  <aside id="drawHud" class="draw-hud" aria-hidden="true"><span id="pointCount">000</span><span class="hud-line"></span><span>RAW HAND DATA</span></aside>
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <aside class="telemetry" id="drawHud" aria-hidden="true"><span>TRACE</span><b id="pointCount">000</b><i></i><span>COALESCED POINTER DATA</span></aside><div class="draw-command" id="drawCommand" aria-hidden="true">KEEP THE LOOP CONTINUOUS</div><div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script type="module" src="./main.js"></script>
 </body>
 </html>
