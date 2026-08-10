@@ -15,6 +15,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./styles.css?v=9.1" />
+  <link rel="stylesheet" href="./archive.css?v=10" />
 </head>
 <body data-mode="intro">
   <div class="atmosphere" aria-hidden="true"><i class="glow g1"></i><i class="glow g2"></i><i class="noise"></i></div>
@@ -25,7 +26,7 @@
       <span class="brand-glyph" aria-hidden="true"><i></i></span>
       <span><strong>EIDOS</strong><small>THE DISTANCE TO AN IDEA</small></span>
     </button>
-    <div class="meta"><span id="localeBadge">EN</span><span>01</span><span id="bestBadge" hidden>PB <b>—</b></span></div>
+    <div class="meta"><span id="localeBadge">EN</span><button id="archiveButton" class="meta-button" type="button">ARCHIVE</button><span id="playerBadge" hidden>—</span><span id="bestBadge" hidden>PB <b>—</b></span></div>
   </header>
 
   <main class="app">
@@ -62,7 +63,7 @@
         <h2 data-i18n-html="readyTitle">DRAW WHAT<br><em>YOU REMEMBER.</em></h2>
         <p class="lede" data-i18n="readyLede">One continuous gesture. Draw a large closed circle and release when the form feels complete.</p>
       </div>
-      <div class="ready-status"><span class="pulse"></span><span data-i18n="awaiting">TOUCH ANYWHERE TO BEGIN</span><i></i><span data-i18n="oneStroke">ONE TRACE</span></div>
+      <div class="ready-status"><span class="pulse"></span><span id="readyStatusText" data-i18n="awaiting">TOUCH ANYWHERE TO BEGIN</span><i></i><span data-i18n="oneStroke">ONE TRACE</span></div>
     </section>
 
     <section id="result" class="scene result" aria-live="polite">
@@ -91,15 +92,50 @@
             <button id="againButton" class="action primary" type="button"><span data-i18n="again">TRY AGAIN</span><i>→</i></button>
             <button id="shareButton" class="action" type="button"><span data-i18n="share">SHARE TRACE</span><i>↗</i></button>
           </div>
+          <div class="global-proof">
+            <div><span data-i18n="verificationLabel">GLOBAL ARCHIVE</span><b id="verifyState">LOCAL / PENDING</b></div>
+            <div><span data-i18n="rankLabel">WORLD RANK</span><b id="worldRank">—</b></div>
+            <div><span data-i18n="identityLabel">IDENTITY</span><b id="resultIdentity">—</b></div>
+          </div>
+          <button id="resultArchiveButton" class="archive-call" type="button"><span data-i18n="openArchive">OPEN THE ARCHIVE</span><i>↗</i></button>
           <div id="newBest" class="new-best" hidden data-i18n="newBest">NEW PERSONAL BEST / STORED ON THIS DEVICE</div>
         </div>
       </div>
     </section>
   </main>
 
+
+  <section id="identityGate" class="identity-gate" aria-hidden="true">
+    <div class="identity-card">
+      <button id="identityClose" class="overlay-close" type="button" aria-label="Close">×</button>
+      <span class="overlay-index">EIDOS / IDENTITY</span>
+      <div class="identity-symbol" aria-hidden="true"><i></i><b></b></div>
+      <p class="eyebrow" data-i18n="identityEyebrow">BEFORE THE TRACE, A NAME.</p>
+      <h2 data-i18n-html="identityTitle">HOW SHOULD THE<br><em>ARCHIVE REMEMBER YOU?</em></h2>
+      <p class="identity-copy" data-i18n="identityCopy">Choose a public pseudonym. No email, phone number or account is required.</p>
+      <label class="name-field"><span data-i18n="nicknameLabel">PUBLIC NAME</span><input id="nicknameInput" maxlength="20" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="AION" /></label>
+      <p id="identityError" class="field-error" aria-live="polite"></p>
+      <button id="identityConfirm" class="cta identity-confirm" type="button"><span data-i18n="claimIdentity">CLAIM THIS IDENTITY</span><i>→</i></button>
+      <p class="privacy-note" data-i18n="privacyNote">A random device ID is stored locally so this name stays yours on this device.</p>
+    </div>
+  </section>
+
+  <section id="archiveOverlay" class="archive-overlay" aria-hidden="true">
+    <div class="archive-shell">
+      <header class="archive-head">
+        <div><span class="overlay-index">EIDOS / GLOBAL</span><h2 data-i18n="archiveTitle">THE ARCHIVE</h2><p data-i18n="archiveSubtitle">Every hand leaves a trace.</p></div>
+        <button id="archiveClose" class="overlay-close" type="button" aria-label="Close">×</button>
+      </header>
+      <div class="archive-stats"><div><span data-i18n="archivePlayers">HANDS</span><b id="archivePlayers">—</b></div><div><span data-i18n="archiveAttempts">TRACES</span><b id="archiveAttempts">—</b></div><div><span data-i18n="archiveBest">CLOSEST</span><b id="archiveBest">—</b></div></div>
+      <div class="archive-column-head"><span># / IDENTITY</span><span data-i18n="archiveScore">PROXIMITY</span></div>
+      <div id="archiveList" class="archive-list"><div class="archive-empty" data-i18n="archiveLoading">READING THE ARCHIVE…</div></div>
+      <p class="archive-foot" data-i18n="archiveFoot">Only each identity’s best verified trace appears here.</p>
+    </div>
+  </section>
   <aside id="traceHud" class="trace-hud" aria-hidden="true"><span data-i18n="liveTrace">LIVE TRACE</span><b id="pointCount">000</b><i></i><span data-i18n="dontThink">DON'T CORRECT IT.</span></aside>
   <div class="whisper" data-i18n="whisper">LET THE HAND ANSWER BEFORE THE MIND DOES.</div>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script type="module" src="./main.js?v=9.1"></script>
+  <script type="module" src="./archive.js?v=10"></script>
 </body>
 </html>
