@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./styles.css?v=9" />
+  <link rel="stylesheet" href="./styles.css?v=9.1" />
 </head>
 <body data-mode="intro">
   <div class="atmosphere" aria-hidden="true"><i class="glow g1"></i><i class="glow g2"></i><i class="noise"></i></div>
@@ -70,6 +70,7 @@
         <div class="result-head"><div><span data-i18n="resultHead">IDEA / TRACE</span><b id="traceId">TRACE / ----</b></div><span id="runLabel">RUN / 001</span></div>
 
         <div id="resultVisual" class="result-visual" aria-hidden="true">
+          <canvas id="resultCanvas" class="result-canvas"></canvas>
           <span class="ideal-label" data-i18n="ideal">IDEAL</span><span class="trace-label" data-i18n="trace">TRACE</span>
           <div class="result-ring"></div><div class="result-axis x"></div><div class="result-axis y"></div>
         </div>
@@ -99,6 +100,6 @@
   <aside id="traceHud" class="trace-hud" aria-hidden="true"><span data-i18n="liveTrace">LIVE TRACE</span><b id="pointCount">000</b><i></i><span data-i18n="dontThink">DON'T CORRECT IT.</span></aside>
   <div class="whisper" data-i18n="whisper">LET THE HAND ANSWER BEFORE THE MIND DOES.</div>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <script type="module" src="./main.js?v=9"></script>
+  <script type="module" src="./main.js?v=9.1"></script>
 </body>
 </html>
