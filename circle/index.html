@@ -3,101 +3,102 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
-  <meta name="theme-color" content="#0b0908" />
+  <meta name="theme-color" content="#090807" />
   <meta name="color-scheme" content="dark" />
-  <meta name="description" content="EIDOS — a philosophical drawing game about the distance between the ideal and the human hand." />
-  <meta property="og:title" content="EIDOS — The ideal circle lives first in thought" />
-  <meta property="og:description" content="Draw a circle from memory and measure how closely matter can approach an idea." />
+  <meta name="description" content="EIDOS — a philosophical drawing game about the distance between an ideal form and the human hand." />
+  <meta property="og:title" content="EIDOS — How close can the hand come to an idea?" />
+  <meta property="og:description" content="Draw a circle from memory. Measure the distance between ideal form and human trace." />
   <meta property="og:type" content="website" />
-  <title>EIDOS — A Study of Form</title>
+  <title>EIDOS — The Distance to an Idea</title>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./styles.css?v=8" />
+  <link rel="stylesheet" href="./styles.css?v=9" />
 </head>
 <body data-mode="intro">
-  <div class="world" aria-hidden="true">
-    <div class="light light-a"></div>
-    <div class="light light-b"></div>
-    <div class="aura aura-a"></div>
-    <div class="aura aura-b"></div>
-    <div class="veil"></div>
-    <div class="grain"></div>
-  </div>
+  <div class="atmosphere" aria-hidden="true"><i class="glow g1"></i><i class="glow g2"></i><i class="noise"></i></div>
   <canvas id="draw" aria-label="Circle drawing surface"></canvas>
 
   <header class="chrome">
     <button id="homeButton" class="brand" type="button" aria-label="Return to start">
-      <span class="brand-mark" aria-hidden="true"><i></i><u></u></span>
-      <span class="brand-text"><strong>EIDOS</strong><small>THE FORM OF THINGS</small></span>
+      <span class="brand-glyph" aria-hidden="true"><i></i></span>
+      <span><strong>EIDOS</strong><small>THE DISTANCE TO AN IDEA</small></span>
     </button>
-    <div class="meta"><span id="localeBadge">EN</span><span>EPOCH / 01</span><span id="bestBadge" hidden>PB <b>—</b></span></div>
+    <div class="meta"><span id="localeBadge">EN</span><span>01</span><span id="bestBadge" hidden>PB <b>—</b></span></div>
   </header>
 
   <main class="app">
     <section id="intro" class="scene intro is-active">
-      <div class="orbital" aria-hidden="true">
-        <span class="orbit o1"></span><span class="orbit o2"></span><span class="orbit o3"></span>
-        <span class="orbit-line"></span><span class="orbit-node"></span>
-        <span class="ideal-word">IDEA</span><span class="matter-word">MATTER</span>
+      <div class="visual-stage" aria-hidden="true">
+        <div class="eidos-orbit">
+          <span class="ring ring-1"></span><span class="ring ring-2"></span><span class="ring ring-3"></span>
+          <span class="axis axis-x"></span><span class="axis axis-y"></span><span class="gold-arc"></span><span class="node"></span>
+        </div>
+        <span class="visual-label label-a">IDEA</span><span class="visual-label label-b">MATTER</span>
       </div>
-      <div class="chapter">I / PROLOGUE</div>
-      <div class="intro-copy">
-        <p class="micro" data-i18n="introMicro">A PHILOSOPHICAL GAME ABOUT FORM, ERROR &amp; MEMORY</p>
-        <h1 data-i18n-html="introTitle">EVERY PERFECT<br>CIRCLE LIVES FIRST<br><em>IN THOUGHT.</em></h1>
-        <p class="lede" data-i18n="introLede">Can the hand imitate what the mind calls perfect? Draw one circle from memory. We will measure the distance between the ideal and the trace you leave behind.</p>
+
+      <div class="copy-stage">
+        <p class="eyebrow" data-i18n="introMicro">A PHILOSOPHICAL GAME ABOUT FORM &amp; IMPERFECTION</p>
+        <h1 data-i18n-html="introTitle">HOW CLOSE CAN<br>THE HAND COME<br><em>TO AN IDEA?</em></h1>
+        <p class="lede" data-i18n="introLede">Draw one circle from memory. EIDOS measures the distance between the perfect form you imagine and the human trace you actually leave.</p>
       </div>
-      <div class="intro-foot">
-        <p class="axiom"><span>THESIS / 01</span><b data-i18n="axiom">Perfection belongs to ideas. Error belongs to living things.</b></p>
-        <button id="startButton" class="enter" type="button"><span data-i18n="enter">BEGIN THE TRIAL</span><i>↗</i></button>
+
+      <div class="bottom-stage">
+        <p class="axiom"><span>THESIS / 01</span><b data-i18n="axiom">Perfection is imagined. The trace is lived.</b></p>
+        <button id="startButton" class="cta" type="button"><span data-i18n="enter">ENTER EIDOS</span><i>↗</i></button>
       </div>
     </section>
 
     <section id="ready" class="scene ready">
-      <div class="dial" aria-hidden="true">
-        <span class="dial-ring d1"></span><span class="dial-ring d2"></span><span class="dial-ring d3"></span>
-        <span class="dial-axis x"></span><span class="dial-axis y"></span><span class="dial-core"></span>
+      <div class="visual-stage ready-visual" aria-hidden="true">
+        <div class="eidos-orbit target">
+          <span class="ring ring-1"></span><span class="ring ring-2"></span><span class="ring ring-3"></span>
+          <span class="axis axis-x"></span><span class="axis axis-y"></span><span class="node center-node"></span>
+        </div>
       </div>
-      <div class="ready-copy">
-        <p class="micro" data-i18n="readyMicro">DO NOT CORRECT THE HAND</p>
-        <h2 data-i18n-html="readyTitle">DRAW THE IDEA<br><em>FROM MEMORY.</em></h2>
-        <p data-i18n="readyLede">One continuous gesture. Draw one large closed circle. Release at the exact moment it feels complete.</p>
+      <div class="copy-stage ready-copy">
+        <p class="eyebrow" data-i18n="readyMicro">NO GUIDE. NO CORRECTION.</p>
+        <h2 data-i18n-html="readyTitle">DRAW WHAT<br><em>YOU REMEMBER.</em></h2>
+        <p class="lede" data-i18n="readyLede">One continuous gesture. Draw a large closed circle and release when the form feels complete.</p>
       </div>
-      <div class="ready-foot"><span class="pulse"></span><span data-i18n="awaiting">THE CANVAS IS WAITING</span><i></i><span data-i18n="oneStroke">ONE GESTURE ONLY</span></div>
+      <div class="ready-status"><span class="pulse"></span><span data-i18n="awaiting">TOUCH ANYWHERE TO BEGIN</span><i></i><span data-i18n="oneStroke">ONE TRACE</span></div>
     </section>
 
     <section id="result" class="scene result" aria-live="polite">
-      <div class="result-head"><div><span data-i18n="resultHead">IDEA / MATTER</span><b id="traceId">TRACE / ----</b></div><span id="runLabel">RUN / 001</span></div>
-      <div id="resultVisual" class="result-visual" aria-hidden="true">
-        <span class="ideal-label" data-i18n="ideal">IDEAL</span><span class="trace-label" data-i18n="trace">TRACE</span>
-        <div class="result-halo"></div><div class="result-cross"></div>
-      </div>
-      <div class="result-sheet">
-        <span class="score-kicker" data-i18n="scoreKicker">PROXIMITY TO THE IDEA</span>
-        <div class="score"><strong id="scoreValue">0.000</strong><sup>%</sup></div>
-        <h2 id="verdict">—</h2>
-        <p id="resultNote">—</p>
-        <div class="thesis"><span data-i18n="thesisLabel">THESIS</span><p id="thesisText">—</p></div>
-        <div class="metrics">
-          <div><span data-i18n="radial">RADIAL ERROR</span><b id="mRadial">—</b></div>
-          <div><span data-i18n="closure">CLOSURE</span><b id="mClosure">—</b></div>
-          <div><span data-i18n="coverage">COVERAGE</span><b id="mCoverage">—</b></div>
-          <div><span data-i18n="path">PATH EXCESS</span><b id="mPath">—</b></div>
+      <div class="result-scroll">
+        <div class="result-head"><div><span data-i18n="resultHead">IDEA / TRACE</span><b id="traceId">TRACE / ----</b></div><span id="runLabel">RUN / 001</span></div>
+
+        <div id="resultVisual" class="result-visual" aria-hidden="true">
+          <span class="ideal-label" data-i18n="ideal">IDEAL</span><span class="trace-label" data-i18n="trace">TRACE</span>
+          <div class="result-ring"></div><div class="result-axis x"></div><div class="result-axis y"></div>
         </div>
-        <div class="actions">
-          <button id="againButton" class="action primary" type="button"><span data-i18n="again">TRY AGAIN</span><i>→</i></button>
-          <button id="shareButton" class="action" type="button"><span data-i18n="share">SHARE THE TRACE</span><i>↗</i></button>
+
+        <div class="result-sheet">
+          <span class="score-kicker" data-i18n="scoreKicker">DISTANCE TO THE IDEA</span>
+          <div class="score"><strong id="scoreValue">0.000</strong><sup>%</sup></div>
+          <h2 id="verdict">—</h2>
+          <p id="resultNote">—</p>
+          <div class="thesis"><span data-i18n="thesisLabel">THESIS</span><p id="thesisText">—</p></div>
+          <div class="metrics">
+            <div><span data-i18n="radial">RADIAL ERROR</span><b id="mRadial">—</b></div>
+            <div><span data-i18n="closure">CLOSURE</span><b id="mClosure">—</b></div>
+            <div><span data-i18n="coverage">COVERAGE</span><b id="mCoverage">—</b></div>
+            <div><span data-i18n="path">PATH EXCESS</span><b id="mPath">—</b></div>
+          </div>
+          <div class="actions">
+            <button id="againButton" class="action primary" type="button"><span data-i18n="again">TRY AGAIN</span><i>→</i></button>
+            <button id="shareButton" class="action" type="button"><span data-i18n="share">SHARE TRACE</span><i>↗</i></button>
+          </div>
+          <div id="newBest" class="new-best" hidden data-i18n="newBest">NEW PERSONAL BEST / STORED ON THIS DEVICE</div>
         </div>
-        <div id="newBest" class="new-best" hidden data-i18n="newBest">NEW PERSONAL BEST / STORED ON THIS DEVICE</div>
       </div>
     </section>
   </main>
 
-  <aside id="traceHud" class="trace-hud" aria-hidden="true"><span data-i18n="liveTrace">LIVE TRACE</span><b id="pointCount">000</b><i></i><span data-i18n="dontThink">LET THE HAND DECIDE.</span></aside>
-  <div class="whisper" data-i18n="whisper">THE MIND NAMES THE FORM. THE HAND TESTS IT.</div>
+  <aside id="traceHud" class="trace-hud" aria-hidden="true"><span data-i18n="liveTrace">LIVE TRACE</span><b id="pointCount">000</b><i></i><span data-i18n="dontThink">DON'T CORRECT IT.</span></aside>
+  <div class="whisper" data-i18n="whisper">LET THE HAND ANSWER BEFORE THE MIND DOES.</div>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-
-  <script type="module" src="./main.js?v=8"></script>
+  <script type="module" src="./main.js?v=9"></script>
 </body>
 </html>
