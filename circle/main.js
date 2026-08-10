@@ -20,3 +20,4 @@ function makeCard(a){return new Promise((resolve,reject)=>{const c=document.crea
 share.onclick=async()=>{if(!current)return;try{const blob=await makeCard(current),file=new File([blob],`circle-${current.score.toFixed(3)}.png`,{type:'image/png'}),text=`${current.score.toFixed(3)}% geometric fidelity. Can you beat it?`;if(navigator.canShare?.({files:[file]}))await navigator.share({title:'CIRCLE',text,files:[file]});else if(navigator.share)await navigator.share({title:'CIRCLE',text,url:location.href});else{await navigator.clipboard.writeText(`${text} ${location.href}`);msg('LINK COPIED')}}catch(e){if(e?.name!=='AbortError')msg('SHARING UNAVAILABLE')}};
 addEventListener('resize',()=>draw.resize());
 loadBest();
+if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=4',{updateViaCache:'none'}).catch(()=>{}));
