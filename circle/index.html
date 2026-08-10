@@ -3,119 +3,95 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
-  <meta name="theme-color" content="#070706" />
+  <meta name="theme-color" content="#090908" />
   <meta name="color-scheme" content="dark" />
-  <meta name="description" content="CÍRCLE — Perfection is not human. Draw one circle and turn your imperfection into a poster." />
-  <meta property="og:title" content="CÍRCLE — Perfection is not human" />
-  <meta property="og:description" content="One stroke. No guide. Your hand becomes the artwork." />
+  <meta name="description" content="FORM — Can the hand approach a perfect idea? Draw one circle and measure the distance between form and matter." />
+  <meta property="og:title" content="FORM — The circle exists first as an idea" />
+  <meta property="og:description" content="Draw from memory. Measure the distance between the ideal and the human hand." />
   <meta property="og:type" content="website" />
-  <title>CÍRCLE — Perfection is not human</title>
+  <title>FORM — Circle / Matter</title>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="./styles.css?v=6" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css?v=7" />
 </head>
 <body data-mode="intro">
-  <div class="film" aria-hidden="true">
-    <div class="flare"></div>
-    <div class="haze"></div>
-    <div class="scanline"></div>
-    <div class="grain"></div>
+  <div class="world" aria-hidden="true">
+    <div class="light light-a"></div><div class="light light-b"></div>
+    <div class="veil"></div><div class="grain"></div>
   </div>
-
   <canvas id="draw" aria-label="Circle drawing surface"></canvas>
 
   <header class="chrome">
-    <button id="homeButton" class="wordmark" type="button" aria-label="Return to start">
-      <svg viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="8.7"/><path d="M14 2.5a11.5 11.5 0 0 1 10.7 7.3"/><circle class="brand-node" cx="24.5" cy="9.6" r="1.8"/></svg>
-      <span>CÍRCLE</span>
+    <button id="homeButton" class="brand" type="button" aria-label="Return to start">
+      <span class="brand-mark" aria-hidden="true"><i></i></span><span>FORM</span>
     </button>
-    <div class="chrome-meta">
-      <span class="edition">HUMAN ERROR / 006</span>
-      <span id="bestBadge" class="pb" hidden>PB <b>—</b></span>
-    </div>
+    <div class="meta"><span id="localeBadge">EN</span><span>STUDY / 01</span><span id="bestBadge" hidden>PB <b>—</b></span></div>
   </header>
 
   <main class="app">
-    <section id="intro" class="scene scene-intro is-active">
-      <svg class="hero-sigil" viewBox="0 0 520 520" aria-hidden="true">
-        <circle class="sigil-ghost" cx="260" cy="260" r="205"/>
-        <circle class="sigil-dash" cx="260" cy="260" r="166"/>
-        <path class="sigil-hot" d="M260 55a205 205 0 0 1 196 145"/>
-        <path class="sigil-hot sigil-hot-b" d="M86 367a205 205 0 0 1-27-104"/>
-        <path class="sigil-cross" d="M260 18v80M260 422v80M18 260h80M422 260h80"/>
-        <circle class="sigil-core" cx="260" cy="260" r="4"/>
-        <circle class="sigil-node" cx="456" cy="200" r="6"/>
-      </svg>
-
-      <div class="intro-number" aria-hidden="true">01</div>
+    <section id="intro" class="scene intro is-active">
+      <div class="orbital" aria-hidden="true">
+        <span class="orbit o1"></span><span class="orbit o2"></span><span class="orbit o3"></span><span class="orbit-node"></span>
+        <span class="ideal-word">IDEAL</span><span class="matter-word">MATTER</span>
+      </div>
+      <div class="chapter">I</div>
       <div class="intro-copy">
-        <p class="micro">AN INTERACTIVE STUDY / ONE GESTURE</p>
-        <h1><span>PERFECTION</span><span>IS NOT</span><em>HUMAN.</em></h1>
-        <p class="lede">Draw a circle from instinct. We measure the error — then turn it into your own digital artifact.</p>
+        <p class="micro" data-i18n="introMicro">A SMALL EXPERIMENT ABOUT FORM &amp; IMPERFECTION</p>
+        <h1 data-i18n-html="introTitle">THE CIRCLE<br>EXISTS FIRST<br><em>AS AN IDEA.</em></h1>
+        <p class="lede" data-i18n="introLede">Can the body imitate what the mind calls perfect? Draw one circle from memory. We will measure the distance between the ideal and your hand.</p>
       </div>
-
-      <div class="intro-footer">
-        <div class="manifesto"><span class="signal-dot"></span><p><b>NO GUIDE. NO ACCOUNT.</b><small>One stroke becomes one signature.</small></p></div>
-        <button id="startButton" class="launch" type="button"><span>PROVE IT WRONG</span><i aria-hidden="true">↗</i></button>
+      <div class="intro-foot">
+        <p class="axiom"><span>AXIOM / 01</span><b data-i18n="axiom">Perfection belongs to ideas. Error belongs to living things.</b></p>
+        <button id="startButton" class="enter" type="button"><span data-i18n="enter">ENTER THE QUESTION</span><i>↗</i></button>
       </div>
     </section>
 
-    <section id="ready" class="scene scene-ready">
-      <svg class="ready-sigil" viewBox="0 0 480 480" aria-hidden="true">
-        <path class="r-arc arc-a" d="M240 42a198 198 0 0 1 187 133"/>
-        <path class="r-arc arc-b" d="M421 321a198 198 0 0 1-126 108"/>
-        <path class="r-arc arc-c" d="M117 396a198 198 0 0 1-66-172"/>
-        <circle class="r-inner" cx="240" cy="240" r="74"/>
-        <path class="r-cross" d="M240 0v94M240 386v94M0 240h94M386 240h94"/>
-        <circle class="r-core" cx="240" cy="240" r="3"/>
-      </svg>
+    <section id="ready" class="scene ready">
+      <div class="dial" aria-hidden="true">
+        <span class="dial-ring d1"></span><span class="dial-ring d2"></span><span class="dial-ring d3"></span>
+        <span class="dial-axis x"></span><span class="dial-axis y"></span><span class="dial-core"></span>
+      </div>
       <div class="ready-copy">
-        <p class="micro">THE SCREEN IS YOUR CANVAS</p>
-        <h2>DRAW<br><em>ON INSTINCT.</em></h2>
-        <p>Touch anywhere. Make one large closed loop. Release when it feels complete.</p>
+        <p class="micro" data-i18n="readyMicro">DO NOT CORRECT YOURSELF</p>
+        <h2 data-i18n-html="readyTitle">DRAW FROM<br><em>MEMORY.</em></h2>
+        <p data-i18n="readyLede">One continuous gesture. Make a large closed loop and release when the shape feels complete.</p>
       </div>
-      <div class="ready-footer"><span class="pulse"></span><span>AWAITING TRACE</span><i></i><span>ONE STROKE ONLY</span></div>
+      <div class="ready-foot"><span class="pulse"></span><span data-i18n="awaiting">AWAITING THE HAND</span><i></i><span data-i18n="oneStroke">ONE STROKE</span></div>
     </section>
 
-    <section id="result" class="scene scene-result" aria-live="polite">
-      <div class="result-head">
-        <div><span>YOUR HUMAN SIGNATURE</span><b id="traceId">TRACE / ----</b></div>
-        <span id="runLabel">RUN / 001</span>
+    <section id="result" class="scene result" aria-live="polite">
+      <div class="result-head"><div><span data-i18n="resultHead">FORM / MATTER</span><b id="traceId">TRACE / ----</b></div><span id="runLabel">RUN / 001</span></div>
+      <div id="resultVisual" class="result-visual" aria-hidden="true">
+        <span class="ideal-label" data-i18n="ideal">IDEAL</span><span class="trace-label" data-i18n="trace">TRACE</span>
+        <div class="result-halo"></div><div class="result-cross"></div>
       </div>
-
-      <div id="resultArt" class="result-art" aria-hidden="true">
-        <div class="artifact-aura"></div>
-        <span class="artifact-index">H/01</span>
-        <span id="artifactClass" class="artifact-class">CLASS / HUMAN</span>
-      </div>
-
       <div class="result-sheet">
-        <div class="score-block">
-          <span class="score-label">GEOMETRIC FIDELITY</span>
-          <div class="score"><strong id="scoreValue">0.000</strong><sup>%</sup></div>
-          <h2 id="verdict">MEASURED.</h2>
-          <p id="resultNote">Your trace compared against its mathematical ideal.</p>
+        <span class="score-kicker" data-i18n="scoreKicker">PROXIMITY TO THE IDEAL</span>
+        <div class="score"><strong id="scoreValue">0.000</strong><sup>%</sup></div>
+        <h2 id="verdict">—</h2>
+        <p id="resultNote">—</p>
+        <div class="thesis"><span data-i18n="thesisLabel">THESIS</span><p id="thesisText">—</p></div>
+        <div class="metrics">
+          <div><span data-i18n="radial">RADIAL ERROR</span><b id="mRadial">—</b></div>
+          <div><span data-i18n="closure">CLOSURE</span><b id="mClosure">—</b></div>
+          <div><span data-i18n="coverage">COVERAGE</span><b id="mCoverage">—</b></div>
+          <div><span data-i18n="path">PATH EXCESS</span><b id="mPath">—</b></div>
         </div>
-
-        <div class="metrics" aria-label="Circle analysis">
-          <div><span>RADIAL</span><b id="mCircularity">—</b></div>
-          <div><span>CLOSURE</span><b id="mClosure">—</b></div>
-          <div><span>SYMMETRY</span><b id="mSymmetry">—</b></div>
-          <div><span>FLOW</span><b id="mFlow">—</b></div>
+        <div class="actions">
+          <button id="againButton" class="action primary" type="button"><span data-i18n="again">QUESTION AGAIN</span><i>→</i></button>
+          <button id="shareButton" class="action" type="button"><span data-i18n="share">SHARE THE TRACE</span><i>↗</i></button>
         </div>
-
-        <div class="result-actions">
-          <button id="againButton" class="action primary" type="button"><span>DRAW AGAIN</span><i>→</i></button>
-          <button id="shareButton" class="action poster" type="button"><span>SHARE POSTER</span><i>↗</i></button>
-        </div>
-        <div id="newBest" class="new-best" hidden>NEW PERSONAL BEST / RECORDED LOCALLY</div>
+        <div id="newBest" class="new-best" hidden data-i18n="newBest">NEW PERSONAL BEST / STORED ON THIS DEVICE</div>
       </div>
     </section>
   </main>
 
-  <aside id="traceHud" class="trace-hud" aria-hidden="true"><span>LIVE TRACE</span><b id="pointCount">000</b><i></i><span>DON'T THINK</span></aside>
-  <div class="drawing-whisper" aria-hidden="true">LET THE HAND FINISH IT.</div>
+  <aside id="traceHud" class="trace-hud" aria-hidden="true"><span data-i18n="liveTrace">LIVE TRACE</span><b id="pointCount">000</b><i></i><span data-i18n="dontThink">DON'T THINK. CONTINUE.</span></aside>
+  <div class="whisper" data-i18n="whisper">THE HAND KNOWS BEFORE THE MIND CORRECTS IT.</div>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-  <script type="module" src="./main.js?v=6"></script>
+  <script type="module" src="./main.js?v=7"></script>
 </body>
 </html>
