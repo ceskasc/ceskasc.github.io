@@ -1,67 +1,79 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
-  <meta name="theme-color" content="#050508" />
-  <meta name="color-scheme" content="dark" />
-  <meta name="description" content="CÍRCLE — A real-time experiment in human geometry." />
-  <meta property="og:title" content="CÍRCLE — Draw perfection" />
-  <meta property="og:description" content="One stroke. No guide. How close can your hand get to a perfect circle?" />
-  <meta property="og:type" content="website" />
-  <meta property="og:image" content="./og.svg?v=3" />
-  <title>CÍRCLE — Human Geometry</title>
-  <link rel="icon" href="./favicon.svg?v=3" type="image/svg+xml" />
-  <link rel="manifest" href="./manifest.webmanifest?v=3" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Inter+Tight:opsz,wght@14..32,300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
-  <style>
-    html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#050508;color:#f2f1ed;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-    body:before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at 62% 35%,rgba(117,92,207,.18),transparent 34%),radial-gradient(circle at 24% 72%,rgba(73,197,181,.12),transparent 30%),#050508;z-index:-2}
-    .stage{position:fixed;inset:0;z-index:10}.scene{position:absolute;inset:0}.scene:not(.is-active){display:none}.scene-intro.is-active{display:grid;color:#f2f1ed}
-    body.mobile-safe #field{display:none!important}
-    body.boot-failed #field{display:none!important}body.boot-failed[data-mode="intro"] .scene-intro{display:grid!important;opacity:1!important;visibility:visible!important}
-  </style>
-  <link rel="stylesheet" href="./styles.css?v=3" />
+  <meta name="theme-color" content="#f3f0e8" />
+  <meta name="color-scheme" content="light" />
+  <meta name="description" content="CIRCLE — Draw one perfect circle. A minimal experiment in human precision." />
+  <title>CIRCLE — Human Precision</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="./styles.css?v=4" />
 </head>
 <body data-mode="intro">
-  <script>
-    (()=>{
-      const ua=navigator.userAgent||'';
-      if(/Android|SamsungBrowser|; wv\)|\bwv\b/i.test(ua)) document.body.classList.add('mobile-safe');
-      if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(rs=>rs.forEach(r=>r.unregister())).catch(()=>{});}
-      if('caches' in window){caches.keys().then(keys=>keys.filter(k=>k.startsWith('circle-')).forEach(k=>caches.delete(k))).catch(()=>{});}
-      window.__circleBootTimer=setTimeout(()=>document.body.classList.add('boot-failed'),2200);
-    })();
-  </script>
-  <canvas id="field" aria-hidden="true"></canvas>
+  <div class="paper" aria-hidden="true"></div>
   <canvas id="draw" aria-label="Circle drawing surface"></canvas>
-  <div class="optics" aria-hidden="true"></div>
-  <div class="noise" aria-hidden="true"></div>
-  <div class="cursor" id="cursor" aria-hidden="true"><i></i></div>
-  <header class="chrome">
-    <button class="wordmark" id="brandButton" type="button" aria-label="Return to intro"><span class="wordmark-orb" aria-hidden="true"></span><span>CÍRCLE</span><small>01</small></button>
-    <div class="chrome-meta"><span id="bestBadge" class="best" hidden>PB <b>—</b></span><span class="render-tag">REAL-TIME / GPU</span><button class="sound" id="soundButton" type="button" aria-label="Toggle sound" aria-pressed="true"><span></span><span></span><span></span></button></div>
+
+  <header class="topbar">
+    <button id="homeButton" class="brand" type="button" aria-label="Return to start">
+      <span class="brand-ring" aria-hidden="true"></span>
+      <span>CIRCLE</span>
+    </button>
+    <div class="top-meta">
+      <span>EXPERIMENT 01</span>
+      <span id="bestBadge" hidden>PB <b>—</b></span>
+    </div>
   </header>
-  <main class="stage">
-    <section class="scene scene-intro is-active" id="intro" aria-labelledby="introTitle">
-      <div class="intro-index">EXPERIMENT / 001</div>
-      <div class="intro-core"><p class="kicker">A STUDY OF HUMAN IMPRECISION</p><h1 id="introTitle"><span>DRAW</span><em>PERFECTION</em></h1><div class="intro-copy"><p>One continuous gesture. No guide, no correction. Your stroke is compared to its mathematical ideal in real time.</p><button id="beginButton" class="enter magnetic" type="button"><span class="enter-label">ENTER EXPERIMENT</span><span class="enter-disc" aria-hidden="true"><i></i></span></button></div></div>
-      <div class="intro-foot"><span>TOUCH / POINTER</span><span>WEBGL2 / CANVAS / AUDIO</span></div>
+
+  <main class="app">
+    <section id="intro" class="scene scene-intro is-active">
+      <div class="intro-mark" aria-hidden="true"><span></span><i></i></div>
+      <div class="intro-copy">
+        <p class="eyebrow">HUMAN PRECISION / ONE GESTURE</p>
+        <h1>Draw a<br><em>perfect</em><br>circle.</h1>
+        <p class="intro-text">No guide. No correction. One continuous stroke measured against its mathematical ideal.</p>
+      </div>
+      <div class="intro-bottom">
+        <div class="device-note"><span></span><b>TOUCH OPTIMIZED</b><small>Pointer data sampled at native rate</small></div>
+        <button id="startButton" class="start-button" type="button"><span>START</span><i aria-hidden="true">↗</i></button>
+      </div>
     </section>
-    <section class="scene scene-ready" id="ready" aria-labelledby="readyTitle">
-      <div class="ready-reticle" aria-hidden="true"><i></i><i></i><i></i></div><div class="ready-copy"><p class="kicker">ONE STROKE ONLY</p><h2 id="readyTitle">PRESS.<br><em>DRAW.</em><br>RELEASE.</h2><p>Draw anywhere. The interface disappears when your hand takes over.</p></div><div class="ready-status"><span class="live-dot"></span><span>WAITING FOR GESTURE</span></div>
+
+    <section id="ready" class="scene scene-ready">
+      <div class="ready-orbit" aria-hidden="true"><span></span><span></span><i></i></div>
+      <div class="ready-copy">
+        <p class="eyebrow">ONE STROKE</p>
+        <h2>Press.<br>Draw.<br><em>Release.</em></h2>
+        <p>Use the open area. The interface disappears the instant you begin.</p>
+      </div>
+      <div class="ready-bottom"><span class="pulse"></span> WAITING FOR INPUT</div>
     </section>
-    <section class="scene scene-result" id="result" aria-live="polite">
-      <div class="result-eyebrow"><span>MEASUREMENT COMPLETE</span><span id="resultIndex">RUN / 001</span></div><div class="result-grid"><div class="result-score"><span class="score-label">GEOMETRIC FIDELITY</span><div class="score"><span id="scoreValue">0.000</span><sup>%</sup></div><h2 id="verdict">ANALYZING.</h2><p id="resultNote">Your stroke is being compared against its ideal mathematical fit.</p></div><div class="result-metrics" aria-label="Circle analysis"><div><span>RADIAL</span><b id="mCircularity">—</b></div><div><span>CLOSURE</span><b id="mClosure">—</b></div><div><span>SYMMETRY</span><b id="mSymmetry">—</b></div><div><span>FLOW</span><b id="mFlow">—</b></div></div></div><div class="result-bottom"><div id="personalBest" class="new-best" hidden>NEW PERSONAL BEST</div><div class="result-actions"><button id="againButton" class="text-action magnetic" type="button">DRAW AGAIN <span>↗</span></button><button id="shareButton" class="text-action" type="button">SHARE RESULT <span>↗</span></button></div></div>
+
+    <section id="result" class="scene scene-result" aria-live="polite">
+      <div class="result-head"><span>MEASUREMENT / COMPLETE</span><span id="runLabel">RUN 001</span></div>
+      <div class="result-score-wrap">
+        <span class="score-caption">GEOMETRIC FIDELITY</span>
+        <div class="score"><strong id="scoreValue">0.000</strong><sup>%</sup></div>
+        <h2 id="verdict">MEASURED.</h2>
+        <p id="resultNote">Your stroke compared with its best-fit circle.</p>
+      </div>
+      <div class="metrics">
+        <div><span>RADIAL</span><b id="mCircularity">—</b></div>
+        <div><span>CLOSURE</span><b id="mClosure">—</b></div>
+        <div><span>SYMMETRY</span><b id="mSymmetry">—</b></div>
+        <div><span>FLOW</span><b id="mFlow">—</b></div>
+      </div>
+      <div class="result-actions">
+        <button id="againButton" class="action primary" type="button">DRAW AGAIN <span>↗</span></button>
+        <button id="shareButton" class="action" type="button">SHARE <span>↗</span></button>
+      </div>
+      <div id="newBest" class="new-best" hidden>NEW PERSONAL BEST</div>
     </section>
   </main>
-  <aside class="telemetry" id="drawHud" aria-hidden="true"><span>TRACE</span><b id="pointCount">000</b><i></i><span>COALESCED POINTER DATA</span></aside><div class="draw-command" id="drawCommand" aria-hidden="true">KEEP THE LOOP CONTINUOUS</div><div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script type="module">
-    import './main.js?v=3';
-    clearTimeout(window.__circleBootTimer);
-    document.body.classList.remove('boot-failed');
-  </script>
+
+  <div id="traceHud" class="trace-hud" aria-hidden="true"><span>TRACE</span><b id="pointCount">000</b><i></i><span>RAW POINTER DATA</span></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script type="module" src="./main.js?v=4"></script>
 </body>
 </html>
