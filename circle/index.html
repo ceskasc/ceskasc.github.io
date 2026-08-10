@@ -21,7 +21,7 @@
     body:before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at 62% 35%,rgba(117,92,207,.18),transparent 34%),radial-gradient(circle at 24% 72%,rgba(73,197,181,.12),transparent 30%),#050508;z-index:-2}
     .stage{position:fixed;inset:0;z-index:10}.scene{position:absolute;inset:0}.scene:not(.is-active){display:none}.scene-intro.is-active{display:grid;color:#f2f1ed}
     body.mobile-safe #field{display:none!important}
-    body.boot-failed #field{display:none!important}body.boot-failed .scene-intro{display:grid!important;opacity:1!important;visibility:visible!important}
+    body.boot-failed #field{display:none!important}body.boot-failed[data-mode="intro"] .scene-intro{display:grid!important;opacity:1!important;visibility:visible!important}
   </style>
   <link rel="stylesheet" href="./styles.css?v=3" />
 </head>
@@ -58,6 +58,10 @@
     </section>
   </main>
   <aside class="telemetry" id="drawHud" aria-hidden="true"><span>TRACE</span><b id="pointCount">000</b><i></i><span>COALESCED POINTER DATA</span></aside><div class="draw-command" id="drawCommand" aria-hidden="true">KEEP THE LOOP CONTINUOUS</div><div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script type="module" src="./main.js?v=3"></script>
+  <script type="module">
+    import './main.js?v=3';
+    clearTimeout(window.__circleBootTimer);
+    document.body.classList.remove('boot-failed');
+  </script>
 </body>
 </html>
