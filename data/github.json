@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-17T18:49:37.518Z",
+  "generated_at": "2026-08-17T19:33:20.980Z",
   "username": "ceskasc",
   "profile": {
     "login": "ceskasc",
@@ -17,12 +17,12 @@
     {
       "name": "Semaison",
       "description": null,
-      "language": null,
+      "language": "HTML",
       "html_url": "https://github.com/ceskasc/Semaison",
       "homepage": null,
       "stargazers_count": 0,
       "forks_count": 0,
-      "pushed_at": "2026-08-17T18:42:06Z",
+      "pushed_at": "2026-08-17T19:09:44Z",
       "fork": false,
       "archived": false
     },
@@ -34,7 +34,7 @@
       "homepage": null,
       "stargazers_count": 1,
       "forks_count": 0,
-      "pushed_at": "2026-08-17T17:33:22Z",
+      "pushed_at": "2026-08-17T18:49:38Z",
       "fork": false,
       "archived": false
     },
