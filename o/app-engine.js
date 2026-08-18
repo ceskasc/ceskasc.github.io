@@ -97,8 +97,8 @@ function analyze(raw){
   score=clamp(score,0,99.99);
 
   return {
-    valid:netTurns>.57 && absTurns<2.35 && intersections<9,
-    message:netTurns<=.57?'Complete the circle.':intersections>=9?'One clean circle only.':'One circle only.',
+    valid:netTurns>.80 && absTurns<2.35 && intersections<9,
+    message:netTurns<=.80?'Complete the circle.':intersections>=9?'One clean circle only.':'One circle only.',
     fit,score,shape,radius,closure,coverage,smoothness,stability,purity,
     radialRms,netTurns,absTurns,reversalRatio,strokeRatio,intersections,
     duration:Math.max(100,Math.round(performance.now()-drawStart)),pointCount:raw.length
