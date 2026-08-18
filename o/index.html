@@ -37,6 +37,11 @@
           <span class="daily-copy">One circle. Everyone.</span>
           <span class="arrow">↗</span>
         </button>
+        <button class="one-shot-cta" id="oneShotButton" type="button">
+          <span><b>ONE SHOT</b><i>1× TODAY</i></span>
+          <small id="oneShotStatus">ONE ATTEMPT. NO RETRY.</small>
+          <span class="arrow">→</span>
+        </button>
       </div>
 
       <nav class="bottom-nav" aria-label="Main navigation">
@@ -77,6 +82,7 @@
         <button class="active" data-ranking="daily" type="button">DAILY</button>
         <button data-ranking="classic" type="button">CLASSIC</button>
         <button data-ranking="blind" type="button">BLIND</button>
+        <button data-ranking="one_shot" type="button">1×</button>
       </div>
 
       <div class="ranking-summary">
@@ -186,6 +192,17 @@
         </label>
         <p class="field-error" id="usernameError"></p>
         <button class="dialog-submit" id="saveUsername" value="default" type="submit">CLAIM NAME</button>
+      </form>
+    </dialog>
+
+    <dialog class="challenge-dialog" id="challengeDialog">
+      <form method="dialog">
+        <button class="dialog-close" id="closeChallenge" value="cancel" type="button">×</button>
+        <span class="dialog-kicker">DIRECT CHALLENGE</span>
+        <p class="challenge-from" id="challengeFrom">A player challenged you.</p>
+        <h2>Beat <span id="challengeTarget">—</span><small>%</small></h2>
+        <p class="challenge-copy">One circle. Same scoring engine. Highest number wins.</p>
+        <button class="dialog-submit" id="acceptChallenge" value="default" type="button">DRAW AGAINST THEM</button>
       </form>
     </dialog>
 
