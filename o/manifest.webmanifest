@@ -1,0 +1,13 @@
+{
+  "name": "O. — Draw the impossible",
+  "short_name": "O.",
+  "description": "One stroke. No corrections. Draw the impossible circle.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0c0c0b",
+  "theme_color": "#0c0c0b",
+  "orientation": "portrait",
+  "icons": [
+    {"src":"./icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+  ]
+}
