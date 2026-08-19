@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const VERSION = '8.0';
+  const VERSION = '8.1';
   for (const href of ['./retention.css','./progress.css','./rivals.css','./v7.css','./v8.css']) {
     const css = document.createElement('link');
     css.rel = 'stylesheet';
