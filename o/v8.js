@@ -4,7 +4,7 @@
 const LIVE_API=`${config.supabaseUrl||''}/functions/v1/o-live`;
 const LIVE_SCORE_API=`${config.supabaseUrl||''}/functions/v1/o-live-score`;
 let usernameGate=false, pendingLiveSlug=new URLSearchParams(location.search).get('live');
-let liveSession=null, liveChannel=null, liveClient=null, livePoll=null, liveTimer=null, liveRealtimeReady=false;
+let liveSession=null, livePoll=null, liveTimer=null, liveSyncHealthy=false, livePollBusy=false;
 
 async function liveEdge(action,payload={}){
   const r=await fetch(LIVE_API,{method:'POST',headers:{apikey:API_KEY,'Content-Type':'application/json'},body:JSON.stringify({action,installationId,installationSecret,...payload})});
@@ -84,7 +84,7 @@ function renderLive(room){
   $('liveHostAttempts').textContent=`${room.host_attempts||0} ATTEMPT${room.host_attempts===1?'':'S'}`;$('liveGuestAttempts').textContent=`${room.guest_attempts||0} ATTEMPT${room.guest_attempts===1?'':'S'}`;
   $('liveClockLabel').textContent=finished?'DUEL FINISHED':active?'TIME REMAINING':'WAITING FOR PLAYER';$('liveClock').textContent=active||finished?clockText(sec):'2:00:00';
   $('livePlay').classList.toggle('hidden',!active);$('liveLobbyCopy').textContent=finished?finalCopy(room):active?'Both players can draw as many verified circles as they want. Best score wins.':'Your friend opens the invite. The two-hour clock starts when they join.';
-  $('liveState').textContent=liveRealtimeReady?'LIVE · REALTIME CONNECTED':'LIVE · SYNCING';
+  $('liveState').textContent=liveSyncHealthy?'LIVE · SECURE SYNC':'LIVE · RECONNECTING';
   $('liveHud').classList.toggle('hidden',gameMode!=='live'||!active);
   if(active){
     const myHost=liveSession.role==='host';$('liveHudYouName').textContent='YOU';$('liveHudRivalName').textContent=myHost?(room.guest_name||'RIVAL'):(room.host_name||'RIVAL');$('liveHudYou').textContent=Number(myHost?room.host_best:room.guest_best||0)?Number(myHost?room.host_best:room.guest_best).toFixed(2):'—';$('liveHudRival').textContent=Number(myHost?room.guest_best:room.host_best||0)?Number(myHost?room.guest_best:room.host_best).toFixed(2):'—';$('liveHudTime').textContent=clockText(sec);
@@ -94,25 +94,28 @@ function renderLive(room){
 function finalCopy(room){const h=Number(room.host_best||0),g=Number(room.guest_best||0);if(!h&&!g)return'Duel ended with no verified scores.';if(Math.abs(h-g)<.005)return`Draw · ${h.toFixed(2)} vs ${g.toFixed(2)}`;const winner=h>g?room.host_name:room.guest_name;return`${winner||'Winner'} takes the duel · ${Math.max(h,g).toFixed(2)}`}
 function startLiveTimer(){clearInterval(liveTimer);liveTimer=setInterval(()=>{if(liveSession?.room)renderLive(liveSession.room)},1000)}
 
-async function stopLiveSync(){clearInterval(livePoll);livePoll=null;if(liveClient&&liveChannel){try{await liveClient.removeChannel(liveChannel)}catch{}}liveChannel=null;liveRealtimeReady=false}
-function startPoll(){clearInterval(livePoll);livePoll=setInterval(async()=>{if(!liveSession?.slug)return;try{const d=await liveEdge('state',{slug:liveSession.slug});renderLive(normalizeRoom(d))}catch{}},2000)}
-async function subscribeLive(){
-  await stopLiveSync();startPoll();
-  try{
-    const mod=await import('https://esm.sh/@supabase/supabase-js@2');
-    liveClient=mod.createClient(config.supabaseUrl,API_KEY,{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}});
-    liveChannel=liveClient.channel(`o-live-${liveSession.slug}`).on('postgres_changes',{event:'UPDATE',schema:'public',table:'o_live_room_feed',filter:`slug=eq.${liveSession.slug}`},payload=>{liveRealtimeReady=true;renderLive(payload.new)}).subscribe(status=>{liveRealtimeReady=status==='SUBSCRIBED';if(liveSession?.room)renderLive(liveSession.room)});
-  }catch{liveRealtimeReady=false}
+function stopLiveSync(){clearInterval(livePoll);livePoll=null;liveSyncHealthy=false;livePollBusy=false}
+async function pollLiveState(){
+  if(livePollBusy||!liveSession?.slug)return;
+  livePollBusy=true;
+  try{const d=await liveEdge('state',{slug:liveSession.slug});liveSyncHealthy=true;renderLive(normalizeRoom(d))}
+  catch(e){liveSyncHealthy=false;if(e?.status===410&&liveSession?.room){liveSession.room.status='finished';renderLive(liveSession.room)}}
+  finally{livePollBusy=false}
+}
+function startLiveSync(){
+  stopLiveSync();
+  pollLiveState();
+  livePoll=setInterval(pollLiveState,1000);
   startLiveTimer();
 }
 
 async function createLiveRoom(){
   if(!profile){setUsernameGate(true);openUsername();return}
-  try{showToast('CREATING LIVE ROOM');const d=await liveEdge('create');liveSession={slug:d.slug,role:'host',room:normalizeRoom(d)};renderLive(liveSession.room);toggleLobby(true);await subscribeLive()}catch(e){showToast(e.message||'LIVE ROOM UNAVAILABLE')}
+  try{showToast('CREATING LIVE ROOM');const d=await liveEdge('create');liveSession={slug:d.slug,role:'host',room:normalizeRoom(d)};liveSyncHealthy=true;renderLive(liveSession.room);toggleLobby(true);startLiveSync()}catch(e){showToast(e.message||'LIVE ROOM UNAVAILABLE')}
 }
 async function joinLiveRoom(slug){
   if(!profile){pendingLiveSlug=slug;setUsernameGate(true);openUsername();return}
-  try{showToast('JOINING LIVE DUEL');const d=await liveEdge('join',{slug});liveSession={slug,role:d.role,room:normalizeRoom(d)};renderLive(liveSession.room);toggleLobby(true);await subscribeLive();const u=new URL(location.href);u.searchParams.set('live',slug);history.replaceState({},'',u)}catch(e){showToast(e.message||'COULD NOT JOIN DUEL')}
+  try{showToast('JOINING LIVE DUEL');const d=await liveEdge('join',{slug});liveSession={slug,role:d.role,room:normalizeRoom(d)};liveSyncHealthy=true;renderLive(liveSession.room);toggleLobby(true);startLiveSync();const u=new URL(location.href);u.searchParams.set('live',slug);history.replaceState({},'',u)}catch(e){showToast(e.message||'COULD NOT JOIN DUEL')}
 }
 async function shareLiveInvite(){if(!liveSession?.slug)return;const url=liveUrl(liveSession.slug),text=`Join my 2-hour O. Live Duel.`;try{if(navigator.share)await navigator.share({title:'O. — Live Duel',text,url});else{await navigator.clipboard.writeText(url);showToast('INVITE COPIED')}}catch(e){if(e?.name!=='AbortError')showToast('SHARE UNAVAILABLE')}}
 async function copyLiveInvite(){if(!liveSession?.slug)return;try{await navigator.clipboard.writeText(liveUrl(liveSession.slug));showToast('INVITE LINK COPIED')}catch{showToast('COPY UNAVAILABLE')}}
