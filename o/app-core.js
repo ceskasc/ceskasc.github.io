@@ -22,6 +22,7 @@
 
   const ctx = els.canvas.getContext('2d', { alpha: true, desynchronized: true });
   const API = `${config.supabaseUrl || ''}/rest/v1`;
+  const FUNCTION_API = `${config.supabaseUrl || ''}/functions/v1/o-score`;
   const API_KEY = config.supabasePublishableKey || '';
   const screens = { home: els.home, game: els.game, rankings: els.rankings, profile: els.profile };
   const theme = { ink:'#f0ede5', faint:'rgba(240,237,229,.16)', accent:'#d4f45d' };
@@ -42,6 +43,9 @@
   let activeChallenge = null;
   let currentShareSlug = null;
   let pendingModeAfterUsername = null;
+  let pendingShareAfterUsername = false;
+  let pendingScorePromise = null;
+  let lastVerifiedScore = null;
   let installationId = loadInstallationId();
 
   function todayIstanbul() {
@@ -85,6 +89,23 @@
     if (text) { try { data = JSON.parse(text); } catch { data = text; } }
     if (!response.ok) {
       const err = new Error(data?.message || data?.hint || `Request failed (${response.status})`);
+      err.status = response.status; err.data = data; throw err;
+    }
+    return data;
+  }
+
+  async function edge(action, payload = {}) {
+    if (!API_KEY || !config.supabaseUrl) throw new Error('Verification unavailable');
+    const response = await fetch(FUNCTION_API, {
+      method:'POST',
+      headers:{ apikey:API_KEY, 'Content-Type':'application/json' },
+      body:JSON.stringify({ action, ...payload })
+    });
+    const text = await response.text();
+    let data = null;
+    if (text) { try { data = JSON.parse(text); } catch { data = text; } }
+    if (!response.ok) {
+      const err = new Error(data?.error || `Verification failed (${response.status})`);
       err.status = response.status; err.data = data; throw err;
     }
     return data;
