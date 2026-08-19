@@ -1,6 +1,6 @@
 (() => {
 'use strict';
-const RELEASE='13.5';
+const RELEASE='13.6';
 
 // De-duplicate the old unversioned service-worker registration left in
 // app-ui.js. Both callers are funneled into one versioned registration.
