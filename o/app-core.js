@@ -47,6 +47,7 @@
   let pendingScorePromise = null;
   let lastVerifiedScore = null;
   let installationId = loadInstallationId();
+  let installationSecret = loadInstallationSecret();
 
   function todayIstanbul() {
     const parts = new Intl.DateTimeFormat('en-CA', { timeZone:'Europe/Istanbul', year:'numeric', month:'2-digit', day:'2-digit' }).formatToParts(new Date());
@@ -66,6 +67,16 @@
       localStorage.setItem('o.installationId', id);
     }
     return id;
+  }
+
+  function loadInstallationSecret() {
+    let secret = localStorage.getItem('o.installationSecret');
+    if (!secret) {
+      const bytes=crypto.getRandomValues(new Uint8Array(32));
+      secret=btoa(String.fromCharCode(...bytes)).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+      localStorage.setItem('o.installationSecret',secret);
+    }
+    return secret;
   }
 
   function showScreen(name) {
@@ -99,7 +110,7 @@
     const response = await fetch(FUNCTION_API, {
       method:'POST',
       headers:{ apikey:API_KEY, 'Content-Type':'application/json' },
-      body:JSON.stringify({ action, ...payload })
+      body:JSON.stringify({ action, installationSecret, ...payload })
     });
     const text = await response.text();
     let data = null;
@@ -136,17 +147,8 @@
   async function claimUsername(username) {
     const clean = username.trim();
     if (!/^[A-Za-z0-9_]{3,18}$/.test(clean)) throw new Error('Use 3–18 letters, numbers or _.');
-    const existing = await api(`o_profiles?username=ilike.${encodeURIComponent(clean)}&select=installation_id,username&limit=1`);
-    if (existing?.length) {
-      if (existing[0].installation_id === installationId) return existing[0];
-      throw new Error('That name is already taken.');
-    }
-    const created = await api('o_profiles', {
-      method:'POST',
-      headers:{ Prefer:'return=representation' },
-      body:JSON.stringify({ installation_id:installationId, username:clean })
-    });
-    return created?.[0] || { installation_id:installationId, username:clean, country_code:null };
+    const data=await edge('profile',{installationId,username:clean});
+    return data?.profile || { installation_id:installationId, username:clean, country_code:null };
   }
 
   function openUsername() {
