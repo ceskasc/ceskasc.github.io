@@ -1,5 +1,5 @@
-const CACHE='o-circle-v9-1';
-const ASSETS=['./','./index.html','./styles.css?v=9.1','./retention.css?v=9.1','./progress.css?v=9.1','./rivals.css?v=9.1','./v7.css?v=9.1','./v8.css?v=9.1','./v9.css?v=9.1','./app.js?v=9.1','./app-core.js?v=9.1','./app-engine.js?v=9.1','./app-ui.js?v=9.1','./progress.js?v=9.1','./rivals.js?v=9.1','./v7.js?v=9.1','./v8.js?v=9.1','./v9.1.js?v=9.1','./config.js?v=9.1','./manifest.webmanifest','./icon.svg'];
+const CACHE='o-circle-v9-2';
+const ASSETS=['./','./index.html','./styles.css?v=9.2','./retention.css?v=9.2','./progress.css?v=9.2','./rivals.css?v=9.2','./v7.css?v=9.2','./v8.css?v=9.2','./v9.css?v=9.2','./app.js?v=9.2','./app-core.js?v=9.2','./app-engine.js?v=9.2','./app-ui.js?v=9.2','./progress.js?v=9.2','./rivals.js?v=9.2','./v7.js?v=9.2','./v8.js?v=9.2','./v9.1.js?v=9.2','./v9.2.js?v=9.2','./config.js?v=9.2','./manifest.webmanifest','./icon.svg'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',e=>{
