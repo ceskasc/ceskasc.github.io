@@ -89,8 +89,7 @@
   }
 
   function analyze(raw){
-    // Score V3: normalize sampling, suppress digitizer noise, then measure
-    // the actual geometry against a refined best-fit circle.
+    // Score V3 geometry, now re-run by the V4 server verifier before ranking.
     const sampled=resamplePolyline(raw,240);
     const arr=smoothPolyline(sampled,2);
     const fit=fitCircle(arr);
@@ -139,8 +138,6 @@
     const sectorDrift=sectorMeans.length>1?std(sectorMeans)/fit.r:1;
     const intersections=countSelfIntersections(arr);
 
-    // Analysis metrics. Radial error is deliberately NOT counted twice in
-    // the final score, which was the main calibration bug in V2.
     const shape=clamp(100-radialRms*190-radialP90*45,0,100);
     const radius=clamp(100-radialRms*260,0,100);
     const closure=clamp(100-closureGap*135,0,100);
@@ -149,9 +146,6 @@
     const stability=clamp(100-sectorDrift*900,0,100);
     const purity=clamp(100-reversalRatio*500-Math.max(0,absTurns-1.06)*180-intersections*18,0,100);
 
-    // The displayed percentage is now "100 - geometric defect".
-    // Each defect has one job: circularity, closure, coverage, reversals,
-    // excess tracing, intersections and only obvious path anomalies.
     let defect=
       radialRms*210 +
       radialP90*52 +
@@ -181,7 +175,7 @@
 
     return {
       valid,message,fit,score,shape,radius,closure,coverage,smoothness,stability,purity,
-      scoreVersion:'v3',
+      scoreVersion:'v4',
       radialRms,radialP90,closureGap,netTurns,absTurns,reversalRatio,strokeRatio,wobble,sectorDrift,intersections,
       duration:Math.max(100,Math.round(performance.now()-drawStart)),pointCount:raw.length
     };
@@ -244,4 +238,4 @@
     setTimeout(resizeCanvas,60);
   }
 
-  function bestForMode(mode){ const value=Number(localStorage.getItem(`o.best.v3.${mode}`)||0); return value?value.toFixed(2):null; }
+  function bestForMode(mode){ const value=Number(localStorage.getItem(`o.best.v4.${mode}`)||0); return value?value.toFixed(2):null; }
