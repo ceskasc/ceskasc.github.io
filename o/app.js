@@ -1,6 +1,10 @@
 (() => {
   'use strict';
-  const VERSION = '4.1';
+  const VERSION = '5.0';
+  const css = document.createElement('link');
+  css.rel = 'stylesheet';
+  css.href = `./retention.css?v=${VERSION}`;
+  document.head.appendChild(css);
   const parts = ['./app-core.js','./app-engine.js','./app-ui.js'];
   const load = (src) => new Promise((resolve,reject) => {
     const script = document.createElement('script');
