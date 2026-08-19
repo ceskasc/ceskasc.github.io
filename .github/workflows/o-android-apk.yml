@@ -8,7 +8,7 @@ on:
       - '.github/workflows/o-android-apk.yml'
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build-apk:
@@ -38,13 +38,28 @@ jobs:
       - name: Build debug APK
         run: gradle -p android :app:assembleDebug --stacktrace
 
-      - name: Rename APK
-        run: cp android/app/build/outputs/apk/debug/app-debug.apk O-Perfect-Circle-v8-debug.apk
+      - name: Publish APK into site
+        run: |
+          mkdir -p o/download
+          cp android/app/build/outputs/apk/debug/app-debug.apk o/download/O-Perfect-Circle-v8-debug.apk
+          sha256sum o/download/O-Perfect-Circle-v8-debug.apk > o/download/O-Perfect-Circle-v8-debug.apk.sha256
 
-      - name: Upload APK
+      - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: O-Perfect-Circle-v8-debug-apk
-          path: O-Perfect-Circle-v8-debug.apk
+          path: o/download/O-Perfect-Circle-v8-debug.apk
           if-no-files-found: error
           retention-days: 30
+
+      - name: Commit downloadable APK
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add o/download/O-Perfect-Circle-v8-debug.apk o/download/O-Perfect-Circle-v8-debug.apk.sha256
+          if git diff --cached --quiet; then
+            echo "APK unchanged"
+          else
+            git commit -m "Build O. Android v8 debug APK"
+            git push
+          fi
