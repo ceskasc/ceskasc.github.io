@@ -1,13 +1,13 @@
 (() => {
   'use strict';
-  const VERSION = '7.0';
-  for (const href of ['./retention.css','./progress.css','./rivals.css','./v7.css']) {
+  const VERSION = '8.0';
+  for (const href of ['./retention.css','./progress.css','./rivals.css','./v7.css','./v8.css']) {
     const css = document.createElement('link');
     css.rel = 'stylesheet';
     css.href = `${href}?v=${VERSION}`;
     document.head.appendChild(css);
   }
-  const parts = ['./app-core.js','./app-engine.js','./app-ui.js','./progress.js','./rivals.js','./v7.js'];
+  const parts = ['./app-core.js','./app-engine.js','./app-ui.js','./progress.js','./rivals.js','./v7.js','./v8.js'];
   const load = (src) => new Promise((resolve,reject) => {
     const script = document.createElement('script');
     script.src = `${src}?v=${VERSION}`;
