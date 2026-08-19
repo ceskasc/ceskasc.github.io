@@ -1,0 +1,74 @@
+name: O Runtime Integrity
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'o/*.js'
+      - 'o/*.css'
+      - 'o/index.html'
+      - 'o/manifest.webmanifest'
+      - '.github/workflows/o-quality.yml'
+  pull_request:
+    paths:
+      - 'o/*.js'
+      - 'o/*.css'
+      - 'o/index.html'
+      - 'o/manifest.webmanifest'
+      - '.github/workflows/o-quality.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Check JavaScript syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          while IFS= read -r -d '' file; do
+            echo "Checking $file"
+            node --check "$file"
+          done < <(find o -maxdepth 1 -type f -name '*.js' -print0 | sort -z)
+
+      - name: Validate manifest JSON
+        run: node -e "JSON.parse(require('fs').readFileSync('o/manifest.webmanifest','utf8')); console.log('manifest ok')"
+
+      - name: Verify runtime version and service-worker assets
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const assert = (ok, msg) => { if (!ok) throw new Error(msg); };
+          const app = fs.readFileSync('o/app.js','utf8');
+          const index = fs.readFileSync('o/index.html','utf8');
+          const sw = fs.readFileSync('o/sw.js','utf8');
+          const match = app.match(/const VERSION\s*=\s*['\"]([^'\"]+)['\"]/);
+          assert(match, 'app.js VERSION not found');
+          const version = match[1];
+          assert(index.includes(`const release='${version}'`) || index.includes(`const release=\"${version}\"`), `index release != ${version}`);
+          assert(index.includes(`./styles.css?v=${version}`), 'styles bootstrap version mismatch');
+          assert(index.includes(`./config.js?v=${version}`), 'config bootstrap version mismatch');
+          assert(index.includes(`./app.js?v=${version}`), 'app bootstrap version mismatch');
+          assert(sw.includes(`o-circle-v${version.replaceAll('.', '-')}`), 'service worker cache version mismatch');
+
+          const runtimeAssets = [...app.matchAll(/['\"]\.\/([^'\"]+\.(?:js|css))['\"]/g)].map(m => m[1]);
+          for (const asset of new Set(runtimeAssets)) {
+            assert(sw.includes(`./${asset}?v=${version}`), `service worker missing ${asset}?v=${version}`);
+          }
+          for (const asset of ['styles.css','config.js','app.js']) {
+            assert(sw.includes(`./${asset}?v=${version}`), `service worker missing bootstrap asset ${asset}`);
+          }
+          console.log(`O runtime ${version} integrity OK`);
+          NODE
