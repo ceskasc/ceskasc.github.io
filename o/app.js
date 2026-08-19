@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const VERSION = '9.1';
+  const VERSION = '9.2';
   window.O_ACCOUNT_V9 = true;
 
   const nativeFetch = window.fetch.bind(window);
@@ -35,7 +35,7 @@
     css.href = `${href}?v=${VERSION}`;
     document.head.appendChild(css);
   }
-  const parts = ['./app-core.js','./app-engine.js','./app-ui.js','./progress.js','./rivals.js','./v7.js','./v8.js','./v9.1.js'];
+  const parts = ['./app-core.js','./app-engine.js','./app-ui.js','./progress.js','./rivals.js','./v7.js','./v8.js','./v9.1.js','./v9.2.js'];
   const load = (src) => new Promise((resolve,reject) => {
     const script = document.createElement('script');
     script.src = `${src}?v=${VERSION}`;
