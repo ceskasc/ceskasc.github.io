@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const VERSION = '12.2';
+  const VERSION = '12.3';
   window.O_ACCOUNT_V9 = true;
 
   if ('serviceWorker' in navigator) {
@@ -41,7 +41,7 @@
     css.href = `${href}?v=${VERSION}`;
     document.head.appendChild(css);
   }
-  const parts = ['./app-core.js','./app-engine.js','./app-ui.js','./progress.js','./rivals.js','./v7.js','./v8.js','./v9.1.js','./v9.2.js','./v10.js','./v11.js','./i18n-tr.js','./v11-tr-fix.js','./v12-desktop.js'];
+  const parts = ['./app-core.js','./app-engine.js','./app-ui.js','./progress.js','./rivals.js','./v7.js','./v8.js','./v9.1.js','./v9.2.js','./v10.js','./v11.js','./i18n-tr.js','./v11-tr-fix.js','./v12-desktop.js','./v12-mobile.js'];
   const load = (src) => new Promise((resolve,reject) => {
     const script = document.createElement('script');
     script.src = `${src}?v=${VERSION}`;
