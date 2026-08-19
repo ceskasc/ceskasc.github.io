@@ -3,6 +3,29 @@
   const VERSION = '9.0';
   window.O_ACCOUNT_V9 = true;
 
+  // Account responses can rotate the device credential to the account-wide
+  // canonical credential. Apply it before the caller continues so every
+  // existing score service immediately sees the same identity on every device.
+  const nativeFetch = window.fetch.bind(window);
+  window.fetch = async (...args) => {
+    const response = await nativeFetch(...args);
+    try {
+      const rawUrl = typeof args[0] === 'string' ? args[0] : args[0]?.url || '';
+      if (response.ok && rawUrl.includes('/functions/v1/o-account')) {
+        const data = await response.clone().json();
+        if (typeof data?.installationSecret === 'string' && data.installationSecret.length === 43) {
+          localStorage.setItem('o.installationSecret', data.installationSecret);
+          try { installationSecret = data.installationSecret; } catch {}
+        }
+        if (typeof data?.installationId === 'string' && data.installationId.length === 36) {
+          localStorage.setItem('o.installationId', data.installationId);
+          try { installationId = data.installationId; } catch {}
+        }
+      }
+    } catch {}
+    return response;
+  };
+
   // V9 replaces the legacy username-only modal with a real account gate.
   // Keep the element for backwards-compatible listeners, but never surface it.
   const legacyUsernameDialog = document.getElementById('usernameDialog');
