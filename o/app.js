@@ -1,11 +1,8 @@
 (() => {
   'use strict';
-  const VERSION = '9.0';
+  const VERSION = '9.1';
   window.O_ACCOUNT_V9 = true;
 
-  // Account responses can rotate the device credential to the account-wide
-  // canonical credential. Apply it before the caller continues so every
-  // existing score service immediately sees the same identity on every device.
   const nativeFetch = window.fetch.bind(window);
   window.fetch = async (...args) => {
     const response = await nativeFetch(...args);
@@ -26,8 +23,6 @@
     return response;
   };
 
-  // V9 replaces the legacy username-only modal with a real account gate.
-  // Keep the element for backwards-compatible listeners, but never surface it.
   const legacyUsernameDialog = document.getElementById('usernameDialog');
   if (legacyUsernameDialog) {
     legacyUsernameDialog.showModal = () => {};
@@ -40,7 +35,7 @@
     css.href = `${href}?v=${VERSION}`;
     document.head.appendChild(css);
   }
-  const parts = ['./app-core.js','./app-engine.js','./app-ui.js','./progress.js','./rivals.js','./v7.js','./v8.js','./v9.js'];
+  const parts = ['./app-core.js','./app-engine.js','./app-ui.js','./progress.js','./rivals.js','./v7.js','./v8.js','./v9.1.js'];
   const load = (src) => new Promise((resolve,reject) => {
     const script = document.createElement('script');
     script.src = `${src}?v=${VERSION}`;
