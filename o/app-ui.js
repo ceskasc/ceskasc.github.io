@@ -3,6 +3,84 @@
     return `${mode} · ${state}`;
   }
 
+  function resetRetentionResultUI(){
+    els.result?.classList.remove('verified-pop');
+    els.resultContext?.classList.add('hidden');
+    els.achievementUnlock?.classList.add('hidden');
+    if(els.resultPercentile) els.resultPercentile.textContent='';
+    if(els.resultStreak) els.resultStreak.textContent='';
+  }
+
+  function showAchievementUnlock(item){
+    if(!item||!els.achievementUnlock)return;
+    els.achievementUnlockTitle.textContent=item.title||item.code;
+    els.achievementUnlock.classList.remove('hidden');
+    els.achievementUnlock.classList.remove('reveal');
+    void els.achievementUnlock.offsetWidth;
+    els.achievementUnlock.classList.add('reveal');
+    vibrate([12,24,22]);
+  }
+
+  function renderAchievementGrid(items=[]){
+    if(!els.achievementGrid)return;
+    els.achievementGrid.innerHTML='';
+    if(els.achievementCount) els.achievementCount.textContent=`${items.length} UNLOCKED`;
+    if(!items.length){
+      els.achievementGrid.innerHTML='<div class="achievement-empty">Your first verified mark unlocks the archive.</div>';
+      return;
+    }
+    items.slice().reverse().forEach(item=>{
+      const div=document.createElement('div');
+      div.className='achievement-card';
+      div.innerHTML='<span class="achievement-mark">○</span><div><b></b><p></p></div>';
+      div.querySelector('b').textContent=item.title||item.code;
+      div.querySelector('p').textContent=item.copy||'Verified milestone.';
+      els.achievementGrid.appendChild(div);
+    });
+  }
+
+  function applyRetentionSnapshot(snapshot,{result=false}={}){
+    if(!snapshot)return;
+    retentionSnapshot=snapshot;
+    const season=snapshot.season;
+    const streak=snapshot.streak||{current:0,best:0};
+    const daily=snapshot.daily;
+
+    if(els.homeSeason) els.homeSeason.textContent=season?.name||'SEASON 01';
+    if(els.profileSeasonName) els.profileSeasonName.textContent=season?.name||'—';
+    if(els.profileSeasonRank) els.profileSeasonRank.textContent=season?.rank?`#${season.rank}`:'—';
+    if(els.profileSeasonTop) els.profileSeasonTop.textContent=season?.topPercent?`TOP ${season.topPercent}%`:'UNRANKED';
+    if(els.profileStreak) els.profileStreak.textContent=String(streak.current||0);
+    if(els.profileBestStreak) els.profileBestStreak.textContent=`BEST ${streak.best||0}`;
+    renderAchievementGrid(snapshot.achievements?.all||[]);
+
+    if(result){
+      const context=[];
+      if(gameMode==='daily'&&daily?.topPercent) context.push({type:'percentile',text:`TOP ${daily.topPercent}% TODAY`});
+      else if(season?.topPercent) context.push({type:'percentile',text:`TOP ${season.topPercent}% · ${season.name}`});
+      if(streak.current>0) context.push({type:'streak',text:`${streak.current} DAY STREAK`});
+      if(context.length&&els.resultContext){
+        els.resultContext.classList.remove('hidden');
+        els.resultPercentile.textContent=context.find(x=>x.type==='percentile')?.text||'';
+        els.resultStreak.textContent=context.find(x=>x.type==='streak')?.text||'';
+      }
+      const fresh=snapshot.achievements?.newlyUnlocked||[];
+      if(fresh.length) setTimeout(()=>showAchievementUnlock(fresh[0]),420);
+    }
+  }
+
+  async function refreshRetention(scoreId=null,{result=false,silent=true}={}){
+    if(!profile)return null;
+    try{
+      const snapshot=await syncRetention(scoreId);
+      applyRetentionSnapshot(snapshot,{result});
+      return snapshot;
+    }catch(err){
+      if(!silent) showToast('PROGRESS SYNC UNAVAILABLE');
+      return null;
+    }
+  }
+
   function applyVerifiedResult(data){
     if(!data)return;
     lastVerifiedScore=data;
@@ -44,13 +122,20 @@
         updateOneShotStatus();
       }
     }
-    els.resultMode.textContent=resultModeText(data.verificationStatus==='verified'?'VERIFIED':'REVIEW');
+    const verified=data.verificationStatus==='verified';
+    els.resultMode.textContent=resultModeText(verified?'VERIFIED':'REVIEW');
+    if(verified){
+      els.result.classList.remove('verified-pop');
+      void els.result.offsetWidth;
+      els.result.classList.add('verified-pop');
+    }
   }
 
   function showResult(a){
     currentShareSlug=null;
     lastVerifiedScore=null;
     pendingScorePromise=null;
+    resetRetentionResultUI();
     const [defaultLabel,copy]=rank(a.score);
     const bestKey=`o.best.v4.${gameMode}`;
     const previous=Number(localStorage.getItem(bestKey)||0);
@@ -97,10 +182,12 @@
     }
 
     if(profile){
-      pendingScorePromise=submitScore(pendingScore).then(data=>{
+      pendingScorePromise=submitScore(pendingScore).then(async data=>{
         applyVerifiedResult(data);
-        if(data?.verificationStatus==='verified') showToast('SERVER VERIFIED');
-        else showToast('SCORE UNDER REVIEW');
+        if(data?.verificationStatus==='verified'){
+          showToast('SERVER VERIFIED');
+          await refreshRetention(Number(data.id),{result:true});
+        } else showToast('SCORE UNDER REVIEW');
         return data;
       }).catch(err=>{
         els.resultMode.textContent=resultModeText('LOCAL');
@@ -114,7 +201,7 @@
     if(isBest) showToast(profile?'NEW PERSONAL BEST · VERIFYING':'NEW LOCAL BEST');
   }
 
-  function closeResult(){ els.result.classList.remove('visible'); els.result.setAttribute('aria-hidden','true'); }
+  function closeResult(){ els.result.classList.remove('visible','verified-pop'); els.result.setAttribute('aria-hidden','true'); }
 
   function serializeStrokeForServer(){
     const source=points.length>900?resamplePolyline(points,900):points;
@@ -156,9 +243,16 @@
     els.rankingEmpty.classList.add('hidden');
     try{
       const date=todayIstanbul();
-      const dated=rankingMode==='daily'||rankingMode==='one_shot';
-      const filter=dated?`mode=eq.${rankingMode}&daily_date=eq.${date}&score_version=eq.v4&verification_status=eq.verified`:`mode=eq.${rankingMode}&score_version=eq.v4&verification_status=eq.verified`;
-      const rows=await api(`o_scores?${filter}&select=installation_id,score,mode,daily_date,created_at,o_profiles(username,country_code)&order=score.desc,created_at.asc&limit=500`);
+      let filter, label;
+      if(rankingMode==='season'){
+        filter=`season_id=eq.${currentSeasonId()}&mode=neq.challenge&score_version=eq.v4&verification_status=eq.verified`;
+        label=retentionSnapshot?.season?.name||'SEASON 01';
+      }else{
+        const dated=rankingMode==='daily'||rankingMode==='one_shot';
+        filter=dated?`mode=eq.${rankingMode}&daily_date=eq.${date}&score_version=eq.v4&verification_status=eq.verified`:`mode=eq.${rankingMode}&score_version=eq.v4&verification_status=eq.verified`;
+        label=dated?date:'VERIFIED · GLOBAL';
+      }
+      const rows=await api(`o_scores?${filter}&select=installation_id,score,mode,daily_date,created_at,season_id,o_profiles(username,country_code)&order=score.desc,created_at.asc&limit=1000`);
       const best=new Map();
       for(const row of rows||[]){
         const prev=best.get(row.installation_id);
@@ -166,7 +260,7 @@
       }
       const ranked=[...best.values()].sort((a,b)=>Number(b.score)-Number(a.score)||new Date(a.created_at)-new Date(b.created_at)).slice(0,100);
       els.rankingCount.textContent=`${best.size} PLAYER${best.size===1?'':'S'}`;
-      els.rankingDateLabel.textContent=dated?date:'VERIFIED · GLOBAL';
+      els.rankingDateLabel.textContent=label;
       els.rankingList.innerHTML='';
       ranked.forEach((row,i)=>{
         const div=document.createElement('div');
@@ -195,17 +289,25 @@
       els.statAttempts.textContent='0';
       els.statAverage.textContent='—';
       els.statDaily.textContent=bestForMode('daily')||'—';
+      if(els.profileSeasonRank) els.profileSeasonRank.textContent='—';
+      if(els.profileSeasonTop) els.profileSeasonTop.textContent='UNRANKED';
+      if(els.profileStreak) els.profileStreak.textContent='0';
+      if(els.profileBestStreak) els.profileBestStreak.textContent='BEST 0';
+      renderAchievementGrid([]);
       els.historyList.innerHTML='<div class="empty-state">Claim a username to save verified history.</div>';
       return;
     }
     try{
-      const rows=await api(`o_scores?installation_id=eq.${encodeURIComponent(installationId)}&score_version=eq.v4&verification_status=eq.verified&select=score,mode,daily_date,created_at&order=created_at.desc&limit=200`);
-      const scores=(rows||[]).map(r=>Number(r.score));
-      const daily=(rows||[]).filter(r=>r.mode==='daily').map(r=>Number(r.score));
-      els.statBest.textContent=scores.length?Math.max(...scores).toFixed(2):(localBest?localBest.toFixed(2):'—');
-      els.statAttempts.textContent=String(scores.length);
-      els.statAverage.textContent=scores.length?(scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(2):'—';
-      els.statDaily.textContent=daily.length?Math.max(...daily).toFixed(2):(bestForMode('daily')||'—');
+      const [snapshot,rows]=await Promise.all([
+        syncRetention(),
+        api(`o_scores?installation_id=eq.${encodeURIComponent(installationId)}&score_version=eq.v4&verification_status=eq.verified&select=score,mode,daily_date,created_at&order=created_at.desc&limit=200`)
+      ]);
+      applyRetentionSnapshot(snapshot);
+      const stats=snapshot?.stats||{};
+      els.statBest.textContent=Number.isFinite(Number(stats.best))&&stats.best!==null?Number(stats.best).toFixed(2):(localBest?localBest.toFixed(2):'—');
+      els.statAttempts.textContent=String(stats.attempts||0);
+      els.statAverage.textContent=Number.isFinite(Number(stats.average))&&stats.average!==null?Number(stats.average).toFixed(2):'—';
+      els.statDaily.textContent=Number.isFinite(Number(stats.dailyBest))&&stats.dailyBest!==null?Number(stats.dailyBest).toFixed(2):(bestForMode('daily')||'—');
       els.historyList.innerHTML='';
       (rows||[]).slice(0,8).forEach(r=>{
         const item=document.createElement('div');
@@ -216,21 +318,16 @@
       });
       if(!rows?.length) els.historyList.innerHTML='<div class="empty-state">Your next verified circle will appear here.</div>';
     } catch {
-      els.historyList.innerHTML='<div class="empty-state">History is temporarily unavailable.</div>';
+      els.historyList.innerHTML='<div class="empty-state">Progress is temporarily unavailable.</div>';
     }
   }
 
   async function createShareChallenge(){
     if(currentShareSlug)return currentShareSlug;
     if(!profile)throw new Error('Choose a username first.');
-    if(pendingScorePromise){
-      try{ await pendingScorePromise; }catch{}
-    }
+    if(pendingScorePromise){ try{ await pendingScorePromise; }catch{} }
     if(!lastVerifiedScore || lastVerifiedScore.verificationStatus!=='verified'){
-      if(pendingScore){
-        const data=await submitScore(pendingScore);
-        applyVerifiedResult(data);
-      }
+      if(pendingScore){ const data=await submitScore(pendingScore); applyVerifiedResult(data); }
     }
     if(!lastVerifiedScore || lastVerifiedScore.verificationStatus!=='verified') throw new Error('A verified score is required to create a challenge.');
     const data=await edge('challenge',{installationId,scoreId:Number(lastVerifiedScore.id)});
@@ -239,169 +336,79 @@
   }
 
   function challengeUrl(slug){
-    const url=new URL(location.href);
-    url.search='';
-    url.hash='';
-    url.searchParams.set('c',slug);
-    return url.toString();
+    const url=new URL(location.href); url.search=''; url.hash=''; url.searchParams.set('c',slug); return url.toString();
   }
 
   async function buildShareCardBlob(url){
-    const c=document.createElement('canvas');
-    c.width=1080; c.height=1920;
-    const g=c.getContext('2d');
+    const c=document.createElement('canvas'); c.width=1080; c.height=1920; const g=c.getContext('2d');
     g.fillStyle='#0c0c0b'; g.fillRect(0,0,c.width,c.height);
-
-    g.fillStyle='#f0ede5';
-    g.font='800 74px system-ui, sans-serif';
-    g.fillText('O.',82,122);
-    g.fillStyle='#8c8b85';
-    g.font='700 24px system-ui, sans-serif';
-    g.letterSpacing='5px';
-    g.fillText('DRAW THE IMPOSSIBLE',82,178);
-
-    g.fillStyle='#f0ede5';
-    g.font='780 210px system-ui, sans-serif';
-    g.fillText(lastResult.score.toFixed(2),72,470);
-    g.fillStyle='#d4f45d';
-    g.font='800 48px system-ui, sans-serif';
-    g.fillText('%',872,350);
-
-    const label=rank(lastResult.score)[0];
-    g.fillStyle='#aaa8a1';
-    g.font='800 26px system-ui, sans-serif';
-    g.fillText(label,84,538);
-
+    g.fillStyle='#f0ede5'; g.font='800 74px system-ui, sans-serif'; g.fillText('O.',82,122);
+    g.fillStyle='#8c8b85'; g.font='700 24px system-ui, sans-serif'; g.fillText('DRAW THE IMPOSSIBLE',82,178);
+    g.fillStyle='#f0ede5'; g.font='780 210px system-ui, sans-serif'; g.fillText(lastResult.score.toFixed(2),72,470);
+    g.fillStyle='#d4f45d'; g.font='800 48px system-ui, sans-serif'; g.fillText('%',872,350);
+    g.fillStyle='#aaa8a1'; g.font='800 26px system-ui, sans-serif'; g.fillText(rank(lastResult.score)[0],84,538);
     const drawCx=540,drawCy=1040,targetR=305;
     if(fitted&&points.length>1){
-      const scale=targetR/Math.max(1,fitted.r);
-      g.save();
-      g.translate(drawCx,drawCy);
-      g.scale(scale,scale);
-      g.translate(-fitted.cx,-fitted.cy);
-      g.strokeStyle='#f0ede5';
-      g.lineWidth=3.2/scale;
-      g.lineCap='round'; g.lineJoin='round';
-      g.beginPath(); g.moveTo(points[0].x,points[0].y);
-      for(let i=1;i<points.length;i++) g.lineTo(points[i].x,points[i].y);
-      g.stroke();
-      g.restore();
-
-      g.save();
-      g.strokeStyle='#d4f45d';
-      g.globalAlpha=.72;
-      g.lineWidth=2;
-      g.setLineDash([10,14]);
-      g.beginPath(); g.arc(drawCx,drawCy,targetR,0,Math.PI*2); g.stroke();
-      g.restore();
+      const scale=targetR/Math.max(1,fitted.r); g.save(); g.translate(drawCx,drawCy); g.scale(scale,scale); g.translate(-fitted.cx,-fitted.cy);
+      g.strokeStyle='#f0ede5'; g.lineWidth=3.2/scale; g.lineCap='round'; g.lineJoin='round'; g.beginPath(); g.moveTo(points[0].x,points[0].y); for(let i=1;i<points.length;i++) g.lineTo(points[i].x,points[i].y); g.stroke(); g.restore();
+      g.save(); g.strokeStyle='#d4f45d'; g.globalAlpha=.72; g.lineWidth=2; g.setLineDash([10,14]); g.beginPath(); g.arc(drawCx,drawCy,targetR,0,Math.PI*2); g.stroke(); g.restore();
     }
-
-    g.strokeStyle='rgba(240,237,229,.14)';
-    g.beginPath(); g.moveTo(82,1500); g.lineTo(998,1500); g.stroke();
-    g.fillStyle='#f0ede5';
-    g.font='760 48px system-ui, sans-serif';
-    g.fillText('CAN YOU BEAT THIS?',82,1595);
-    g.fillStyle='#8c8b85';
-    g.font='500 28px system-ui, sans-serif';
-    g.fillText('One stroke. No corrections.',82,1650);
-    g.fillStyle='#d4f45d';
-    g.font='700 24px system-ui, sans-serif';
-    g.fillText(new URL(url).host.toUpperCase(),82,1775);
-
+    g.strokeStyle='rgba(240,237,229,.14)'; g.beginPath(); g.moveTo(82,1500); g.lineTo(998,1500); g.stroke();
+    g.fillStyle='#f0ede5'; g.font='760 48px system-ui, sans-serif'; g.fillText('CAN YOU BEAT THIS?',82,1595);
+    g.fillStyle='#8c8b85'; g.font='500 28px system-ui, sans-serif'; g.fillText('One stroke. No corrections.',82,1650);
+    if(retentionSnapshot?.streak?.current){ g.fillStyle='#d4f45d'; g.font='750 25px system-ui, sans-serif'; g.fillText(`${retentionSnapshot.streak.current} DAY STREAK`,82,1710); }
+    g.fillStyle='#d4f45d'; g.font='700 24px system-ui, sans-serif'; g.fillText(new URL(url).host.toUpperCase(),82,1775);
     return await new Promise(resolve=>c.toBlob(resolve,'image/png',.94));
   }
 
   async function shareResult(){
     if(!lastResult)return;
-    if(!profile){
-      pendingShareAfterUsername=true;
-      openUsername();
-      showToast('CHOOSE A NAME TO SHARE');
-      return;
-    }
+    if(!profile){ pendingShareAfterUsername=true; openUsername(); showToast('CHOOSE A NAME TO SHARE'); return; }
     try{
       showToast('VERIFYING CHALLENGE');
-      const slug=await createShareChallenge();
-      const url=challengeUrl(slug);
-      const text=`O. · ${lastResult.score.toFixed(2)}% · ${rank(lastResult.score)[0]}\nBeat my verified circle.`;
-      const blob=await buildShareCardBlob(url);
-      const file=blob?new File([blob],`O-${lastResult.score.toFixed(2)}.png`,{type:'image/png'}):null;
-
+      const slug=await createShareChallenge(); const url=challengeUrl(slug);
+      const extra=retentionSnapshot?.daily?.topPercent&&gameMode==='daily'?` · TOP ${retentionSnapshot.daily.topPercent}% TODAY`:'';
+      const text=`O. · ${lastResult.score.toFixed(2)}% · ${rank(lastResult.score)[0]}${extra}\nBeat my verified circle.`;
+      const blob=await buildShareCardBlob(url); const file=blob?new File([blob],`O-${lastResult.score.toFixed(2)}.png`,{type:'image/png'}):null;
       if(navigator.share){
         if(file && navigator.canShare?.({files:[file]})) await navigator.share({title:'O. — Draw the impossible',text,url,files:[file]});
         else await navigator.share({title:'O. — Draw the impossible',text,url});
-      }else if(navigator.clipboard){
-        await navigator.clipboard.writeText(`${text}\n${url}`);
-        showToast('VERIFIED LINK COPIED');
-      }
-    }catch(err){
-      if(err?.name!=='AbortError') showToast(err?.message?.includes('verified')?'VERIFY SCORE FIRST':'SHARE UNAVAILABLE');
-    }
+      }else if(navigator.clipboard){ await navigator.clipboard.writeText(`${text}\n${url}`); showToast('VERIFIED LINK COPIED'); }
+    }catch(err){ if(err?.name!=='AbortError') showToast(err?.message?.includes('verified')?'VERIFY SCORE FIRST':'SHARE UNAVAILABLE'); }
   }
 
   async function updateOneShotStatus(){
     const local=localStorage.getItem(`o.oneshot.v4.${todayIstanbul()}`);
-    if(local){
-      els.oneShotStatus.textContent=`LOCKED TODAY · ${Number(local).toFixed(2)}`;
-      return true;
-    }
-    if(!profile){
-      els.oneShotStatus.textContent='ONE ATTEMPT. NO RETRY.';
-      return false;
-    }
+    if(local){ els.oneShotStatus.textContent=`LOCKED TODAY · ${Number(local).toFixed(2)}`; return true; }
+    if(!profile){ els.oneShotStatus.textContent='ONE ATTEMPT. NO RETRY.'; return false; }
     try{
       const rows=await api(`o_scores?installation_id=eq.${encodeURIComponent(installationId)}&mode=eq.one_shot&daily_date=eq.${todayIstanbul()}&score_version=eq.v4&verification_status=eq.verified&select=score&limit=1`);
-      if(rows?.length){
-        const value=Number(rows[0].score).toFixed(2);
-        localStorage.setItem(`o.oneshot.v4.${todayIstanbul()}`,value);
-        els.oneShotStatus.textContent=`LOCKED TODAY · ${value}`;
-        return true;
-      }
+      if(rows?.length){ const value=Number(rows[0].score).toFixed(2); localStorage.setItem(`o.oneshot.v4.${todayIstanbul()}`,value); els.oneShotStatus.textContent=`LOCKED TODAY · ${value}`; return true; }
     }catch{}
-    els.oneShotStatus.textContent='ONE ATTEMPT. NO RETRY.';
-    return false;
+    els.oneShotStatus.textContent='ONE ATTEMPT. NO RETRY.'; return false;
   }
 
   async function startOneShot(){
-    if(!profile){
-      pendingModeAfterUsername='one_shot';
-      openUsername();
-      showToast('CHOOSE A NAME FIRST');
-      return;
-    }
-    if(await updateOneShotStatus()){
-      showToast('ONE SHOT · ALREADY USED');
-      return;
-    }
+    if(!profile){ pendingModeAfterUsername='one_shot'; openUsername(); showToast('CHOOSE A NAME FIRST'); return; }
+    if(await updateOneShotStatus()){ showToast('ONE SHOT · ALREADY USED'); return; }
     startGame('one_shot');
   }
 
   function closeChallengeDialog(){
     if(!els.challengeDialog)return;
-    if(typeof els.challengeDialog.close==='function' && els.challengeDialog.open) els.challengeDialog.close();
-    else els.challengeDialog.removeAttribute('open');
+    if(typeof els.challengeDialog.close==='function' && els.challengeDialog.open) els.challengeDialog.close(); else els.challengeDialog.removeAttribute('open');
   }
 
   function openChallengeDialog(challenge,username){
-    activeChallenge=challenge;
-    els.challengeTarget.textContent=Number(challenge.target_score).toFixed(2);
-    els.challengeFrom.textContent=username?`${username} challenged you.`:'A player challenged you.';
-    if(typeof els.challengeDialog.showModal==='function') els.challengeDialog.showModal();
-    else els.challengeDialog.setAttribute('open','');
+    activeChallenge=challenge; els.challengeTarget.textContent=Number(challenge.target_score).toFixed(2); els.challengeFrom.textContent=username?`${username} challenged you.`:'A player challenged you.';
+    if(typeof els.challengeDialog.showModal==='function') els.challengeDialog.showModal(); else els.challengeDialog.setAttribute('open','');
   }
 
   async function loadChallengeFromUrl(){
-    const slug=new URLSearchParams(location.search).get('c');
-    if(!slug || !/^[A-Za-z0-9_-]{7,14}$/.test(slug)) return;
+    const slug=new URLSearchParams(location.search).get('c'); if(!slug || !/^[A-Za-z0-9_-]{7,14}$/.test(slug)) return;
     try{
-      const rows=await api(`o_share_challenges?slug=eq.${encodeURIComponent(slug)}&score_version=eq.v4&select=slug,installation_id,target_score,source_mode,expires_at&limit=1`);
-      const challenge=rows?.[0];
-      if(!challenge)return;
-      let username=null;
-      try{
-        const profiles=await api(`o_profiles?installation_id=eq.${encodeURIComponent(challenge.installation_id)}&select=username&limit=1`);
-        username=profiles?.[0]?.username||null;
-      }catch{}
+      const rows=await api(`o_share_challenges?slug=eq.${encodeURIComponent(slug)}&score_version=eq.v4&select=slug,installation_id,target_score,source_mode,expires_at&limit=1`); const challenge=rows?.[0]; if(!challenge)return;
+      let username=null; try{ const profiles=await api(`o_profiles?installation_id=eq.${encodeURIComponent(challenge.installation_id)}&select=username&limit=1`); username=profiles?.[0]?.username||null; }catch{}
       openChallengeDialog(challenge,username);
     }catch{}
   }
@@ -409,7 +416,6 @@
   function vibrate(pattern){ if(navigator.vibrate) navigator.vibrate(pattern); }
   function showToast(text){ els.toast.textContent=text; els.toast.classList.add('visible'); clearTimeout(hideTimer); hideTimer=setTimeout(()=>els.toast.classList.remove('visible'),1450); }
 
-  // navigation
   $('classicButton').addEventListener('click',()=>startGame('classic'));
   $('dailyButton').addEventListener('click',()=>startGame('daily'));
   $('oneShotButton').addEventListener('click',startOneShot);
@@ -427,7 +433,7 @@
   els.claimProfileButton.addEventListener('click',openUsername);
   $('closeUsername').addEventListener('click',()=>{pendingModeAfterUsername=null;closeUsername();});
   $('refreshRankings').addEventListener('click',loadRankings);
-  $('settingsButton').addEventListener('click',()=>showToast('SCORE V4 · SERVER VERIFIED'));
+  $('settingsButton').addEventListener('click',()=>showToast('SCORE V5 · VERIFIED SEASONS'));
   qsa('[data-ranking]').forEach(btn=>btn.addEventListener('click',()=>{qsa('[data-ranking]').forEach(b=>b.classList.toggle('active',b===btn));rankingMode=btn.dataset.ranking;loadRankings();}));
   qsa('[data-metric]').forEach(btn=>btn.addEventListener('click',openAnalysis));
 
@@ -437,16 +443,11 @@
       profile=await claimUsername(els.usernameInput.value); renderProfileIdentity(); closeUsername(); showToast('NAME CLAIMED');
       if(pendingScore){
         pendingScorePromise=submitScore(pendingScore);
-        try{ applyVerifiedResult(await pendingScorePromise); }catch{ showToast('VERIFICATION OFFLINE'); }
-      }
-      const nextMode=pendingModeAfterUsername;
-      const shouldShare=pendingShareAfterUsername;
-      pendingModeAfterUsername=null;
-      pendingShareAfterUsername=false;
-      if(currentScreen==='profile') loadProfileStats();
-      updateOneShotStatus();
-      if(nextMode==='one_shot') setTimeout(startOneShot,80);
-      else if(shouldShare) setTimeout(shareResult,80);
+        try{ const verified=await pendingScorePromise; applyVerifiedResult(verified); if(verified?.verificationStatus==='verified') await refreshRetention(Number(verified.id),{result:true}); }catch{ showToast('VERIFICATION OFFLINE'); }
+      } else await refreshRetention();
+      const nextMode=pendingModeAfterUsername; const shouldShare=pendingShareAfterUsername; pendingModeAfterUsername=null; pendingShareAfterUsername=false;
+      if(currentScreen==='profile') loadProfileStats(); updateOneShotStatus();
+      if(nextMode==='one_shot') setTimeout(startOneShot,80); else if(shouldShare) setTimeout(shareResult,80);
     }catch(err){els.usernameError.textContent=err.message||'Could not claim name.';}finally{els.saveUsername.disabled=false;}
   });
 
@@ -454,7 +455,7 @@
   window.addEventListener('resize',resizeCanvas); document.addEventListener('contextmenu',e=>e.preventDefault());
 
   displayDailyDate();
-  loadProfile().then(()=>updateOneShotStatus()).catch(()=>updateOneShotStatus());
+  loadProfile().then(async()=>{ updateOneShotStatus(); if(profile) await refreshRetention(); }).catch(()=>updateOneShotStatus());
   resizeCanvas();
   loadChallengeFromUrl();
   if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
