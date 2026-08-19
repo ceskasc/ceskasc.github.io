@@ -65,8 +65,27 @@ public class MainActivity extends Activity {
         });
 
         setContentView(webView);
-        if (savedInstanceState == null) webView.loadUrl(HOME);
+        if (savedInstanceState == null) webView.loadUrl(launchUrlFromIntent(getIntent()));
         else webView.restoreState(savedInstanceState);
+    }
+
+    private String launchUrlFromIntent(Intent intent) {
+        Uri data = intent == null ? null : intent.getData();
+        if (data != null
+                && "https".equalsIgnoreCase(data.getScheme())
+                && "ceskasc.github.io".equalsIgnoreCase(data.getHost())
+                && data.getPath() != null
+                && data.getPath().startsWith("/o/")) {
+            return data.toString();
+        }
+        return HOME;
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        if (webView != null) webView.loadUrl(launchUrlFromIntent(intent));
     }
 
     private void injectNativePolyfills() {
