@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const VERSION = '13.6';
+  const VERSION = '14.0';
   window.O_ACCOUNT_V9 = true;
 
   if ('serviceWorker' in navigator) {
@@ -35,13 +35,13 @@
     legacyUsernameDialog.show = () => {};
   }
 
-  for (const href of ['./retention.css','./progress.css','./rivals.css','./v7.css','./v8.css','./v9.css','./v10.css','./v11.css','./v12-desktop.css','./v12-mobile.css','./v13-mobile.css','./v13.1-sharp.css','./v13.2-type-dock.css','./v13.3-hero.css']) {
+  for (const href of ['./retention.css','./progress.css','./rivals.css','./v7.css','./v8.css','./v9.css','./v10.css','./v11.css','./v12-desktop.css','./v12-mobile.css','./v13-mobile.css','./v13.1-sharp.css','./v13.2-type-dock.css','./v13.3-hero.css','./v14-live-party.css']) {
     const css = document.createElement('link');
     css.rel = 'stylesheet';
     css.href = `${href}?v=${VERSION}`;
     document.head.appendChild(css);
   }
-  const parts = ['./app-core.js','./app-engine.js','./app-ui.js','./progress.js','./rivals.js','./v7.js','./v13.4-live-auth-bridge.js','./v13.5-preflight.js','./v8.js','./v9.1.js','./v9.2.js','./v10.js','./v11.js','./i18n-tr.js','./v11-tr-fix.js','./v12-desktop.js','./v12-mobile.js','./v13.5-stability.js','./v13.6-duel-finalizer.js'];
+  const parts = ['./app-core.js','./app-engine.js','./app-ui.js','./progress.js','./rivals.js','./v7.js','./v13.4-live-auth-bridge.js','./v13.5-preflight.js','./v8.js','./v9.1.js','./v9.2.js','./v10.js','./v11.js','./i18n-tr.js','./v11-tr-fix.js','./v12-desktop.js','./v12-mobile.js','./v13.5-stability.js','./v13.6-duel-finalizer.js','./v14-live-party.js'];
   const load = (src) => new Promise((resolve,reject) => {
     const script = document.createElement('script');
     script.src = `${src}?v=${VERSION}`;
