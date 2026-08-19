@@ -3,6 +3,12 @@
   const VERSION = '12.2';
   window.O_ACCOUNT_V9 = true;
 
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register(`./sw.js?v=${VERSION}`, { updateViaCache:'none' }).then(reg => reg.update()).catch(() => {});
+    }, { once:true });
+  }
+
   const nativeFetch = window.fetch.bind(window);
   window.fetch = async (...args) => {
     const response = await nativeFetch(...args);
