@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const VERSION = '12.1';
+  const VERSION = '12.2';
   window.O_ACCOUNT_V9 = true;
 
   const nativeFetch = window.fetch.bind(window);
