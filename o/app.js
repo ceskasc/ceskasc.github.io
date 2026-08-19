@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const VERSION = '12.3';
+  const VERSION = '13.0';
   window.O_ACCOUNT_V9 = true;
 
   if ('serviceWorker' in navigator) {
@@ -35,7 +35,7 @@
     legacyUsernameDialog.show = () => {};
   }
 
-  for (const href of ['./retention.css','./progress.css','./rivals.css','./v7.css','./v8.css','./v9.css','./v10.css','./v11.css','./v12-desktop.css','./v12-mobile.css']) {
+  for (const href of ['./retention.css','./progress.css','./rivals.css','./v7.css','./v8.css','./v9.css','./v10.css','./v11.css','./v12-desktop.css','./v12-mobile.css','./v13-mobile.css']) {
     const css = document.createElement('link');
     css.rel = 'stylesheet';
     css.href = `${href}?v=${VERSION}`;
