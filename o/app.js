@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const VERSION = '10.0';
+  const VERSION = '11.0';
   window.O_ACCOUNT_V9 = true;
 
   const nativeFetch = window.fetch.bind(window);
@@ -29,13 +29,13 @@
     legacyUsernameDialog.show = () => {};
   }
 
-  for (const href of ['./retention.css','./progress.css','./rivals.css','./v7.css','./v8.css','./v9.css','./v10.css']) {
+  for (const href of ['./retention.css','./progress.css','./rivals.css','./v7.css','./v8.css','./v9.css','./v10.css','./v11.css']) {
     const css = document.createElement('link');
     css.rel = 'stylesheet';
     css.href = `${href}?v=${VERSION}`;
     document.head.appendChild(css);
   }
-  const parts = ['./app-core.js','./app-engine.js','./app-ui.js','./progress.js','./rivals.js','./v7.js','./v8.js','./v9.1.js','./v9.2.js','./v10.js'];
+  const parts = ['./app-core.js','./app-engine.js','./app-ui.js','./progress.js','./rivals.js','./v7.js','./v8.js','./v9.1.js','./v9.2.js','./v10.js','./v11.js','./i18n-tr.js'];
   const load = (src) => new Promise((resolve,reject) => {
     const script = document.createElement('script');
     script.src = `${src}?v=${VERSION}`;
