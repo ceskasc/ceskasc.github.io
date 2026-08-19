@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const VERSION = '4.0';
+  const VERSION = '4.1';
   const parts = ['./app-core.js','./app-engine.js','./app-ui.js'];
   const load = (src) => new Promise((resolve,reject) => {
     const script = document.createElement('script');
