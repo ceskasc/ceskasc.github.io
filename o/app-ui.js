@@ -1,7 +1,58 @@
+  function resultModeText(state='LOCAL'){
+    const mode=gameMode==='one_shot'?'ONE SHOT':gameMode.toUpperCase();
+    return `${mode} · ${state}`;
+  }
+
+  function applyVerifiedResult(data){
+    if(!data)return;
+    lastVerifiedScore=data;
+    const metrics=data.metrics||{};
+    const serverScore=Number(data.score);
+    if(Number.isFinite(serverScore)){
+      if(lastResult){
+        lastResult.score=serverScore;
+        for(const key of ['shape','radius','closure','coverage','smoothness','stability','purity']){
+          if(Number.isFinite(Number(metrics[key]))) lastResult[key]=Number(metrics[key]);
+        }
+      }
+      els.resultScore.textContent=serverScore.toFixed(2);
+      els.metricShape.textContent=Number(metrics.shape??lastResult?.shape??0).toFixed(0);
+      els.metricClosure.textContent=Number(metrics.closure??lastResult?.closure??0).toFixed(0);
+      els.metricFlow.textContent=Number(metrics.smoothness??lastResult?.smoothness??0).toFixed(0);
+
+      let label=rank(serverScore)[0];
+      let verdict=serverScore>=99.5?rank(serverScore)[1]:`${(100-serverScore).toFixed(2)}% from perfection.`;
+      if(gameMode==='challenge'&&activeChallenge){
+        const target=Number(activeChallenge.target_score),delta=serverScore-target;
+        label=delta>0?'YOU WON':Math.abs(delta)<.01?'TIE':'SO CLOSE';
+        verdict=delta>0?`${delta.toFixed(2)} above the target.`:`${Math.abs(delta).toFixed(2)} short of ${target.toFixed(2)}.`;
+      }
+      els.resultRank.textContent=label;
+      els.resultVerdict.textContent=verdict;
+
+      if(gameMode!=='challenge'){
+        const bestKey=`o.best.v4.${gameMode}`;
+        const previous=Number(localStorage.getItem(bestKey)||0);
+        if(serverScore>previous){
+          localStorage.setItem(bestKey,serverScore.toFixed(2));
+          els.personalBest.classList.remove('hidden');
+          els.gameBest.textContent=serverScore.toFixed(2);
+        }
+      }
+      if(gameMode==='one_shot'){
+        localStorage.setItem(`o.oneshot.v4.${todayIstanbul()}`,serverScore.toFixed(2));
+        updateOneShotStatus();
+      }
+    }
+    els.resultMode.textContent=resultModeText(data.verificationStatus==='verified'?'VERIFIED':'REVIEW');
+  }
+
   function showResult(a){
     currentShareSlug=null;
+    lastVerifiedScore=null;
+    pendingScorePromise=null;
     const [defaultLabel,copy]=rank(a.score);
-    const bestKey=`o.best.v3.${gameMode}`;
+    const bestKey=`o.best.v4.${gameMode}`;
     const previous=Number(localStorage.getItem(bestKey)||0);
     const isBest=gameMode!=='challenge' && a.score>previous;
     if(isBest) localStorage.setItem(bestKey,a.score.toFixed(2));
@@ -16,7 +67,7 @@
     }
 
     els.resultRank.textContent=label;
-    els.resultMode.textContent=gameMode==='one_shot'?'ONE SHOT':gameMode.toUpperCase();
+    els.resultMode.textContent=resultModeText(profile?'VERIFYING':'LOCAL');
     els.resultScore.textContent=a.score.toFixed(2);
     els.resultVerdict.textContent=verdict;
     els.metricShape.textContent=a.shape.toFixed(0);
@@ -41,42 +92,54 @@
     };
 
     if(gameMode==='one_shot'){
-      localStorage.setItem(`o.oneshot.v3.${todayIstanbul()}`,a.score.toFixed(2));
+      localStorage.setItem(`o.oneshot.v4.${todayIstanbul()}`,a.score.toFixed(2));
       updateOneShotStatus();
     }
 
-    if(profile) submitScore(pendingScore).catch(err=>{
-      if(gameMode==='one_shot' && (err.status===409 || err.status===400)) showToast('ONE SHOT ALREADY USED');
-      else showToast('SCORE SAVED LOCALLY');
-    });
-    if(isBest) showToast('NEW PERSONAL BEST');
+    if(profile){
+      pendingScorePromise=submitScore(pendingScore).then(data=>{
+        applyVerifiedResult(data);
+        if(data?.verificationStatus==='verified') showToast('SERVER VERIFIED');
+        else showToast('SCORE UNDER REVIEW');
+        return data;
+      }).catch(err=>{
+        els.resultMode.textContent=resultModeText('LOCAL');
+        if(gameMode==='one_shot' && err.status===409) showToast('ONE SHOT ALREADY USED');
+        else if(err.status===422) showToast('SERVER REJECTED STROKE');
+        else showToast('VERIFICATION OFFLINE');
+        throw err;
+      });
+      pendingScorePromise.catch(()=>{});
+    }
+    if(isBest) showToast(profile?'NEW PERSONAL BEST · VERIFYING':'NEW LOCAL BEST');
   }
 
   function closeResult(){ els.result.classList.remove('visible'); els.result.setAttribute('aria-hidden','true'); }
 
+  function serializeStrokeForServer(){
+    const source=points.length>900?resamplePolyline(points,900):points;
+    if(!source.length)return [];
+    const t0=source[0].t||0;
+    return source.map(p=>[
+      Math.round(p.x*100)/100,
+      Math.round(p.y*100)/100,
+      Math.max(0,Math.round((p.t||t0)-t0))
+    ]);
+  }
+
   async function submitScore(a){
     if(!profile||!a)return null;
-    const payload={
-      installation_id:installationId,
+    const rect=els.canvas.getBoundingClientRect();
+    const data=await edge('score',{
+      installationId,
       mode:a.mode,
-      score:+a.score.toFixed(2),
-      shape:+a.shape.toFixed(2),
-      radius:+a.radius.toFixed(2),
-      closure:+a.closure.toFixed(2),
-      coverage:+a.coverage.toFixed(2),
-      smoothness:+a.smoothness.toFixed(2),
-      stability:+a.stability.toFixed(2),
-      purity:+a.purity.toFixed(2),
-      stroke_duration:a.duration,
-      point_count:a.pointCount,
-      daily_date:a.dailyDate,
-      verification_status:'prototype',
-      score_version:'v3',
-      challenge_slug:a.challengeSlug||null
-    };
-    const rows=await api('o_scores',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify(payload)});
+      clientScore:+a.score.toFixed(2),
+      challengeSlug:a.challengeSlug||null,
+      viewport:{width:Math.round(rect.width*100)/100,height:Math.round(rect.height*100)/100},
+      stroke:serializeStrokeForServer()
+    });
     pendingScore=null;
-    return rows?.[0]||null;
+    return data;
   }
 
   function openAnalysis(){
@@ -94,7 +157,7 @@
     try{
       const date=todayIstanbul();
       const dated=rankingMode==='daily'||rankingMode==='one_shot';
-      const filter=dated?`mode=eq.${rankingMode}&daily_date=eq.${date}&score_version=eq.v3`:`mode=eq.${rankingMode}&score_version=eq.v3`;
+      const filter=dated?`mode=eq.${rankingMode}&daily_date=eq.${date}&score_version=eq.v4&verification_status=eq.verified`:`mode=eq.${rankingMode}&score_version=eq.v4&verification_status=eq.verified`;
       const rows=await api(`o_scores?${filter}&select=installation_id,score,mode,daily_date,created_at,o_profiles(username,country_code)&order=score.desc,created_at.asc&limit=500`);
       const best=new Map();
       for(const row of rows||[]){
@@ -103,7 +166,7 @@
       }
       const ranked=[...best.values()].sort((a,b)=>Number(b.score)-Number(a.score)||new Date(a.created_at)-new Date(b.created_at)).slice(0,100);
       els.rankingCount.textContent=`${best.size} PLAYER${best.size===1?'':'S'}`;
-      els.rankingDateLabel.textContent=dated?date:'V3 · GLOBAL';
+      els.rankingDateLabel.textContent=dated?date:'VERIFIED · GLOBAL';
       els.rankingList.innerHTML='';
       ranked.forEach((row,i)=>{
         const div=document.createElement('div');
@@ -126,17 +189,17 @@
 
   async function loadProfileStats(){
     renderProfileIdentity();
-    const localBest=Math.max(...['classic','blind','daily','one_shot'].map(m=>Number(localStorage.getItem(`o.best.v3.${m}`)||0)),0);
+    const localBest=Math.max(...['classic','blind','daily','one_shot'].map(m=>Number(localStorage.getItem(`o.best.v4.${m}`)||0)),0);
     if(!profile){
       els.statBest.textContent=localBest?localBest.toFixed(2):'—';
       els.statAttempts.textContent='0';
       els.statAverage.textContent='—';
       els.statDaily.textContent=bestForMode('daily')||'—';
-      els.historyList.innerHTML='<div class="empty-state">Claim a username to save V3 history.</div>';
+      els.historyList.innerHTML='<div class="empty-state">Claim a username to save verified history.</div>';
       return;
     }
     try{
-      const rows=await api(`o_scores?installation_id=eq.${encodeURIComponent(installationId)}&score_version=eq.v3&select=score,mode,daily_date,created_at&order=created_at.desc&limit=200`);
+      const rows=await api(`o_scores?installation_id=eq.${encodeURIComponent(installationId)}&score_version=eq.v4&verification_status=eq.verified&select=score,mode,daily_date,created_at&order=created_at.desc&limit=200`);
       const scores=(rows||[]).map(r=>Number(r.score));
       const daily=(rows||[]).filter(r=>r.mode==='daily').map(r=>Number(r.score));
       els.statBest.textContent=scores.length?Math.max(...scores).toFixed(2):(localBest?localBest.toFixed(2):'—');
@@ -151,41 +214,28 @@
         item.innerHTML=`<div><span>${String(r.mode).replace('_',' ').toUpperCase()}</span><b>${Number(r.score).toFixed(2)}</b></div><time>${new Intl.DateTimeFormat('en',{month:'short',day:'numeric'}).format(d)}</time>`;
         els.historyList.appendChild(item);
       });
-      if(!rows?.length) els.historyList.innerHTML='<div class="empty-state">Your next V3 circle will appear here.</div>';
+      if(!rows?.length) els.historyList.innerHTML='<div class="empty-state">Your next verified circle will appear here.</div>';
     } catch {
       els.historyList.innerHTML='<div class="empty-state">History is temporarily unavailable.</div>';
     }
   }
 
-  function randomChallengeSlug(){
-    const chars='ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789';
-    const bytes=crypto.getRandomValues(new Uint8Array(9));
-    return [...bytes].map(v=>chars[v%chars.length]).join('');
-  }
-
   async function createShareChallenge(){
-    if(!lastResult)return null;
-    if(currentShareSlug) return currentShareSlug;
-    for(let attempt=0;attempt<3;attempt++){
-      const slug=randomChallengeSlug();
-      try{
-        await api('o_share_challenges',{
-          method:'POST',
-          headers:{Prefer:'return=minimal'},
-          body:JSON.stringify({
-            slug,
-            installation_id:installationId,
-            target_score:+lastResult.score.toFixed(2),
-            source_mode:gameMode,
-            score_version:'v3',
-            expires_at:new Date(Date.now()+30*86400000).toISOString()
-          })
-        });
-        currentShareSlug=slug;
-        return slug;
-      }catch(err){ if(err.status!==409) throw err; }
+    if(currentShareSlug)return currentShareSlug;
+    if(!profile)throw new Error('Choose a username first.');
+    if(pendingScorePromise){
+      try{ await pendingScorePromise; }catch{}
     }
-    throw new Error('Could not create challenge');
+    if(!lastVerifiedScore || lastVerifiedScore.verificationStatus!=='verified'){
+      if(pendingScore){
+        const data=await submitScore(pendingScore);
+        applyVerifiedResult(data);
+      }
+    }
+    if(!lastVerifiedScore || lastVerifiedScore.verificationStatus!=='verified') throw new Error('A verified score is required to create a challenge.');
+    const data=await edge('challenge',{installationId,scoreId:Number(lastVerifiedScore.id)});
+    currentShareSlug=data.slug;
+    return data.slug;
   }
 
   function challengeUrl(slug){
@@ -207,6 +257,7 @@
     g.fillText('O.',82,122);
     g.fillStyle='#8c8b85';
     g.font='700 24px system-ui, sans-serif';
+    g.letterSpacing='5px';
     g.fillText('DRAW THE IMPOSSIBLE',82,178);
 
     g.fillStyle='#f0ede5';
@@ -262,11 +313,17 @@
 
   async function shareResult(){
     if(!lastResult)return;
+    if(!profile){
+      pendingShareAfterUsername=true;
+      openUsername();
+      showToast('CHOOSE A NAME TO SHARE');
+      return;
+    }
     try{
-      showToast('BUILDING CHALLENGE');
+      showToast('VERIFYING CHALLENGE');
       const slug=await createShareChallenge();
       const url=challengeUrl(slug);
-      const text=`O. · ${lastResult.score.toFixed(2)}% · ${rank(lastResult.score)[0]}\nBeat my circle.`;
+      const text=`O. · ${lastResult.score.toFixed(2)}% · ${rank(lastResult.score)[0]}\nBeat my verified circle.`;
       const blob=await buildShareCardBlob(url);
       const file=blob?new File([blob],`O-${lastResult.score.toFixed(2)}.png`,{type:'image/png'}):null;
 
@@ -275,15 +332,15 @@
         else await navigator.share({title:'O. — Draw the impossible',text,url});
       }else if(navigator.clipboard){
         await navigator.clipboard.writeText(`${text}\n${url}`);
-        showToast('CHALLENGE LINK COPIED');
+        showToast('VERIFIED LINK COPIED');
       }
     }catch(err){
-      if(err?.name!=='AbortError') showToast('SHARE UNAVAILABLE');
+      if(err?.name!=='AbortError') showToast(err?.message?.includes('verified')?'VERIFY SCORE FIRST':'SHARE UNAVAILABLE');
     }
   }
 
   async function updateOneShotStatus(){
-    const local=localStorage.getItem(`o.oneshot.v3.${todayIstanbul()}`);
+    const local=localStorage.getItem(`o.oneshot.v4.${todayIstanbul()}`);
     if(local){
       els.oneShotStatus.textContent=`LOCKED TODAY · ${Number(local).toFixed(2)}`;
       return true;
@@ -293,10 +350,10 @@
       return false;
     }
     try{
-      const rows=await api(`o_scores?installation_id=eq.${encodeURIComponent(installationId)}&mode=eq.one_shot&daily_date=eq.${todayIstanbul()}&score_version=eq.v3&select=score&limit=1`);
+      const rows=await api(`o_scores?installation_id=eq.${encodeURIComponent(installationId)}&mode=eq.one_shot&daily_date=eq.${todayIstanbul()}&score_version=eq.v4&verification_status=eq.verified&select=score&limit=1`);
       if(rows?.length){
         const value=Number(rows[0].score).toFixed(2);
-        localStorage.setItem(`o.oneshot.v3.${todayIstanbul()}`,value);
+        localStorage.setItem(`o.oneshot.v4.${todayIstanbul()}`,value);
         els.oneShotStatus.textContent=`LOCKED TODAY · ${value}`;
         return true;
       }
@@ -337,7 +394,7 @@
     const slug=new URLSearchParams(location.search).get('c');
     if(!slug || !/^[A-Za-z0-9_-]{7,14}$/.test(slug)) return;
     try{
-      const rows=await api(`o_share_challenges?slug=eq.${encodeURIComponent(slug)}&score_version=eq.v3&select=slug,installation_id,target_score,source_mode,expires_at&limit=1`);
+      const rows=await api(`o_share_challenges?slug=eq.${encodeURIComponent(slug)}&score_version=eq.v4&select=slug,installation_id,target_score,source_mode,expires_at&limit=1`);
       const challenge=rows?.[0];
       if(!challenge)return;
       let username=null;
@@ -370,7 +427,7 @@
   els.claimProfileButton.addEventListener('click',openUsername);
   $('closeUsername').addEventListener('click',()=>{pendingModeAfterUsername=null;closeUsername();});
   $('refreshRankings').addEventListener('click',loadRankings);
-  $('settingsButton').addEventListener('click',()=>showToast('SCORE V3 · HAPTICS ON'));
+  $('settingsButton').addEventListener('click',()=>showToast('SCORE V4 · SERVER VERIFIED'));
   qsa('[data-ranking]').forEach(btn=>btn.addEventListener('click',()=>{qsa('[data-ranking]').forEach(b=>b.classList.toggle('active',b===btn));rankingMode=btn.dataset.ranking;loadRankings();}));
   qsa('[data-metric]').forEach(btn=>btn.addEventListener('click',openAnalysis));
 
@@ -378,12 +435,18 @@
     e.preventDefault(); els.usernameError.textContent=''; els.saveUsername.disabled=true;
     try{
       profile=await claimUsername(els.usernameInput.value); renderProfileIdentity(); closeUsername(); showToast('NAME CLAIMED');
-      if(pendingScore) await submitScore(pendingScore);
+      if(pendingScore){
+        pendingScorePromise=submitScore(pendingScore);
+        try{ applyVerifiedResult(await pendingScorePromise); }catch{ showToast('VERIFICATION OFFLINE'); }
+      }
       const nextMode=pendingModeAfterUsername;
+      const shouldShare=pendingShareAfterUsername;
       pendingModeAfterUsername=null;
+      pendingShareAfterUsername=false;
       if(currentScreen==='profile') loadProfileStats();
       updateOneShotStatus();
       if(nextMode==='one_shot') setTimeout(startOneShot,80);
+      else if(shouldShare) setTimeout(shareResult,80);
     }catch(err){els.usernameError.textContent=err.message||'Could not claim name.';}finally{els.saveUsername.disabled=false;}
   });
 
