@@ -1,277 +1,39 @@
 (() => {
-  'use strict';
+'use strict';
+const GHOST_API=`${config.supabaseUrl||''}/functions/v1/o-ghost`;
+const SEASON_API=`${config.supabaseUrl||''}/functions/v1/o-season-awards`;
+const LEAGUES=['RAW','FORM','PRECISE','BLACK','ELITE','PERFECT?'];
+let ghost=null,ghostPromise=null,beat=false,beatLaunching=false,beatTarget=null;
 
-  const GHOST_API = `${config.supabaseUrl || ''}/functions/v1/o-ghost`;
-  const SEASON_API = `${config.supabaseUrl || ''}/functions/v1/o-season-awards`;
-  const LEAGUE_ORDER = ['RAW','FORM','PRECISE','BLACK','ELITE','PERFECT?'];
+async function edgeV7(url,payload={}){if(!profile)throw new Error('Profile required');const r=await fetch(url,{method:'POST',headers:{apikey:API_KEY,'Content-Type':'application/json'},body:JSON.stringify({installationId,installationSecret,...payload})});const t=await r.text();let d=null;if(t){try{d=JSON.parse(t)}catch{}}if(!r.ok)throw new Error(d?.error||`Request failed (${r.status})`);return d}
+async function loadGhost(force=false){if(!profile)return null;if(ghost&&!force)return ghost;if(ghostPromise&&!force)return ghostPromise;ghostPromise=edgeV7(GHOST_API,{action:'load'}).then(d=>(ghost=d?.ghost||null)).catch(()=>null).finally(()=>ghostPromise=null);return ghostPromise}
+async function saveGhost(scoreId){if(!profile||!scoreId||!points?.length)return;try{const d=await edgeV7(GHOST_API,{action:'save',scoreId:Number(scoreId),stroke:serializeStrokeForServer()});if(d?.saved||!ghost)await loadGhost(true);updateBeatButton()}catch{}}
 
-  let personalGhost = null;
-  let beatSelfActive = false;
-  let beatTargetScore = null;
-  let ghostLoadPromise = null;
-  let seasonAwards = null;
+function ensureUI(){
+ const one=$('oneShotButton');if(one&&!$('beatSelfButton')){one.insertAdjacentHTML('afterend','<button class="beat-self-cta" id="beatSelfButton" type="button"><span><b>BEAT YOURSELF</b><i>GHOST</i></span><small id="beatSelfStatus">CREATE A VERIFIED BEST FIRST.</small><span class="arrow">→</span></button>');$('beatSelfButton').addEventListener('click',startBeatSelf)}
+ const actions=document.querySelector('.result-actions');if(actions&&!$('rematchButton')){actions.insertAdjacentHTML('afterend','<button class="rematch-button hidden" id="rematchButton" type="button">CHALLENGE BACK ↗</button>');$('rematchButton').addEventListener('click',async()=>{if(!lastVerifiedScore||lastVerifiedScore.verificationStatus!=='verified')return showToast('VERIFY SCORE FIRST');await shareResult()})}
+ if(!$('leaguePromotion'))document.body.insertAdjacentHTML('beforeend','<div class="league-promotion" id="leaguePromotion" aria-hidden="true"><div class="league-orbit"><i></i><span>O.</span></div><p>PRECISION CLASS ADVANCED</p><strong id="promotionLeague">BLACK</strong><small id="promotionRating">PR 870</small></div>');
+ const identity=document.querySelector('.profile-identity > div');if(identity&&!$('legacyTitle'))identity.insertAdjacentHTML('beforeend','<span class="legacy-title hidden" id="legacyTitle"></span>');
+ const archive=document.querySelector('.achievement-section');if(archive&&!$('seasonTitleArchive'))archive.insertAdjacentHTML('beforebegin','<section class="season-title-section" id="seasonTitleArchive"><div class="section-label"><span>SEASON TITLES</span><b id="seasonTitleCount">0 EARNED</b></div><div id="seasonTitleList" class="season-title-list"><div class="achievement-empty">Permanent titles settle after each season.</div></div></section>')
+}
+function updateBeatButton(){const s=$('beatSelfStatus'),b=$('beatSelfButton');if(!s||!b)return;if(!profile){s.textContent='CLAIM A NAME TO CREATE YOUR GHOST.';b.classList.remove('ready')}else if(!ghost){s.textContent='CREATE A VERIFIED BEST FIRST.';b.classList.remove('ready')}else{s.textContent=`GHOST BEST · ${Number(ghost.score).toFixed(2)}`;b.classList.add('ready')}}
+function ghostFrame(){const cr=els.canvas.getBoundingClientRect(),qr=els.centerCue?.getBoundingClientRect();return{cx:qr?.width?qr.left+qr.width/2-cr.left:cr.width/2,cy:qr?.height?qr.top+qr.height/2-cr.top:cr.height*.48,r:Math.min(cr.width*.34,cr.height*.25)}}
+function drawGhost(){if(!beat||!ghost?.normalized_points?.length)return;const{cx,cy,r}=ghostFrame();ctx.save();ctx.strokeStyle='rgba(212,244,93,.34)';ctx.lineWidth=1.25;ctx.setLineDash([3.5,7]);ctx.lineCap='round';ctx.lineJoin='round';ctx.beginPath();ghost.normalized_points.forEach((p,i)=>{const x=cx+Number(p[0])*r,y=cy+Number(p[1])*r;i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke();ctx.restore()}
+async function startBeatSelf(){if(!profile){openUsername();return showToast('CHOOSE A NAME FIRST')}const g=await loadGhost();if(!g)return showToast('SET A VERIFIED BEST FIRST');beatLaunching=true;beat=true;beatTarget=Number(g.score);startGame('classic');beatLaunching=false;beat=true;els.gameModeEyebrow.textContent='YOUR GHOST';els.gameModeLabel.textContent='BEAT YOURSELF';els.promptIndex.textContent='VS';els.promptText.textContent=`Beat ${beatTarget.toFixed(2)}.`;els.gameBest.textContent=beatTarget.toFixed(2);redraw()}
+function beatVerdict(score){if(!beat||beatTarget==null)return;const d=Number(score)-beatTarget;els.resultRank.textContent=d>0?'NEW SELF.':Math.abs(d)<.01?'EXACT MATCH':'GHOST HOLDS';els.resultVerdict.textContent=d>0?`${d.toFixed(2)} above your ghost.`:`${Math.abs(d).toFixed(2)} short of your best.`}
 
-  async function privateEdge(url, payload={}) {
-    if (!profile || !API_KEY || !config.supabaseUrl) throw new Error('Profile required');
-    const response = await fetch(url, {
-      method:'POST',
-      headers:{apikey:API_KEY,'Content-Type':'application/json'},
-      body:JSON.stringify({installationId, installationSecret, ...payload})
-    });
-    const text=await response.text();
-    let data=null;
-    if(text){try{data=JSON.parse(text)}catch{data=null}}
-    if(!response.ok) throw new Error(data?.error || `Request failed (${response.status})`);
-    return data;
-  }
+const redraw0=redraw;redraw=function(...a){redraw0(...a);drawGhost()};
+const start0=startGame;startGame=function(mode){if(!beatLaunching){beat=false;beatTarget=null}return start0(mode)};
+const show0=showResult;showResult=function(a){const was=beat,target=beatTarget,out=show0(a);if(was){beat=true;beatTarget=target;beatVerdict(a.score)}$('rematchButton')?.classList.add('hidden');return out};
+const verified0=applyVerifiedResult;applyVerifiedResult=function(data){const was=beat,target=beatTarget,out=verified0(data);if(was){beat=true;beatTarget=target;beatVerdict(data.score)}if(data?.verificationStatus==='verified'){saveGhost(Number(data.id));$('rematchButton')?.classList.toggle('hidden',gameMode!=='challenge')}return out};
 
-  async function loadPersonalGhost(force=false) {
-    if(!profile) return null;
-    if(personalGhost && !force) return personalGhost;
-    if(ghostLoadPromise && !force) return ghostLoadPromise;
-    ghostLoadPromise=privateEdge(GHOST_API,{action:'load'})
-      .then(data=>{personalGhost=data?.ghost||null;return personalGhost})
-      .catch(()=>null)
-      .finally(()=>{ghostLoadPromise=null});
-    return ghostLoadPromise;
-  }
+function promotion(league,rating){const o=$('leaguePromotion');if(!o)return;$('promotionLeague').textContent=league;$('promotionRating').textContent=`PR ${rating||'—'}`;o.classList.add('visible');o.setAttribute('aria-hidden','false');vibrate([16,30,26,42,34]);setTimeout(()=>{o.classList.remove('visible');o.setAttribute('aria-hidden','true')},2300)}
+function checkLeague(){const l=$('precisionLeague')?.textContent?.trim(),s=$('precisionState')?.textContent||'',r=$('precisionRating')?.textContent?.trim();if(!l||l==='UNRANKED'||s.includes('PROVISIONAL'))return;const k='o.precision.league.v7',p=localStorage.getItem(k);if(!p){localStorage.setItem(k,l);return}const a=LEAGUES.indexOf(p),b=LEAGUES.indexOf(l);if(b>a&&a>=0)promotion(l,r);if(a!==b)localStorage.setItem(k,l)}
+function watchLeague(){const l=$('precisionLeague'),s=$('precisionState');if(!l||!s)return setTimeout(watchLeague,180);const m=new MutationObserver(()=>setTimeout(checkLeague,30));m.observe(l,{childList:true,subtree:true,characterData:true});m.observe(s,{childList:true,subtree:true,characterData:true});checkLeague()}
 
-  async function saveVerifiedGhost(scoreId) {
-    if(!profile || !scoreId || !points?.length) return null;
-    try{
-      const data=await privateEdge(GHOST_API,{action:'save',scoreId:Number(scoreId),stroke:serializeStrokeForServer()});
-      if(data?.saved || !personalGhost || Number(data?.score)>Number(personalGhost?.score||0)) await loadPersonalGhost(true);
-      updateBeatButton();
-      return data;
-    } catch { return null; }
-  }
+function renderAwards(d){const cur=d?.current,b=$('legacyTitle');if(b){b.textContent=cur?.title||'';b.classList.toggle('hidden',!cur?.title)}const list=$('seasonTitleList'),count=$('seasonTitleCount'),awards=d?.awards||[];if(!list||!count)return;count.textContent=`${awards.length} EARNED`;if(!awards.length){list.innerHTML='<div class="achievement-empty">Permanent titles settle after each season.</div>';return}list.innerHTML='';for(const a of awards){const row=document.createElement('div');row.className='season-title-row';row.innerHTML='<div><b></b><span></span></div><strong></strong>';row.querySelector('b').textContent=a.title;row.querySelector('span').textContent=a.o_seasons?.name||a.season_id;row.querySelector('strong').textContent=a.season_rank?`#${a.season_rank}`:'—';list.appendChild(row)}}
+async function syncAwards(){if(!profile)return;try{renderAwards(await edgeV7(SEASON_API))}catch{}}
+if(typeof loadProfileStats==='function'){const p0=loadProfileStats;loadProfileStats=async function(...a){const out=await p0(...a);await Promise.all([loadGhost(),syncAwards()]);updateBeatButton();return out}}
 
-  function ensureV7UI() {
-    const oneShot=document.getElementById('oneShotButton');
-    if(oneShot && !document.getElementById('beatSelfButton')) {
-      oneShot.insertAdjacentHTML('afterend', `
-        <button class="beat-self-cta" id="beatSelfButton" type="button">
-          <span><b>BEAT YOURSELF</b><i>GHOST</i></span>
-          <small id="beatSelfStatus">CREATE A VERIFIED BEST FIRST.</small>
-          <span class="arrow">→</span>
-        </button>`);
-      document.getElementById('beatSelfButton').addEventListener('click', startBeatSelf);
-    }
-
-    const actions=document.querySelector('.result-actions');
-    if(actions && !document.getElementById('rematchButton')) {
-      actions.insertAdjacentHTML('afterend','<button class="rematch-button hidden" id="rematchButton" type="button">CHALLENGE BACK ↗</button>');
-      document.getElementById('rematchButton').addEventListener('click', async()=>{
-        if(!lastVerifiedScore || lastVerifiedScore.verificationStatus!=='verified') { showToast('VERIFY SCORE FIRST'); return; }
-        await shareResult();
-      });
-    }
-
-    if(!document.getElementById('leaguePromotion')) {
-      document.body.insertAdjacentHTML('beforeend', `
-        <div class="league-promotion" id="leaguePromotion" aria-hidden="true">
-          <div class="league-orbit"><i></i><span>O.</span></div>
-          <p>PRECISION CLASS ADVANCED</p>
-          <strong id="promotionLeague">BLACK</strong>
-          <small id="promotionRating">PR 870</small>
-        </div>`);
-    }
-
-    const identity=document.querySelector('.profile-identity > div');
-    if(identity && !document.getElementById('legacyTitle')) {
-      identity.insertAdjacentHTML('beforeend','<span class="legacy-title hidden" id="legacyTitle"></span>');
-    }
-
-    const achievementSection=document.querySelector('.achievement-section');
-    if(achievementSection && !document.getElementById('seasonTitleArchive')) {
-      achievementSection.insertAdjacentHTML('beforebegin', `
-        <section class="season-title-section" id="seasonTitleArchive">
-          <div class="section-label"><span>SEASON TITLES</span><b id="seasonTitleCount">0 EARNED</b></div>
-          <div id="seasonTitleList" class="season-title-list"><div class="achievement-empty">Permanent titles settle after each season.</div></div>
-        </section>`);
-    }
-  }
-
-  function updateBeatButton() {
-    const status=document.getElementById('beatSelfStatus');
-    const button=document.getElementById('beatSelfButton');
-    if(!status||!button)return;
-    if(!profile){status.textContent='CLAIM A NAME TO CREATE YOUR GHOST.';button.classList.remove('ready');return;}
-    if(!personalGhost){status.textContent='CREATE A VERIFIED BEST FIRST.';button.classList.remove('ready');return;}
-    status.textContent=`GHOST BEST · ${Number(personalGhost.score).toFixed(2)}`;
-    button.classList.add('ready');
-  }
-
-  function ghostCenterAndRadius() {
-    const canvasRect=els.canvas.getBoundingClientRect();
-    const cueRect=els.centerCue?.getBoundingClientRect();
-    const cx=cueRect?.width ? cueRect.left+cueRect.width/2-canvasRect.left : canvasRect.width/2;
-    const cy=cueRect?.height ? cueRect.top+cueRect.height/2-canvasRect.top : canvasRect.height*.48;
-    return {cx,cy,r:Math.min(canvasRect.width*.34,canvasRect.height*.25)};
-  }
-
-  function drawGhost() {
-    if(!beatSelfActive || !personalGhost?.normalized_points?.length) return;
-    const {cx,cy,r}=ghostCenterAndRadius();
-    const pts=personalGhost.normalized_points;
-    ctx.save();
-    ctx.strokeStyle='rgba(212,244,93,.34)';
-    ctx.lineWidth=1.25;
-    ctx.setLineDash([3.5,7]);
-    ctx.lineCap='round';
-    ctx.lineJoin='round';
-    ctx.beginPath();
-    pts.forEach((p,i)=>{
-      const x=cx+Number(p[0])*r, y=cy+Number(p[1])*r;
-      if(i===0)ctx.moveTo(x,y); else ctx.lineTo(x,y);
-    });
-    ctx.stroke();
-    ctx.restore();
-  }
-
-  async function startBeatSelf() {
-    if(!profile){openUsername();showToast('CHOOSE A NAME FIRST');return;}
-    const ghost=await loadPersonalGhost();
-    if(!ghost){showToast('SET A VERIFIED BEST FIRST');return;}
-    beatSelfActive=true;
-    beatTargetScore=Number(ghost.score);
-    startGame('classic');
-    beatSelfActive=true;
-    els.gameModeEyebrow.textContent='YOUR GHOST';
-    els.gameModeLabel.textContent='BEAT YOURSELF';
-    els.promptIndex.textContent='VS';
-    els.promptText.textContent=`Beat ${beatTargetScore.toFixed(2)}.`;
-    els.gameBest.textContent=beatTargetScore.toFixed(2);
-    redraw();
-  }
-
-  function applyBeatVerdict(score) {
-    if(!beatSelfActive || beatTargetScore===null) return;
-    const delta=Number(score)-Number(beatTargetScore);
-    els.resultRank.textContent=delta>0?'NEW SELF.':Math.abs(delta)<.01?'EXACT MATCH':'GHOST HOLDS';
-    els.resultVerdict.textContent=delta>0?`${delta.toFixed(2)} above your ghost.`:`${Math.abs(delta).toFixed(2)} short of your best.`;
-  }
-
-  const baseRedraw=redraw;
-  redraw=function(...args){
-    baseRedraw(...args);
-    drawGhost();
-  };
-
-  const baseStartGame=startGame;
-  startGame=function(mode){
-    if(mode!=='classic' || !beatSelfActive){beatSelfActive=false;beatTargetScore=null;}
-    return baseStartGame(mode);
-  };
-
-  const baseShowResult=showResult;
-  showResult=function(a){
-    const wasBeat=beatSelfActive;
-    const target=beatTargetScore;
-    const out=baseShowResult(a);
-    if(wasBeat){beatSelfActive=true;beatTargetScore=target;applyBeatVerdict(a.score);}
-    const rematch=document.getElementById('rematchButton');
-    if(rematch)rematch.classList.add('hidden');
-    return out;
-  };
-
-  const baseApplyVerified=applyVerifiedResult;
-  applyVerifiedResult=function(data){
-    const wasBeat=beatSelfActive;
-    const target=beatTargetScore;
-    const out=baseApplyVerified(data);
-    if(wasBeat){beatSelfActive=true;beatTargetScore=target;applyBeatVerdict(data.score);}
-    if(data?.verificationStatus==='verified'){
-      saveVerifiedGhost(Number(data.id));
-      const rematch=document.getElementById('rematchButton');
-      if(rematch) rematch.classList.toggle('hidden',gameMode!=='challenge');
-    }
-    return out;
-  };
-
-  function showPromotion(league,rating){
-    const overlay=document.getElementById('leaguePromotion');
-    if(!overlay)return;
-    document.getElementById('promotionLeague').textContent=league;
-    document.getElementById('promotionRating').textContent=`PR ${rating||'—'}`;
-    overlay.classList.add('visible');
-    overlay.setAttribute('aria-hidden','false');
-    vibrate([16,30,26,42,34]);
-    setTimeout(()=>{overlay.classList.remove('visible');overlay.setAttribute('aria-hidden','true');},2300);
-  }
-
-  function checkLeaguePromotion(){
-    const league=document.getElementById('precisionLeague')?.textContent?.trim();
-    const state=document.getElementById('precisionState')?.textContent||'';
-    const rating=document.getElementById('precisionRating')?.textContent?.trim();
-    if(!league||league==='UNRANKED'||state.includes('PROVISIONAL'))return;
-    const key='o.precision.league.v7';
-    const prev=localStorage.getItem(key);
-    if(!prev){localStorage.setItem(key,league);return;}
-    const before=LEAGUE_ORDER.indexOf(prev),after=LEAGUE_ORDER.indexOf(league);
-    if(after>before&&before>=0)showPromotion(league,rating);
-    if(after!==before)localStorage.setItem(key,league);
-  }
-
-  function watchLeague(){
-    const league=document.getElementById('precisionLeague');
-    const state=document.getElementById('precisionState');
-    if(!league||!state){setTimeout(watchLeague,180);return;}
-    const observer=new MutationObserver(()=>setTimeout(checkLeaguePromotion,30));
-    observer.observe(league,{childList:true,subtree:true,characterData:true});
-    observer.observe(state,{childList:true,subtree:true,characterData:true});
-    checkLeaguePromotion();
-  }
-
-  async function syncSeasonAwards(){
-    if(!profile)return null;
-    try{
-      const data=await privateEdge(SEASON_API,{});
-      seasonAwards=data;
-      renderSeasonAwards(data);
-      return data;
-    }catch{return null;}
-  }
-
-  function renderSeasonAwards(data){
-    const current=data?.current;
-    const badge=document.getElementById('legacyTitle');
-    if(badge){
-      if(current?.title){badge.textContent=current.title;badge.classList.remove('hidden');}
-      else badge.classList.add('hidden');
-    }
-    const list=document.getElementById('seasonTitleList');
-    const count=document.getElementById('seasonTitleCount');
-    if(!list||!count)return;
-    const awards=data?.awards||[];
-    count.textContent=`${awards.length} EARNED`;
-    if(!awards.length){list.innerHTML='<div class="achievement-empty">Permanent titles settle after each season.</div>';return;}
-    list.innerHTML='';
-    for(const award of awards){
-      const row=document.createElement('div');
-      row.className='season-title-row';
-      row.innerHTML='<div><b></b><span></span></div><strong></strong>';
-      row.querySelector('b').textContent=award.title;
-      row.querySelector('span').textContent=award.o_seasons?.name||award.season_id;
-      row.querySelector('strong').textContent=award.season_rank?`#${award.season_rank}`:'—';
-      list.appendChild(row);
-    }
-  }
-
-  if(typeof loadProfileStats==='function'){
-    const baseLoadProfileStatsV7=loadProfileStats;
-    loadProfileStats=async function(...args){
-      const out=await baseLoadProfileStatsV7(...args);
-      await Promise.all([loadPersonalGhost(),syncSeasonAwards()]);
-      updateBeatButton();
-      return out;
-    };
-  }
-
-  ensureV7UI();
-  watchLeague();
-  loadProfile().then(async()=>{
-    if(profile)await Promise.all([loadPersonalGhost(),syncSeasonAwards()]);
-    updateBeatButton();
-  }).catch(updateBeatButton);
+ensureUI();watchLeague();loadProfile().then(async()=>{if(profile)await Promise.all([loadGhost(),syncAwards()]);updateBeatButton()}).catch(updateBeatButton);
 })();
