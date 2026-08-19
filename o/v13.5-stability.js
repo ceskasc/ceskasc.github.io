@@ -1,6 +1,6 @@
 (() => {
 'use strict';
-const RELEASE='13.6';
+const RELEASE='14.0';
 
 // De-duplicate the old unversioned service-worker registration left in
 // app-ui.js. Both callers are funneled into one versioned registration.
@@ -101,11 +101,12 @@ try{
   if(state){new MutationObserver(()=>queueMicrotask(renderCalibration)).observe(state,{subtree:true,childList:true,characterData:true});renderCalibration();}
 }catch{}
 
-// Keep the user's own duel avatar fresh immediately after an avatar upload,
-// even if the older duel module has cached the previous public URL.
+// V14 paints all LIVE avatars directly from the room feed. Keep this as an
+// old-room fallback only.
 try{
   const accountAvatar=document.getElementById('accountAvatarImage');
   const syncOwnDuelAvatar=()=>{
+    if(window.O_LIVE_PARTY_RENDER){window.O_LIVE_PARTY_RENDER();return}
     const url=accountAvatar?.getAttribute('src')||profile?.avatar_url||'';
     const username=String(profile?.username||'').trim();
     if(!url||!username)return;
@@ -125,8 +126,6 @@ try{
   document.getElementById('accountAvatarInput')?.addEventListener('change',()=>setTimeout(syncOwnDuelAvatar,1600));
 }catch{}
 
-// Remove stale version wording from the legacy settings toast without touching
-// the score engine itself.
 try{
   if(typeof showToast==='function'){
     const baseToast=showToast;
