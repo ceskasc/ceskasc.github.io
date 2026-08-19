@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const VERSION = '12.0';
+  const VERSION = '12.1';
   window.O_ACCOUNT_V9 = true;
 
   const nativeFetch = window.fetch.bind(window);
@@ -29,7 +29,7 @@
     legacyUsernameDialog.show = () => {};
   }
 
-  for (const href of ['./retention.css','./progress.css','./rivals.css','./v7.css','./v8.css','./v9.css','./v10.css','./v11.css','./v12-desktop.css']) {
+  for (const href of ['./retention.css','./progress.css','./rivals.css','./v7.css','./v8.css','./v9.css','./v10.css','./v11.css','./v12-desktop.css','./v12-mobile.css']) {
     const css = document.createElement('link');
     css.rel = 'stylesheet';
     css.href = `${href}?v=${VERSION}`;
