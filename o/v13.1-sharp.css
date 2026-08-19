@@ -1,0 +1,137 @@
+/* O. V13.1 — sharp cinematic mobile controls. Loaded after V13. */
+@media (max-width:979px){
+  .mode-primary .draw-cta{
+    border-radius:0!important;
+    clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,18px 100%,0 calc(100% - 18px))!important;
+    border:1px solid rgba(240,237,229,.18)!important;
+    background:
+      linear-gradient(90deg,rgba(212,244,93,.065),transparent 23%),
+      linear-gradient(135deg,#151513 0%,#0d0d0c 72%,#11110f 100%)!important;
+    color:var(--ink)!important;
+    padding:12px 66px 12px 16px!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.025),0 16px 38px rgba(0,0,0,.24)!important;
+  }
+  .mode-primary .draw-cta:after{
+    content:""!important;
+    position:absolute!important;
+    inset:0!important;
+    width:auto!important;height:auto!important;
+    border:0!important;border-radius:0!important;
+    background:
+      linear-gradient(90deg,var(--accent),var(--accent)) 0 0/2px 100% no-repeat,
+      linear-gradient(90deg,rgba(255,255,255,.08),transparent 32%) 0 0/100% 1px no-repeat!important;
+    box-shadow:none!important;
+    pointer-events:none!important;
+  }
+  .mode-primary .draw-cta:before{
+    content:"→"!important;
+    right:14px!important;top:50%!important;
+    width:42px!important;height:42px!important;
+    border-radius:0!important;
+    clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px))!important;
+    background:var(--accent)!important;
+    color:#0c0c0a!important;
+    box-shadow:0 0 26px rgba(212,244,93,.18)!important;
+    font-size:20px!important;
+  }
+  .mode-primary .draw-cta span{
+    font-size:clamp(30px,9.3vw,40px)!important;
+    font-weight:900!important;
+    letter-spacing:-.07em!important;
+  }
+  .mode-primary .draw-cta small{
+    color:rgba(240,237,229,.38)!important;
+    opacity:1!important;
+    font-size:5.6px!important;
+    letter-spacing:.24em!important;
+  }
+
+  .mode-grid>button,.mode-practice>button{
+    border-radius:0!important;
+    clip-path:polygon(0 0,calc(100% - 9px) 0,100% 9px,100% 100%,9px 100%,0 calc(100% - 9px))!important;
+    border:1px solid rgba(240,237,229,.095)!important;
+    background:linear-gradient(150deg,rgba(255,255,255,.024),rgba(255,255,255,.004) 68%,rgba(212,244,93,.01))!important;
+    padding:10px 27px 9px 12px!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.018)!important;
+  }
+  .mode-grid>button:after,.mode-practice>button:after{
+    content:""!important;
+    position:absolute!important;
+    left:0!important;top:0!important;bottom:auto!important;
+    width:100%!important;height:1px!important;
+    background:linear-gradient(90deg,rgba(240,237,229,.16),rgba(240,237,229,.02) 52%,transparent)!important;
+  }
+  .mode-challenge-grid .live-duel-cta:after,.mode-practice .trace-mode-cta:after{
+    background:linear-gradient(90deg,var(--accent),rgba(212,244,93,.08) 42%,transparent)!important;
+  }
+  .mode-challenge-grid .live-duel-cta,.mode-practice .trace-mode-cta{
+    border-color:rgba(212,244,93,.17)!important;
+    background:linear-gradient(150deg,rgba(212,244,93,.025),rgba(255,255,255,.004) 58%,rgba(212,244,93,.008))!important;
+  }
+
+  .mode-grid>button:before,.mode-practice>button:before{
+    right:9px!important;bottom:7px!important;
+    color:rgba(240,237,229,.135)!important;
+    font-size:18px!important;
+    font-weight:700!important;
+    letter-spacing:-.05em!important;
+  }
+
+  .mode-core-grid .daily-meta,
+  .mode-core-grid .one-shot-cta>span:first-child,
+  .mode-challenge-grid .live-duel-cta>span:first-child,
+  .mode-challenge-grid .level-run-cta>span:first-child,
+  .mode-practice .trace-mode-cta>span:first-child,
+  .mode-practice .beat-self-cta>span:first-child{
+    gap:5px!important;
+  }
+  .mode-core-grid .daily-meta b,.mode-core-grid .one-shot-cta b,
+  .mode-challenge-grid .live-duel-cta b,.mode-challenge-grid .level-run-cta b,
+  .mode-practice .trace-mode-cta b,.mode-practice .beat-self-cta b{
+    font-size:clamp(7.7px,2.28vw,9.5px)!important;
+    letter-spacing:.085em!important;
+    font-weight:880!important;
+  }
+  .mode-core-grid .daily-meta i,.mode-core-grid .one-shot-cta i,
+  .mode-challenge-grid .live-duel-cta i,.mode-challenge-grid .level-run-cta i,
+  .mode-practice .trace-mode-cta i,.mode-practice .beat-self-cta i{
+    font-size:5.3px!important;
+    letter-spacing:.065em!important;
+  }
+  .mode-core-grid .daily-copy,.mode-core-grid .one-shot-cta small,
+  .mode-challenge-grid .live-duel-cta small,.mode-challenge-grid .level-run-cta small,
+  .mode-practice .trace-mode-cta small,.mode-practice .beat-self-cta small{
+    font-size:5.6px!important;
+    color:rgba(240,237,229,.31)!important;
+    letter-spacing:.025em!important;
+  }
+  .mode-grid .arrow,.mode-practice .arrow{
+    right:9px!important;top:9px!important;
+    font-size:11px!important;
+    color:rgba(240,237,229,.30)!important;
+  }
+  .mode-challenge-grid .live-pulse{
+    right:10px!important;bottom:9px!important;
+    width:4px!important;height:4px!important;
+  }
+  .mode-challenge-grid .level-run-cta em,.mode-practice .trace-mode-cta em{
+    right:8px!important;bottom:7px!important;
+    font-size:5.1px!important;
+  }
+
+  /* micro cinematic highlight on interaction */
+  .mode-grid>button:active,.mode-practice>button:active,.mode-primary .draw-cta:active{
+    transform:translateY(1px) scale(.994)!important;
+    filter:brightness(1.08)!important;
+  }
+}
+
+@media (max-width:979px) and (max-height:680px){
+  .mode-primary .draw-cta{padding-left:13px!important;padding-right:58px!important}
+  .mode-primary .draw-cta:before{width:36px!important;height:36px!important;right:11px!important;font-size:17px!important}
+  .mode-grid>button,.mode-practice>button{padding:8px 23px 7px 9px!important}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .mode-grid>button,.mode-practice>button,.mode-primary .draw-cta{transition:none!important}
+}
