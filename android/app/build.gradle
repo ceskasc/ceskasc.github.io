@@ -10,8 +10,8 @@ android {
         applicationId = 'io.ceskasc.ocircle'
         minSdk = 26
         targetSdk = 36
-        versionCode = 8
-        versionName = '8.0'
+        versionCode = 9
+        versionName = '13.5'
     }
 
     compileOptions {

@@ -20,6 +20,7 @@ import org.json.JSONArray;
 
 public class MainActivity extends Activity {
     private WebView webView;
+    private static final String NATIVE_VERSION = "13.5";
     private static final String HOME = "https://ceskasc.github.io/o/?native=android";
 
     @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
@@ -40,7 +41,11 @@ public class MainActivity extends Activity {
         settings.setDisplayZoomControls(false);
         settings.setMediaPlaybackRequiresUserGesture(true);
         settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
-        settings.setUserAgentString(settings.getUserAgentString() + " OAndroid/8.0");
+        settings.setAllowFileAccess(false);
+        settings.setAllowContentAccess(false);
+        settings.setGeolocationEnabled(false);
+        settings.setSafeBrowsingEnabled(true);
+        settings.setUserAgentString(settings.getUserAgentString() + " OAndroid/" + NATIVE_VERSION);
 
         WebView.setWebContentsDebuggingEnabled(false);
         webView.addJavascriptInterface(new NativeBridge(this), "OAndroid");
@@ -49,8 +54,7 @@ public class MainActivity extends Activity {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                 Uri uri = request.getUrl();
-                String host = uri.getHost() == null ? "" : uri.getHost();
-                if ("ceskasc.github.io".equals(host)) return false;
+                if (isTrustedAppUri(uri)) return false;
                 try {
                     startActivity(new Intent(Intent.ACTION_VIEW, uri));
                 } catch (Exception ignored) {}
@@ -69,15 +73,18 @@ public class MainActivity extends Activity {
         else webView.restoreState(savedInstanceState);
     }
 
+    private static boolean isTrustedAppUri(Uri uri) {
+        if (uri == null) return false;
+        String path = uri.getPath();
+        return "https".equalsIgnoreCase(uri.getScheme())
+                && "ceskasc.github.io".equalsIgnoreCase(uri.getHost())
+                && path != null
+                && ("/o".equals(path) || path.startsWith("/o/"));
+    }
+
     private String launchUrlFromIntent(Intent intent) {
         Uri data = intent == null ? null : intent.getData();
-        if (data != null
-                && "https".equalsIgnoreCase(data.getScheme())
-                && "ceskasc.github.io".equalsIgnoreCase(data.getHost())
-                && data.getPath() != null
-                && data.getPath().startsWith("/o/")) {
-            return data.toString();
-        }
+        if (isTrustedAppUri(data)) return data.toString();
         return HOME;
     }
 
@@ -93,7 +100,7 @@ public class MainActivity extends Activity {
             "try{" +
             "if(!navigator.share){navigator.share=function(d){OAndroid.share(String(d&&d.title||''),String(d&&d.text||''),String(d&&d.url||''));return Promise.resolve();};}" +
             "if(!navigator.vibrate){navigator.vibrate=function(p){OAndroid.vibrate(JSON.stringify(p));return true;};}" +
-            "window.__O_NATIVE__={platform:'android',version:'8.0'};" +
+            "window.__O_NATIVE__={platform:'android',version:'" + NATIVE_VERSION + "'};" +
             "}catch(e){}" +
             "})();";
         webView.evaluateJavascript(js, null);
