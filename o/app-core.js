@@ -9,13 +9,15 @@
     canvas: $('canvas'), centerCue: $('centerCue'), gamePrompt: $('gamePrompt'), promptIndex: $('promptIndex'), promptText: $('promptText'),
     gestureHint: $('gestureHint'), liveStatus: $('liveStatus'), gameModeEyebrow: $('gameModeEyebrow'), gameModeLabel: $('gameModeLabel'), gameBest: $('gameBest'),
     result: $('resultSheet'), resultRank: $('resultRank'), resultMode: $('resultMode'), resultScore: $('resultScore'), resultVerdict: $('resultVerdict'), personalBest: $('personalBest'),
+    resultContext: $('resultContext'), resultPercentile: $('resultPercentile'), resultStreak: $('resultStreak'), achievementUnlock: $('achievementUnlock'), achievementUnlockTitle: $('achievementUnlockTitle'),
     metricShape: $('metricShape'), metricClosure: $('metricClosure'), metricFlow: $('metricFlow'),
     analysis: $('analysisPanel'), analysisScore: $('analysisScore'), analysisBest: $('analysisBest'), analysisWeak: $('analysisWeak'),
     usernameDialog: $('usernameDialog'), usernameForm: $('usernameForm'), usernameInput: $('usernameInput'), usernameError: $('usernameError'), saveUsername: $('saveUsername'),
     rankingList: $('rankingList'), rankingEmpty: $('rankingEmpty'), rankingCount: $('rankingCount'), rankingDateLabel: $('rankingDateLabel'),
     profileName: $('profileName'), profileCaption: $('profileCaption'), profileMonogram: $('profileMonogram'), claimProfileButton: $('claimProfileButton'),
-    statBest: $('statBest'), statAttempts: $('statAttempts'), statAverage: $('statAverage'), statDaily: $('statDaily'), historyList: $('historyList'),
-    toast: $('toast'), dailyDate: $('dailyDate'),
+    profileSeasonName: $('profileSeasonName'), profileSeasonRank: $('profileSeasonRank'), profileSeasonTop: $('profileSeasonTop'), profileStreak: $('profileStreak'), profileBestStreak: $('profileBestStreak'),
+    statBest: $('statBest'), statAttempts: $('statAttempts'), statAverage: $('statAverage'), statDaily: $('statDaily'), historyList: $('historyList'), achievementGrid: $('achievementGrid'), achievementCount: $('achievementCount'),
+    toast: $('toast'), dailyDate: $('dailyDate'), homeSeason: $('homeSeason'),
     challengeDialog: $('challengeDialog'), challengeTarget: $('challengeTarget'), challengeFrom: $('challengeFrom'),
     oneShotStatus: $('oneShotStatus')
   };
@@ -23,6 +25,7 @@
   const ctx = els.canvas.getContext('2d', { alpha: true, desynchronized: true });
   const API = `${config.supabaseUrl || ''}/rest/v1`;
   const FUNCTION_API = `${config.supabaseUrl || ''}/functions/v1/o-score`;
+  const RETENTION_API = `${config.supabaseUrl || ''}/functions/v1/o-retention`;
   const API_KEY = config.supabasePublishableKey || '';
   const screens = { home: els.home, game: els.game, rankings: els.rankings, profile: els.profile };
   const theme = { ink:'#f0ede5', faint:'rgba(240,237,229,.16)', accent:'#d4f45d' };
@@ -46,6 +49,7 @@
   let pendingShareAfterUsername = false;
   let pendingScorePromise = null;
   let lastVerifiedScore = null;
+  let retentionSnapshot = null;
   let installationId = loadInstallationId();
   let installationSecret = loadInstallationSecret();
 
@@ -54,6 +58,8 @@
     const get = (t) => parts.find(p => p.type === t)?.value;
     return `${get('year')}-${get('month')}-${get('day')}`;
   }
+
+  function currentSeasonId() { return todayIstanbul().slice(0,7); }
 
   function displayDailyDate() {
     const label = new Intl.DateTimeFormat('en-US', { timeZone:'Europe/Istanbul', month:'short', day:'numeric' }).format(new Date()).toUpperCase();
@@ -105,22 +111,25 @@
     return data;
   }
 
-  async function edge(action, payload = {}) {
-    if (!API_KEY || !config.supabaseUrl) throw new Error('Verification unavailable');
-    const response = await fetch(FUNCTION_API, {
+  async function callFunction(url, payload = {}) {
+    if (!API_KEY || !config.supabaseUrl) throw new Error('Backend unavailable');
+    const response = await fetch(url, {
       method:'POST',
       headers:{ apikey:API_KEY, 'Content-Type':'application/json' },
-      body:JSON.stringify({ action, installationSecret, ...payload })
+      body:JSON.stringify({ installationSecret, ...payload })
     });
     const text = await response.text();
     let data = null;
     if (text) { try { data = JSON.parse(text); } catch { data = text; } }
     if (!response.ok) {
-      const err = new Error(data?.error || `Verification failed (${response.status})`);
+      const err = new Error(data?.error || `Request failed (${response.status})`);
       err.status = response.status; err.data = data; throw err;
     }
     return data;
   }
+
+  async function edge(action, payload = {}) { return callFunction(FUNCTION_API,{ action, ...payload }); }
+  async function syncRetention(scoreId=null) { return callFunction(RETENTION_API,{ installationId, scoreId }); }
 
   async function loadProfile() {
     try {
