@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-30T18:44:48.613Z",
+  "generated_at": "2026-08-30T21:52:43.042Z",
   "username": "ceskasc",
   "profile": {
     "login": "ceskasc",
@@ -9,23 +9,11 @@
     "location": "Ankara",
     "followers": 1,
     "following": 0,
-    "public_repos": 12,
+    "public_repos": 11,
     "created_at": "2023-11-30T20:36:21Z",
     "updated_at": "2026-08-30T17:53:52Z"
   },
   "repos": [
-    {
-      "name": "Semaison",
-      "description": null,
-      "language": "HTML",
-      "html_url": "https://github.com/ceskasc/Semaison",
-      "homepage": null,
-      "stargazers_count": 0,
-      "forks_count": 0,
-      "pushed_at": "2026-08-30T16:50:34Z",
-      "fork": false,
-      "archived": false
-    },
     {
       "name": "ceskasc.github.io",
       "description": null,
@@ -34,7 +22,7 @@
       "homepage": null,
       "stargazers_count": 1,
       "forks_count": 0,
-      "pushed_at": "2026-08-30T15:17:31Z",
+      "pushed_at": "2026-08-30T18:44:49Z",
       "fork": false,
       "archived": false
     },
