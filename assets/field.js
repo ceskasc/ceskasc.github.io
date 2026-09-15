@@ -4,7 +4,7 @@
   const canvas = document.getElementById('light-field');
   if (!canvas) return;
   const gl = canvas.getContext('webgl', { alpha: true, antialias: false, depth: false, powerPreference: 'low-power' });
-  if (!gl) return;
+  if (!gl) { renderCanvasField(canvas); return; }
   const vertexSource = `
     attribute vec2 aParam;
     uniform float uTime;
@@ -50,11 +50,11 @@
   }
   const vertex = compile(gl.VERTEX_SHADER, vertexSource);
   const fragment = compile(gl.FRAGMENT_SHADER, fragmentSource);
-  if (!vertex || !fragment) return;
+  if (!vertex || !fragment) { renderCanvasField(canvas); return; }
   const program = gl.createProgram();
   gl.attachShader(program, vertex); gl.attachShader(program, fragment); gl.linkProgram(program);
   gl.deleteShader(vertex); gl.deleteShader(fragment);
-  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) { gl.deleteProgram(program); return; }
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) { gl.deleteProgram(program); renderCanvasField(canvas); return; }
   gl.useProgram(program);
   const smallScreen = matchMedia('(max-width: 760px)').matches;
   const rings = smallScreen ? 42 : 76;
@@ -142,4 +142,87 @@
     canvas.dataset.render = 'fallback';
   });
   sync();
+  function renderCanvasField(original) {
+    // Canvas 2D uses the same parametric form on devices without WebGL.
+    const field = original.cloneNode();
+    original.replaceWith(field);
+    const ctx = field.getContext('2d', { alpha: true });
+    if (!ctx) return;
+    let w = 0, h = 0, raf = 0, last = 0, phase = 0.8, visible = true;
+    let px = 0, py = 0, tx = 0, ty = 0;
+    const compact = matchMedia('(max-width: 760px)').matches;
+    const count = compact ? 35 : 56;
+    const steps = compact ? 90 : 150;
+    const tau = Math.PI * 2;
+    const running = () => visible && !document.hidden && document.documentElement.dataset.motion !== 'paused';
+    function paint() {
+      ctx.clearRect(0, 0, w, h);
+      px += (tx - px) * .08; py += (ty - py) * .08;
+      const size = Math.min(w, h) * .24;
+      const xrot = .80 + Math.sin(phase * .3) * .13 + py * .1;
+      const yrot = .35 + Math.cos(phase * .4) * .15 + px * .12;
+      const zrot = -.55 + Math.sin(phase * .2) * .12;
+      const cx = Math.cos(xrot), sx = Math.sin(xrot), cy = Math.cos(yrot), sy = Math.sin(yrot), cz = Math.cos(zrot), sz = Math.sin(zrot);
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.lineWidth = compact ? .8 : .85;
+      for (let j = 0; j < count; j++) {
+        const b = j / count * tau;
+        const light = .14 + .44 * Math.pow(Math.max(0, Math.cos(b - phase * .3)), 4);
+        ctx.strokeStyle = `rgba(239, ${Math.round(107 + 57 * (Math.sin(b) * .5 + .5))}, 67, ${light})`;
+        ctx.beginPath();
+        for (let i = 0; i <= steps; i++) {
+          const a = i / steps * tau;
+          const tube = .5 + .16 * Math.sin(a * 3 + phase);
+          const orbit = 1.46 + .11 * Math.cos(a * 2 - phase);
+          const twist = b + .48 * Math.sin(a * 2 + phase);
+          let x = (orbit + tube * Math.cos(twist)) * Math.cos(a);
+          let y = (orbit + tube * Math.cos(twist)) * Math.sin(a);
+          let z = tube * Math.sin(twist) + .28 * Math.sin(a * 3 + phase * .7);
+          const y1 = y * cx - z * sx; z = y * sx + z * cx; y = y1;
+          const x1 = x * cy - z * sy; z = x * sy + z * cy; x = x1;
+          const x2 = x * cz - y * sz; y = x * sz + y * cz; x = x2;
+          const perspective = 3.6 / (4.5 - z);
+          const dx = w * .5 + x * size * perspective;
+          const dy = h * .5 - y * size * perspective;
+          if (i === 0) ctx.moveTo(dx, dy); else ctx.lineTo(dx, dy);
+        }
+        ctx.stroke();
+      }
+      ctx.globalCompositeOperation = 'source-over';
+    }
+    function resize() {
+      const box = field.getBoundingClientRect();
+      const dpr = Math.min(devicePixelRatio || 1, 1.5);
+      w = box.width; h = box.height;
+      field.width = Math.round(w * dpr); field.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      paint();
+    }
+    function tick(now) {
+      raf = 0;
+      if (!running()) { last = 0; return; }
+      if (!last || now - last >= 1000 / 24) {
+        phase += last ? Math.min((now - last) / 1000, .1) * .12 : 0;
+        last = now; paint();
+      }
+      raf = requestAnimationFrame(tick);
+    }
+    function resume() {
+      if (running() && !raf) raf = requestAnimationFrame(tick);
+      if (!running()) { cancelAnimationFrame(raf); raf = 0; last = 0; }
+    }
+    resize();
+    field.classList.add('is-ready');
+    field.parentElement.classList.add('has-webgl');
+    field.dataset.render = 'canvas2d';
+    if ('ResizeObserver' in window) new ResizeObserver(resize).observe(field);
+    else addEventListener('resize', resize, { passive: true });
+    if ('IntersectionObserver' in window) new IntersectionObserver(entries => { visible = entries[0].isIntersecting; resume(); }).observe(field);
+    document.addEventListener('visibilitychange', resume);
+    document.addEventListener('portfolio:motion', resume);
+    if (matchMedia('(pointer: fine)').matches) document.querySelector('.hero')?.addEventListener('pointermove', event => {
+      tx = (event.clientX / innerWidth - .5) * 2; ty = (event.clientY / innerHeight - .5) * 2;
+    }, { passive: true });
+    resume();
+  }
 })();
