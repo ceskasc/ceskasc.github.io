@@ -1,165 +1,152 @@
-const qs = (selector, scope = document) => scope.querySelector(selector);
-const qsa = (selector, scope = document) => [...scope.querySelectorAll(selector)];
+(() => {
+  'use strict';
+  const $ = (selector, scope = document) => scope.querySelector(selector);
+  const $$ = (selector, scope = document) => [...scope.querySelectorAll(selector)];
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  const menu = $('#mobile-menu');
+  const menuToggle = $('.menu-toggle');
+  const motionToggle = $('.motion-toggle');
+  const html = document.documentElement;
+  let manuallyPaused = false;
+  try { manuallyPaused = localStorage.getItem('portfolio.motion') === 'paused'; } catch { /* Private browsing can restrict storage. */ }
 
-const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-const header = qs('.site-header');
-const menuToggle = qs('.menu-toggle');
-const mobileMenu = qs('.mobile-menu');
-const progress = qs('#scroll-progress');
-const repoCount = qs('#repo-count');
-
-qsa('.current-year').forEach((node) => {
-  node.textContent = new Date().getFullYear();
-});
-
-let scrollFrame = 0;
-function syncScrollUI() {
-  scrollFrame = 0;
-  const y = window.scrollY;
-  const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-  header?.classList.toggle('is-scrolled', y > 24);
-  if (progress) progress.style.transform = `scaleX(${Math.min(1, Math.max(0, y / max))})`;
-}
-
-window.addEventListener('scroll', () => {
-  if (scrollFrame) return;
-  scrollFrame = requestAnimationFrame(syncScrollUI);
-}, { passive: true });
-window.addEventListener('resize', syncScrollUI, { passive: true });
-syncScrollUI();
-
-function updateClock() {
-  const time = new Intl.DateTimeFormat('en-GB', {
-    timeZone: 'Europe/Istanbul',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false
-  }).format(new Date());
-
-  const heroClock = qs('#istanbul-time');
-  const contactClock = qs('#contact-time');
-  if (heroClock) heroClock.textContent = `Local time · ${time}`;
-  if (contactClock) contactClock.textContent = `Türkiye · ${time}`;
-}
-updateClock();
-setInterval(updateClock, 30000);
-
-function setMenu(open, { restoreFocus = false } = {}) {
-  document.body.classList.toggle('menu-open', open);
-  mobileMenu?.classList.toggle('is-open', open);
-  mobileMenu?.setAttribute('aria-hidden', String(!open));
-  menuToggle?.setAttribute('aria-expanded', String(open));
-  menuToggle?.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
-
-  if (mobileMenu) mobileMenu.inert = !open;
-  if (open) requestAnimationFrame(() => qs('a', mobileMenu)?.focus());
-  if (!open && restoreFocus) menuToggle?.focus();
-}
-
-menuToggle?.addEventListener('click', () => {
-  setMenu(menuToggle.getAttribute('aria-expanded') !== 'true');
-});
-
-qsa('.mobile-menu a').forEach((link) => {
-  link.addEventListener('click', () => setMenu(false));
-});
-
-document.addEventListener('keydown', (event) => {
-  if (event.key === 'Escape' && document.body.classList.contains('menu-open')) {
-    setMenu(false, { restoreFocus: true });
-  }
-
-  if (event.key !== 'Tab' || !document.body.classList.contains('menu-open') || !mobileMenu) return;
-  const focusable = qsa('a[href], button:not([disabled])', mobileMenu);
-  if (!focusable.length) return;
-  const first = focusable[0];
-  const last = focusable[focusable.length - 1];
-  if (event.shiftKey && document.activeElement === first) {
-    event.preventDefault();
-    last.focus();
-  } else if (!event.shiftKey && document.activeElement === last) {
-    event.preventDefault();
-    first.focus();
-  }
-});
-
-window.addEventListener('resize', () => {
-  if (window.innerWidth > 900 && document.body.classList.contains('menu-open')) setMenu(false);
-}, { passive: true });
-
-let revealObserver = null;
-if ('IntersectionObserver' in window && !reducedMotion.matches) {
-  revealObserver = new IntersectionObserver((entries, observer) => {
-    entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
-      entry.target.classList.add('is-visible');
-      observer.unobserve(entry.target);
-    });
-  }, { threshold: 0.08, rootMargin: '0px 0px -6%' });
-
-  qsa('.reveal').forEach((node) => revealObserver.observe(node));
-} else {
-  qsa('.reveal').forEach((node) => node.classList.add('is-visible'));
-}
-
-const sectionLinks = new Map(qsa('.desktop-nav [data-nav]').map((link) => [link.dataset.nav, link]));
-if ('IntersectionObserver' in window) {
-  const sectionObserver = new IntersectionObserver((entries) => {
-    const active = entries
-      .filter((entry) => entry.isIntersecting)
-      .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-    if (!active) return;
-    sectionLinks.forEach((link, id) => link.classList.toggle('is-active', id === active.target.id));
-  }, { rootMargin: '-30% 0px -58%', threshold: [0.01, 0.2, 0.5] });
-
-  ['work', 'experience', 'practice', 'about', 'contact'].forEach((id) => {
-    const section = document.getElementById(id);
-    if (section) sectionObserver.observe(section);
-  });
-}
-
-function formatMonthYear(value) {
-  if (!value) return null;
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return null;
-  return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
-}
-
-function enhanceProjectCard(repo) {
-  const card = qs(`[data-repo="${CSS.escape(repo.name)}"]`);
-  if (!card) return;
-
-  const language = qs('[data-project-language]', card);
-  const date = qs('[data-project-date]', card);
-  const stars = qs('[data-project-stars]', card);
-  const link = qs('[data-project-link]', card);
-
-  if (language && repo.language) language.textContent = repo.language;
-  const formattedDate = formatMonthYear(repo.updated_at || repo.pushed_at);
-  if (date && formattedDate) date.textContent = `Updated ${formattedDate}`;
-  if (stars) stars.textContent = Number(repo.stargazers_count) > 0 ? `${repo.stargazers_count} star${repo.stargazers_count === 1 ? '' : 's'}` : 'Public source';
-
-  const homepage = typeof repo.homepage === 'string' && /^https?:\/\//i.test(repo.homepage) ? repo.homepage : null;
-  if (link) {
-    link.href = homepage || repo.html_url || link.href;
-    if (homepage) link.firstChild.textContent = 'Open live project ';
-  }
-}
-
-async function enhanceFromSnapshot() {
-  try {
-    const response = await fetch('./data/github.json', { cache: 'no-cache' });
-    if (!response.ok) throw new Error(`Snapshot returned ${response.status}`);
-    const snapshot = await response.json();
-
-    if (repoCount && Number.isFinite(Number(snapshot.profile?.public_repos))) {
-      repoCount.textContent = `${snapshot.profile.public_repos} public repos`;
+  function syncMotion() {
+    const paused = reducedMotion.matches || manuallyPaused;
+    html.classList.toggle('motion-paused', paused);
+    html.dataset.motion = paused ? 'paused' : 'playing';
+    motionToggle?.setAttribute('aria-pressed', String(paused));
+    if (motionToggle) {
+      motionToggle.disabled = reducedMotion.matches;
+      $('[data-motion-label]', motionToggle).textContent = reducedMotion.matches ? 'Motion reduced' : paused ? 'Resume motion' : 'Pause motion';
     }
-
-    (snapshot.repos || []).forEach(enhanceProjectCard);
-  } catch (error) {
-    console.info('GitHub snapshot unavailable; static portfolio content remains active.', error);
+    document.dispatchEvent(new CustomEvent('portfolio:motion', { detail: { paused } }));
   }
-}
+  motionToggle?.addEventListener('click', () => {
+    manuallyPaused = !manuallyPaused;
+    try { localStorage.setItem('portfolio.motion', manuallyPaused ? 'paused' : 'playing'); } catch { /* Preference still applies for this page. */ }
+    syncMotion();
+  });
+  reducedMotion.addEventListener('change', syncMotion);
+  syncMotion();
 
-enhanceFromSnapshot();
+  function closeMenu() {
+    if (menu?.open) menu.close();
+  }
+  menuToggle?.addEventListener('click', () => {
+    if (menu.open) return closeMenu();
+    menu.showModal();
+    menuToggle.setAttribute('aria-expanded', 'true');
+    document.body.classList.add('menu-open');
+  });
+  $('.menu-close')?.addEventListener('click', closeMenu);
+  menu?.addEventListener('close', () => {
+    menuToggle.setAttribute('aria-expanded', 'false');
+    document.body.classList.remove('menu-open');
+  });
+  $$('.mobile-menu nav a').forEach(link => link.addEventListener('click', () => {
+    const target = $(link.getAttribute('href'));
+    closeMenu();
+    // Restore focus to the destination, not to a control in the closed dialog.
+    if (target) {
+      target.tabIndex = -1;
+      requestAnimationFrame(() => target.focus({ preventScroll: true }));
+      target.addEventListener('blur', () => target.removeAttribute('tabindex'), { once: true });
+    }
+  }));
+  const desktop = matchMedia('(min-width: 761px)');
+  desktop.addEventListener('change', event => { if (event.matches) closeMenu(); });
+
+  let scrollFrame = 0;
+  const progress = $('#scroll-progress');
+  const header = $('.site-header');
+  function syncScroll() {
+    scrollFrame = 0;
+    const range = Math.max(1, html.scrollHeight - innerHeight);
+    if (progress) progress.style.transform = `scaleX(${Math.min(1, Math.max(0, scrollY / range))})`;
+    header?.classList.toggle('is-scrolled', scrollY > 70);
+  }
+  addEventListener('scroll', () => {
+    if (!scrollFrame) scrollFrame = requestAnimationFrame(syncScroll);
+  }, { passive: true });
+  addEventListener('resize', syncScroll, { passive: true });
+  syncScroll();
+
+  if ('IntersectionObserver' in window && !reducedMotion.matches) {
+    const revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-visible');
+        revealObserver.unobserve(entry.target);
+      });
+    }, { threshold: 0.06, rootMargin: '0px 0px 30px' });
+    $$('.reveal').forEach(element => {
+      // Do not hide content already visible at load or at a deep link.
+      if (element.getBoundingClientRect().top < innerHeight) return;
+      element.classList.add('js-reveal');
+      revealObserver.observe(element);
+    });
+  }
+  if ('IntersectionObserver' in window) {
+    const navLinks = $$('.desktop-nav [data-nav]');
+    const sectionObserver = new IntersectionObserver(entries => {
+      const visible = entries.find(entry => entry.isIntersecting);
+      if (!visible) return;
+      navLinks.forEach(link => {
+        const active = link.dataset.nav === visible.target.id;
+        link.classList.toggle('is-active', active);
+        if (active) link.setAttribute('aria-current', 'location');
+        else link.removeAttribute('aria-current');
+      });
+    }, { rootMargin: '-18% 0px -65%', threshold: 0 });
+    ['work', 'about', 'experience', 'contact'].forEach(id => {
+      const section = document.getElementById(id);
+      if (section) sectionObserver.observe(section);
+    });
+  }
+
+  function updateClock() {
+    const time = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Istanbul', hour: '2-digit', minute: '2-digit', hour12: false }).format(new Date());
+    const heroClock = $('#istanbul-time');
+    const footerClock = $('#contact-time');
+    if (heroClock) heroClock.textContent = `${time} / UTC +03:00`;
+    if (footerClock) footerClock.textContent = `Türkiye / ${time}`;
+    $$('.current-year').forEach(node => { node.textContent = new Date().getFullYear(); });
+  }
+  updateClock();
+  setInterval(() => { if (!document.hidden) updateClock(); }, 30000);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) updateClock(); });
+
+  let toastTimer;
+  function announce(message) {
+    const toast = $('#toast');
+    toast.textContent = message;
+    toast.classList.add('is-visible');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('is-visible'), 3500);
+  }
+  $('.copy-email')?.addEventListener('click', async () => {
+    try {
+      if (!navigator.clipboard?.writeText) throw new Error('Clipboard unavailable');
+      await navigator.clipboard.writeText('cnceska@gmail.com');
+      announce('Email address copied.');
+    } catch {
+      announce('Email: cnceska@gmail.com');
+    }
+  });
+
+  // Enhance existing content only. No API dependency for rendering or navigation.
+  fetch('./data/github.json', { cache: 'no-cache' })
+    .then(response => { if (!response.ok) throw new Error('Snapshot unavailable'); return response.json(); })
+    .then(snapshot => {
+      const count = Number(snapshot.profile?.public_repos);
+      if (Number.isFinite(count) && count >= 0) $('#repo-count').textContent = `${count} public repositories`;
+      const entries = new Map($$('[data-repo]').map(element => [element.dataset.repo, element]));
+      if (!Array.isArray(snapshot.repos)) return;
+      snapshot.repos.forEach(repo => {
+        const entry = entries.get(repo.name);
+        const language = entry && $('[data-project-language]', entry);
+        if (language && typeof repo.language === 'string') language.textContent = repo.language;
+      });
+    })
+    .catch(() => { /* Static project content is complete without the snapshot. */ });
+})();

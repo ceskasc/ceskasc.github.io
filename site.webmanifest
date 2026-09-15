@@ -1,10 +1,10 @@
 {
-  "name": "Sadıkcan Çeşka Portfolio",
-  "short_name": "Çeşka",
+  "name": "Sadık Can Çeşka — Portfolio",
+  "short_name": "Can Çeşka",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0b0e11",
-  "theme_color": "#0b0e11",
+  "background_color": "#10100f",
+  "theme_color": "#10100f",
   "icons": [
     {
       "src": "/github-avatar.png",
